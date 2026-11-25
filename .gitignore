@@ -1,4 +1,5 @@
 .tools/
+.presentation-build/
 **/node_modules/
 practical-examples/**/.env
 practical-examples/**/.env.local
