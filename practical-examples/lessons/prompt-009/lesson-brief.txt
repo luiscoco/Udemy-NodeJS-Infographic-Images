@@ -1,0 +1,4 @@
+Category: JavaScript · Purpose: Avoid accidental modification of shared data.
+Build a function that applies defaults to a nested configuration object using destructuring and nullish coalescing. Demonstrate shallow-copy behavior and verify that the chosen implementation preserves the original input.
+
+defaults.mjs: function withDefaults(input) { const { server = {} } = input; return { ...input, server: { ...server, port: server.port ?? 3000, tls: server.tls ?? false } }; } const original = { server: { port: 0 } }; const configured = withDefaults(original); console.log(configured.server); console.log(original.server); => {port:0,tls:false} and {port:0}. ?? preserves 0,false,''; spread shallow copies only. Demonstrate nested shared object after {...original}; no claim deep cloning from spread. node defaults.mjs.

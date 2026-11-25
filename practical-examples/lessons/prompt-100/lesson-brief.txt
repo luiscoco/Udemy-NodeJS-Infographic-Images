@@ -1,0 +1,12 @@
+Category: Ecosystem · Purpose: Prevent authenticated users from accessing unauthorized data.
+Add owner and administrator authorization to a fastify task API. Create two users and verify one cannot read, update, or delete the other’s tasks by guessing identifiers.
+
+Focused authenticated Fastify handler; verified request.user, existingpool andvalidatedtaskId provided:
+const result = await pool.query(
+  'SELECT id, title FROM tasks WHERE id = $1 AND (owner_id = $2 OR $3::boolean)',
+  [taskId, request.user.id, request.user.role === 'admin']
+);
+if (result.rowCount === 0)
+  return reply.code(404).send({ error: 'Not found' });
+return result.rows[0];
+Same predicate SELECT/UPDATE/DELETE. Roles/owneridentity from trusted auth, never requestbody role. Matrixowner200,otheruserguessesid404,verifiedadmin200,unauthenticated401. Uniform404policyhidesexistence. Authenticationwho vs authorizationaccess; parameterizationalone doesn'tauthorize. Test two users crossread/update/delete. Source fastify.dev node-postgres.com.

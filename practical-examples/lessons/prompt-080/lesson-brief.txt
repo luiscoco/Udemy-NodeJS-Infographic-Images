@@ -1,0 +1,18 @@
+Category: Ecosystem · Purpose: Make API behavior discoverable and reviewable.
+Generate an OpenAPI document using fastify and @fastify/swagger. Verify documented request and response schemas match actual endpoint behavior, including at least one error response.
+
+Focused OpenAPIregistration order:
+import Fastify from 'fastify';
+import swagger from '@fastify/swagger';
+const app = Fastify();
+await app.register(swagger, {
+  openapi: { info: { title: 'Tasks API', version: '1.0.0' } }
+});
+app.get('/health', {
+  schema: { response: { 200: {
+    type: 'object', properties: { ok: { type: 'boolean' } }
+  } } }
+}, async () => ({ ok: true }));
+await app.ready();
+console.log(app.swagger().info.title);
+npm install --save-exact fastify @fastify/swagger ; node api-docs.mjs =>Tasks API. Pluginbefore routesforautoinspection; statictrusted schemas. Completeexercise adddocumented400/404, compareactualresponsecontracts; OpenAPIdocumentnotinteractiveUI unlessseparateplugin. Sourcegithub.com/fastify/fastify-swagger.

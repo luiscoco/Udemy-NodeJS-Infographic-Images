@@ -1,0 +1,10 @@
+Category: Node.js core · Purpose: Handle failures from event-driven asynchronous work.
+Create an EventEmitter example with an async listener that rejects. Demonstrate an appropriate rejection-handling strategy and verify the failure is observed without an unhandled rejection.
+
+async-events.mjs:
+import { EventEmitter } from 'node:events';
+const events = new EventEmitter({ captureRejections: true });
+events.on('error', error => console.log('observed:', error.message));
+events.on('job', async () => { throw new Error('job failed'); });
+events.emit('job');
+node async-events.mjs =>observed:job failed. emit doesn't await async listeners; captureRejections routes rejected listener promises to error event; error handler should be synchronous to avoid rejection loops. Alternative explicitly catch within async listener. Do not claim emit returns promise or waits completion. No capture by default unless configured.

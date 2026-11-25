@@ -1,0 +1,26 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+1/2 ✔ file A owns its process global (1.9245ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 199.012
+
+2/2 ✔ file B owns its process global (1.0028ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 139.2955
+
+JUnit artifact written; both shards passed
+
+STDERR

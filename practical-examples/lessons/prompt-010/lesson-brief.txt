@@ -1,0 +1,4 @@
+Category: JavaScript · Purpose: Choose suitable object behavior and encapsulation.
+Implement a small inventory class with a private field and a prototype method. Pass a method as a callback, reproduce a lost-`this` failure, and verify two appropriate fixes.
+
+inventory.mjs: class Inventory { #count = 0; add(n = 1) { this.#count += n; return this.#count; } } const stock = new Inventory(); const loose = stock.add; try { loose(); } catch (e) { console.log(e.name); } const bound = stock.add.bind(stock); console.log(bound()); const wrapped = () => stock.add(); console.log(wrapped()); => TypeError,1,2. Methods on prototype, private state per instance. Passing reference loses receiver; bind fixes receiver, closure calls as method. node inventory.mjs.

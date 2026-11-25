@@ -1,0 +1,4 @@
+Category: Tooling · Purpose: Make common development commands consistent.
+Add npm scripts for checking, testing, running, and cleaning a project. Use Node.js scripts for filesystem operations instead of shell-specific commands, and verify equivalent behavior on Windows and POSIX shells.
+
+package.json scripts {"check":"node --check src/main.mjs","test":"node --test","start":"node src/main.mjs","clean":"node scripts/clean.mjs"}; clean.mjs import {rm}from'node:fs/promises';await rm(new URL('../dist/',import.meta.url),{recursive:true,force:true}); fixed project-owned generated dist only. commands npm run check,npm test,npm start,npm run clean. Portable Node operations vs rm -rf shell. No tests claimed executed.

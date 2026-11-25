@@ -1,0 +1,26 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{
+  _id: new ObjectId('6b06e9e1387f834a260daa02'),
+  sku: 'demo-1',
+  price: 10
+}
+{
+  executionSuccess: true,
+  nReturned: 1,
+  executionTimeMillis: 3,
+  totalKeysExamined: 1,
+  totalDocsExamined: 1,
+  executionStages: {
+    isCached: false,
+    stage: 'EXPRESS_IXSCAN',
+    keyPattern: '{ sku: 1 }',
+    indexName: 'sku_1',
+    keysExamined: 1,
+    docsExamined: 1,
+    nReturned: 1
+  }
+}
+
+STDERR

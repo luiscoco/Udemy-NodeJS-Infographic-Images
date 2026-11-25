@@ -1,0 +1,38 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Tasks API",
+    "version": "1.0.0"
+  },
+  "components": {
+    "schemas": {}
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+STDERR

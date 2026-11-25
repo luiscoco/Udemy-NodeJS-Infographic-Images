@@ -1,0 +1,13 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+benchmark | samples | mean rate | 95% CI | median rate | warning
+Array.join | 30 | 36.95k ops/s | [34.18k ops/s, 39.73k ops/s] | 35.21k ops/s | noisy, skewed
+concatenation loop | 30 | 42.49k ops/s | [36.34k ops/s, 48.65k ops/s] | 41.07k ops/s | noisy
+
+2 completed, 0 failed, 0 skipped
+ (node:15740) ExperimentalWarning: Benchmarks is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+STDERR

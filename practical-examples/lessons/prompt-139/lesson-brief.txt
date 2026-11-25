@@ -1,0 +1,17 @@
+Category: Node.js core · Purpose: Communicate whether an instance should receive traffic or restart.
+Implement separate readiness and liveness endpoints in a Node.js service. Simulate startup, database unavailability, and shutdown, verifying readiness changes without automatically treating every dependency outage as a process failure.
+
+FocusedFastifyhealthroutes prereq appandpoolprovided; state sharedwithboot/shutdown:
+let started = false;
+let stopping = false;
+app.get('/live', async () => ({ alive: true }));
+app.get('/ready', async (_, reply) => {
+  if (!started || stopping) return reply.code(503).send({ ready: false });
+  try {
+    await pool.query('SELECT 1');
+    return { ready: true };
+  } catch {
+    return reply.code(503).send({ ready: false });
+  }
+});
+Afterinitializationstarted=true; shutdownsetsstopping=truebeforestopadmission. Databasecheckmusthaveboundedquery/connecttimeoutconfiguredpool (prereq) nothangprobes. Matrixstartup live200ready503; healthyboth200;DBoutagelive200ready503;shutdownready503whilelisteneravailablethenconnectionsclose. Liveness200onlywhileeventloopcanrespond notbypasshang. Dependencyoutagedoesnotautomaticallyrestartallinstances, readinessrequireddependencypolicy. Source nodejs.org/api/http.html • fastify.dev.

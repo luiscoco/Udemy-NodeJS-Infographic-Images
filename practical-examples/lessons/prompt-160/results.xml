@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="file A owns its process global" time="0.001151" classname="test" file="C:\00. IMPORTANTE - Prompts NodeJS, Angular, React, Blazor\Udemy-NodeJS-Infographic-Images\practical-examples\lessons\prompt-160\a.test.mjs"/>
+	<testcase name="file B owns its process global" time="0.001203" classname="test" file="C:\00. IMPORTANTE - Prompts NodeJS, Angular, React, Blazor\Udemy-NodeJS-Infographic-Images\practical-examples\lessons\prompt-160\b.test.mjs"/>
+	<!-- tests 2 -->
+	<!-- suites 0 -->
+	<!-- pass 2 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 199.3332 -->
+</testsuites>

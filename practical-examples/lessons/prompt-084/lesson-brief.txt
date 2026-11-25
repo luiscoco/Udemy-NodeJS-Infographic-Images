@@ -1,0 +1,16 @@
+Category: Ecosystem · Purpose: Understand browser access rules around an API.
+Serve a small page using fastify and @fastify/static, and configure @fastify/cors for a separate allowed origin. Verify browser behavior for allowed and disallowed origins, and demonstrate that CORS does not authenticate nonbrowser clients.
+
+Focused complete setup app.mjs:
+import Fastify from 'fastify';
+import cors from '@fastify/cors';
+import staticFiles from '@fastify/static';
+import { fileURLToPath } from 'node:url';
+const app = Fastify();
+await app.register(cors, { origin: 'http://localhost:5173', credentials: true });
+await app.register(staticFiles, {
+  root: fileURLToPath(new URL('./public/', import.meta.url))
+});
+app.get('/data', async () => ({ ok: true }));
+await app.listen({ port: 3000 });
+Prerequisite prepared public/index.html and separate browserpageoriginlocalhost5173; npm install --save-exact fastify @fastify/cors @fastify/static ; node app.mjs. Browserallowed5173canreadAPI3000response; disallowedoriginbrowserblocksreadingresponse(notnecessarilyrequestitself); curlnotrestrictedbyCORS. Credentialsrequiresspecificoriginnot*. CORSnotauthenticationandnotCSRFdefense. fileURLToPathportableWindows. OfficialGitHubfastifyplugins.

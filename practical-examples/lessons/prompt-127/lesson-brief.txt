@@ -1,0 +1,28 @@
+Category: Node.js core · Purpose: Finish or terminate active work within a bounded shutdown period.
+Add coordinated shutdown to a service with HTTP requests, long-lived connections, and background work. Stop admission, drain or close resources, enforce a deadline, and verify termination during active traffic.
+
+Coordinatedshutdown design graphic, focused serverexcerpt prereqs server is listeningnode:httpserver, stopBackground andcloseDatabase projectasyncfunctions, readiness usesstopping, upgradedconnections tracked separately. Code:
+let stopping = false;
+async function shutdown() {
+  if (stopping) return;
+  stopping = true;
+  const deadline = setTimeout(() => {
+    server.closeAllConnections();
+    process.exit(1);
+  }, 10000);
+  try {
+    await Promise.all([
+      new Promise((resolve, reject) =>
+        server.close(error => error ? reject(error) : resolve())),
+      stopBackground()
+    ]);
+    await closeDatabase();
+    clearTimeout(deadline);
+  } catch (error) {
+    console.error('Shutdown failed');
+    process.exitCode = 1;
+  }
+}
+process.once('SIGTERM', shutdown);
+process.once('SIGINT', shutdown);
+Caveatfailurecatchleavesdeadlinetoenforceexit. LonglivedWebSocket/SSEstopandcloseexplicitly, closeAllConnectionsnotupgraded; stopadmissionreadinessfalse,stopproducers/drainworkers,HTTPdrain,DBflushtelemetry, deadline10s. VerificationactiveHTTPslowclientbackgroundboundedtermination. NodehttpSIGTERMplatformdifferencesWindowsCtrlC. Source nodejs.org/api/http.html/process.html.

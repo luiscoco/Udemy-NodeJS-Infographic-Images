@@ -1,0 +1,18 @@
+Category: Node.js core · Purpose: Encode and decode binary protocols.
+Define a binary record containing a version byte, integer length, and payload using Buffer and typed arrays. Verify endianness, bounds checking, and round-trip decoding of multiple records.
+
+binary.mjs exact:
+const text = Buffer.from('hello', 'utf8');
+const packet = Buffer.alloc(5 + text.length);
+packet.writeUInt8(1, 0);
+packet.writeUInt32BE(text.length, 1);
+text.copy(packet, 5);
+function decode(bytes) {
+  if (bytes.length < 5) throw Error('Truncated header');
+  const length = bytes.readUInt32BE(1);
+  if (bytes[0] !== 1 || length > 1024 || bytes.length !== 5 + length)
+    throw Error('Invalid record');
+  return bytes.subarray(5).toString('utf8');
+}
+console.log(decode(packet));
+node binary.mjs => hello. Diagram byte0 version1, bytes1–4 unsigned length big-endian5, bytes5–9payloadhello. Buffer bounds and validation; subarray shares memory, Buffer.from copies if needed; don't use allocUnsafe uninitialized data. Truncated or oversized reject.

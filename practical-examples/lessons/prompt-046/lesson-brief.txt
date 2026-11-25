@@ -1,0 +1,14 @@
+Category: Node.js core · Purpose: Reduce the risk of corrupting existing data.
+Implement configuration replacement using a temporary file and rename within one directory. Inject a failure before replacement and verify the original remains intact; explain atomicity versus crash durability.
+
+Focused replace function for an existing prepared fixture directory:
+import { writeFile, rename, rm } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
+async function replace(file, text) {
+  const temporary = file + '.' + randomUUID() + '.tmp';
+  try {
+    await writeFile(temporary, text, { flag: 'wx' });
+    await rename(temporary, file);
+  } finally { await rm(temporary, { force: true }); }
+}
+Same directory keeps rename on same filesystem. Failure before rename leaves original intact; remove incomplete temp. Atomic visibility vs crash durability distinct, fsync file+directory needed platform-specific stronger persistence; Windows sharing locks may prevent rename. Failure test inject before rename. No guarantee atomic across filesystems, not concurrent-update lock.

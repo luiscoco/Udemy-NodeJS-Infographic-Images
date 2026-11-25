@@ -1,0 +1,8 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{"level":30,"time":1795615250245,"pid":8104,"hostname":"LCELaptop","requestId":"req-001","req":{"headers":{}},"action":"login","msg":"request"}
+{"level":50,"time":1795615250246,"pid":8104,"hostname":"LCELaptop","requestId":"req-001","err":{"type":"Error","message":"fixture failure","stack":"Error: fixture failure\n    at file:///C:/00.%20IMPORTANTE%20-%20Prompts%20NodeJS,%20Angular,%20React,%20Blazor/Udemy-NodeJS-Infographic-Images/practical-examples/lessons/prompt-115/demo.mjs:25:18\n    at ModuleJob.run (node:internal/modules/esm/module_job:569:25)\n    at async node:internal/modules/esm/loader:650:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:105:5)"},"msg":"failed"}
+
+
+STDERR

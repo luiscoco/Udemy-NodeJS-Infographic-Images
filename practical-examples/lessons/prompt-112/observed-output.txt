@@ -1,0 +1,15 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+[
+  {
+    rule: 'no-unused-vars',
+    message: "'unused' is assigned a value but never used."
+  },
+  { rule: 'no-undef', message: "'missingName' is not defined." }
+]
+const x = { a: 1 };
+console.log(x);
+
+
+STDERR

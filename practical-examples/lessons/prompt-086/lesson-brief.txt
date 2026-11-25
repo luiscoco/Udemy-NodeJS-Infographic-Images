@@ -1,0 +1,14 @@
+Category: Ecosystem · Purpose: Access a relational database with controlled connection usage.
+Build parameterized CRUD operations using pg and a local PostgreSQL service. Configure a bounded pool, test injection-like input as ordinary data, and verify connections are released after errors.
+
+Focused pgpool CRUD:
+import { Pool } from 'pg';
+const pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 5 });
+try {
+  const { rows } = await pool.query(
+    'SELECT id, title FROM tasks WHERE title = $1',
+    ["x'; DROP TABLE tasks; --"]
+  );
+  console.log(rows);
+} finally { await pool.end(); }
+npm install --save-exact pg; prerequisite localPostgreSQLtaskstable/DATABASE_URLvalid. ParameterargisordinarydatanotexecutedSQL; expectedmatchingrowsoremptydependingfixture,nofakeDBdestruction. pool.queryownsrelease; checkedoutclientreleasefinally. max5perprocess,replicas×maxwithinDBbudget; identifiercan'tparameterizeasvaluesuseallowlist. Source node-postgres.com/features/queries andpooling.

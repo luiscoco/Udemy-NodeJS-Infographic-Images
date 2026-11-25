@@ -1,0 +1,8 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{ size: 5, status: 200, body: '{"stored":true}' }
+{ size: 2048, status: 413, body: '{"error":"Too large"}' }
+only complete upload retained with generated filename
+
+STDERR

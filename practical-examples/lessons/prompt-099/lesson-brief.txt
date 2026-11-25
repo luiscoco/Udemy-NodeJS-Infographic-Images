@@ -1,0 +1,18 @@
+Category: Ecosystem · Purpose: Validate bearer credentials according to a defined trust policy.
+Build JWT issuance and verification using jose. Restrict algorithms and verify issuer, audience, and expiry; test tampered tokens, incorrect audiences, and expired credentials.
+
+Focused JWT issuance/verification; server-held randomkey of at least32bytes supplied by authentication harness:
+import { SignJWT, jwtVerify } from 'jose';
+const token = await new SignJWT({ sub: 'user-1' })
+  .setProtectedHeader({ alg: 'HS256' })
+  .setIssuer('https://course.example')
+  .setAudience('tasks-api')
+  .setIssuedAt()
+  .setExpirationTime('15m')
+  .sign(key);
+const { payload } = await jwtVerify(token, key, {
+  algorithms: ['HS256'],
+  issuer: 'https://course.example',
+  audience: 'tasks-api'
+});
+npm install --save-exact jose. Matrixvalidaccepted,tampered/wrongaudience/wrongissuer/expired/disallowedalgorithm rejected. Verify signature+claims not justdecode, authz separate. No JWT/keylogs orhardcodedproductionkeys; HTTPSbearertokens; expirationnotrevocation. Focusedexcerptnotstandalonewithoutkey. Source github.com/panva/jose.

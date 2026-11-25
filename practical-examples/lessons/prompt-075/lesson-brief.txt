@@ -1,0 +1,13 @@
+Category: Node.js core · Purpose: Understand multiple processes serving one application.
+Build a two-worker node:cluster HTTP service that returns each worker’s PID. Terminate one worker, verify controlled replacement, and demonstrate why ordinary in-memory state is not shared.
+
+cluster.mjs:
+import cluster from 'node:cluster';
+import { createServer } from 'node:http';
+if (cluster.isPrimary) {
+  cluster.fork(); cluster.fork();
+  cluster.on('exit', () => cluster.fork());
+} else {
+  createServer((req, res) => res.end(String(process.pid))).listen(3000);
+}
+node cluster.mjs thenrepeatcurl.exe http://localhost:3000. PIDs varynondeterministically, no strictalternationguarantee. Snippet minimalrestartillustration needsrestartbudget/backoffandshutdownflag infullapp orcrashloop. Independenteachprocessheap; sharedstateviaexternalDB/Redis. TwoCPUprocessesnotsametworworkerthreads; eachhasseparateeventloop. CTRL+Cstop, signalplatformdifferences.

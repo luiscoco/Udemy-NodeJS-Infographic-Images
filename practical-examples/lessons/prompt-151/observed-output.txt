@@ -1,0 +1,9 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{"read":4,"accepted":2,"malformed":1,"peakRssKiB":43948}
+ {"level":"info","text":"café 😀"}
+{"level":"error"}
+ malformed failure preserved existing output and removed partial
+
+STDERR

@@ -1,0 +1,29 @@
+Back up an embedded SQLite database, reopen the copy read-only, iterate restored rows, and preserve a 64-bit integer beyond JavaScript's safe Number range. Use a unique disposable lab directory and verify the copy rather than assuming backup success.
+
+Course baseline: Node.js 26.13.1. node:sqlite is Stability 1.2 Release candidate; do not label it fully stable. Database is the current class name on Node 26.13.1. Statements execute synchronously: iteration avoids all() materializing every row, but it does not make queries asynchronous. Use a BigInt literal before binding and setReadBigInts(true) before reading; converting a rounded Number to BigInt cannot recover lost precision. backup() returns a Promise and needs an open source; it overwrites an existing destination. This lab chooses a fresh destination in a disposable folder; dispose statements and databases before removing that folder. The copy is intentionally deleted on scope exit: durable backup retention is a separate task. Complete the exercise: read-only writes fail, compare counts/IDs and verify a retained copy after restart. Essential output only; warnings may also appear.
+Files (copy exactly):
+sqlite-backup.mjs:
+import { Database, backup } from 'node:sqlite';
+import { mkdtempDisposable } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
+await using temp = await mkdtempDisposable(join(tmpdir(), 'sqlite-lab-'));
+using source = new Database(':memory:');
+source.exec('CREATE TABLE notes(id INTEGER PRIMARY KEY, body TEXT)');
+using insert = source.prepare('INSERT INTO notes VALUES (?, ?)');
+insert.run(9007199254740993n, 'safe');
+
+const path = join(temp.path, 'copy.db');
+await backup(source, path);
+using restored = new Database(path, { readOnly: true });
+using rows = restored.prepare('SELECT id, body FROM notes ORDER BY id');
+rows.setReadBigInts(true);
+for (const row of rows.iterate()) {
+  console.log(row.id.toString(), row.body);
+}
+Commands (PowerShell, each a single unwrapped line):
+node sqlite-backup.mjs
+Essential expected output (illustrative):
+9007199254740993 safe
+Sources: https://nodejs.org/api/sqlite.html | https://nodejs.org/api/fs.html

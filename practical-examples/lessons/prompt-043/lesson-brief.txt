@@ -1,0 +1,20 @@
+Category: Node.js core · Purpose: Read and write files with predictable failure handling.
+Build a file utility with node:fs/promises that creates, reads, appends, and deletes a temporary file. Verify missing-file errors and ensure explicitly opened file handles close after both success and failure.
+
+Code file files.mjs, EXACT content:
+import { mkdtemp, writeFile, appendFile, readFile, open, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+const dir = await mkdtemp(join(tmpdir(), 'node-lab-'));
+const file = join(dir, 'demo.txt');
+try {
+  await writeFile(file, 'Hello');
+  await appendFile(file, ', Node.js!');
+  const handle = await open(file, 'r');
+  try { console.log(await handle.readFile('utf8')); }
+  finally { await handle.close(); }
+  await rm(file);
+  try { await readFile(file); }
+  catch (e) { console.log(e.code); }
+} finally { await rm(dir, { recursive: true, force: true }); }
+Command node files.mjs; essential expected Hello, Node.js! then ENOENT. Generated temp data only. fs promises propagate errors; always close explicit handles. No extra code.

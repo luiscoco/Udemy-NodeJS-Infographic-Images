@@ -1,0 +1,19 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+/tasks 200 []
+/fail 500 {"error":"Internal error"}
+/missing 404 <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot GET /missing</pre>
+</body>
+</html>
+
+[ 'before', 'before', 'error', 'before' ]
+
+STDERR

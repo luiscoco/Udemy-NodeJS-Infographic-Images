@@ -1,0 +1,6 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{ value: { reportId: 'r1' }, attempts: 3 }
+
+STDERR

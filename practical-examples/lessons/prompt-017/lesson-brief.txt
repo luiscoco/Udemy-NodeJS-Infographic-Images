@@ -1,0 +1,4 @@
+Category: Node.js core · Purpose: Reason about when callbacks can execute.
+Create an experiment using a filesystem callback, setTimeout, and setImmediate. Repeat it inside and outside an I/O callback, recording observations while distinguishing guaranteed ordering from timing-dependent results.
+
+order.mjs: import { readFile } from 'node:fs'; setTimeout(()=>console.log('outer timeout'),0); setImmediate(()=>console.log('outer immediate')); readFile(new URL(import.meta.url),()=>{ setTimeout(()=>console.log('I/O timeout'),0); setImmediate(()=>console.log('I/O immediate')); }); Guaranteed in I/O callback: I/O immediate before I/O timeout. At top level timeout vs immediate is timing-dependent; NO single guaranteed whole-program order, show two possible observations, repeated node order.mjs. Timers threshold not exact deadline.

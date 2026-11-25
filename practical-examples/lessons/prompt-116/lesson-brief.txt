@@ -1,0 +1,16 @@
+Category: Node.js core · Purpose: Preserve correlation information across asynchronous operations.
+Use AsyncLocalStorage to carry a request ID through promises, timers, and database-like callbacks. Run overlapping requests and verify their context values never mix.
+
+Complete context.mjs:
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { setTimeout as delay } from 'node:timers/promises';
+const context = new AsyncLocalStorage();
+async function request(id, ms) {
+  return context.run({ id }, async () => {
+    await Promise.resolve();
+    await delay(ms);
+    console.log(context.getStore().id);
+  });
+}
+await Promise.all([request('A', 20), request('B', 5)]);
+node context.mjs expected B then A, each keeps own ID; outside run getStore undefined. Show requestA andB parallel separate stores. Full exercise add database-like callbacks, verify custom integrations; AsyncResource may be needed for context-losing callback APIs. Do not say all arbitrary callbacks automatically preserve. Sources nodejs.org/api/async_context.html.

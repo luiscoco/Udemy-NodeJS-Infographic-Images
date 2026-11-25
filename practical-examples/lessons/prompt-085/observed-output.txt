@@ -1,0 +1,10 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+[ [Object: null prototype] { id: 1, text: 'Learn Node.js' } ]
+[
+  [Object: null prototype] { id: 1, text: 'Learn Node.js' },
+  [Object: null prototype] { id: 2, text: 'Learn Node.js' }
+]
+
+STDERR

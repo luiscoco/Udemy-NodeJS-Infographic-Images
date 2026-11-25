@@ -1,0 +1,10 @@
+from pathlib import Path
+import json
+root=Path(__file__).resolve().parents[1]
+p=root/'shared/lab.mjs';s=p.read_text();s=s.replace("import { join } from 'node:path';","import { join, dirname, delimiter } from 'node:path';");s=s.replace("...options,stdio:['pipe','pipe','pipe'],shell:false", "...options,stdio:['pipe','pipe','pipe'],shell:false,env:{...(options.env??process.env),PATH:dirname(process.execPath)+delimiter+(options.env??process.env).PATH}");p.write_text(s)
+p=root/'shared/telemetry.mjs';p.write_text(p.read_text().replace('new SimpleSpanProcessor(exporter)','new SimpleSpanProcessor({exporter})'))
+p=root/'lessons/prompt-112/demo.mjs';s=p.read_text();start="new URL('./eslint.config.mjs',import.meta.url).pathname.replace(/^\\/(C:)/,'$1')";s=s.replace(start,"fileURLToPath(new URL('./eslint.config.mjs',import.meta.url))");p.write_text("import {fileURLToPath} from 'node:url';\n"+s)
+p=root/'lessons/prompt-098/demo.mjs';s=p.read_text().replace("c.name+'='+c.value","c.name+'='+encodeURIComponent(c.value)");p.write_text(s)
+p=root/'lessons/prompt-131/binding.gyp';p.write_text(json.dumps({'targets':[{'target_name':'addon','sources':['native.cc'],'include_dirs':['<!@(node -p "require(\'node-addon-api\').include")'],'dependencies':['<!(node -p "require(\'node-addon-api\').gyp")'],'defines':['NAPI_DISABLE_CPP_EXCEPTIONS']}]},indent=2))
+p=root/'lessons/prompt-136/Dockerfile';p.write_text(p.read_text().replace('RUN npm ci --omit=dev','RUN npm ci --omit=dev && mkdir -p node_modules'))
+p=root/'tools/validate.mjs';s=p.read_text();s=s.replace("if(item.mode!=='automatic')", "if(item.mode!=='automatic'&&!(process.argv.includes('--services')&&/postgres|redis|mongodb/.test(item.mode))&&!(process.argv.includes('--native')&&item.mode==='native-tooling')&&!(process.argv.includes('--docker')&&item.mode==='docker'))");p.write_text(s)

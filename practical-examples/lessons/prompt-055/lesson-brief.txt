@@ -1,0 +1,19 @@
+Category: Node.js core · Purpose: Coordinate stream completion and errors.
+Build a file transformation with node:stream/promises.pipeline. Inject a transform error and an abort signal, verifying all streams close and incomplete output is handled according to a stated policy.
+
+Focused pipeline snippet:
+import { createReadStream, createWriteStream } from 'node:fs';
+import { pipeline } from 'node:stream/promises';
+import { createGzip } from 'node:zlib';
+import { rm, rename } from 'node:fs/promises';
+const temporary = './fixture/output.gz.part';
+try {
+  await pipeline(createReadStream('./fixture/input.txt'),
+    createGzip(), createWriteStream(temporary),
+    { signal: AbortSignal.timeout(1000) });
+  await rename(temporary, './fixture/output.gz');
+} catch (error) {
+  await rm(temporary, { force: true });
+  throw error;
+}
+Prerequisite prepared owned fixture directory,inputfile; final policy publishonlyon success,deletepartial onfailure. pipeline propagates errors/destroys participant streams; destination existingoverwrite policy mustdocument. Inject transformerror anddeadline; checksumsuccess. Do notuse pipe()alone as equivalenterrorcleanup.

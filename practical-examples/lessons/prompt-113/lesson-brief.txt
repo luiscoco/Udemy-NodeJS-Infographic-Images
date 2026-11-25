@@ -1,0 +1,17 @@
+Category: Node.js core · Purpose: Inspect program state before guessing at a fix.
+Create a reproducible calculation bug and debug it with --inspect-brk using an editor or DevTools. Set a conditional breakpoint, inspect variables, and verify a regression test fails before the fix.
+
+Teach inspector workflow and a regression test. Files discount.mjs (intentionally buggy) and discount.test.mjs. Exact code:
+export function total(price, percent) {
+  return price * (1 - percent); // BUG: percent is 0..100
+}
+console.log(total(100, 20));
+
+Test:
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { total } from './discount.mjs';
+test('20 percent discount', () => {
+  assert.equal(total(100, 20), 80);
+});
+Commands node --test discount.test.mjs and node --inspect-brk discount.mjs. Conditional breakpoint percent > 1. Inspect price=100 percent=20 buggy return=-1900. Fix expression price * (1 - percent / 100). Expected test fails before fix, passes after. Inspector access local only, never expose debugger. Sources nodejs.org/api/debugger.html and inspector.html.

@@ -1,0 +1,12 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+Hello watch fixture
+Completed running 'main.mjs'. Waiting for file changes before restarting...
+Change detected in 'C:\\Users\\luisc\\AppData\\Local\\Temp\\node-course-3VsFZ9\\message.mjs'
+Restarting 'main.mjs'
+Updated watch fixture
+
+actual imported-file edit triggered restart
+
+STDERR

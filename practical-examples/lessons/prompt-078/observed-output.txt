@@ -1,0 +1,8 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+201 {"id":1,"title":"hello"}
+400 {"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"params/id must be integer"}
+400 {"statusCode":400,"code":"FST_ERR_VALIDATION","error":"Bad Request","message":"body must have required property 'title'"}
+
+STDERR

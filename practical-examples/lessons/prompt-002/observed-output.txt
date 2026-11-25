@@ -1,0 +1,47 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{
+  args: [ '--eval', '2 + 3' ],
+  code: 0,
+  signal: null,
+  stdout: '',
+  stderr: ''
+}
+{
+  args: [ '--print', '2 + 3' ],
+  code: 0,
+  signal: null,
+  stdout: '5\n',
+  stderr: ''
+}
+{
+  args: [ '--check', 'main.mjs' ],
+  code: 0,
+  signal: null,
+  stdout: '',
+  stderr: ''
+}
+{
+  args: [ 'main.mjs' ],
+  code: 0,
+  signal: null,
+  stdout: 'Hello, Node.js!\n',
+  stderr: ''
+}
+{
+  args: [ '--check', 'bad.mjs' ],
+  code: 1,
+  signal: null,
+  stdout: '',
+  stderr: 'C:\\00. IMPORTANTE - Prompts NodeJS, Angular, React, Blazor\\Udemy-NodeJS-Infographic-Images\\practical-examples\\lessons\\prompt-002\\bad.mjs:1\r\n' +
+    'const x = ;\r\n' +
+    '          ^\r\n' +
+    '\r\n' +
+    "SyntaxError: Unexpected token ';'\r\n" +
+    '    at checkSyntax (node:internal/main/check_syntax:84:5)\r\n' +
+    '\r\n' +
+    'Node.js v26.13.1\r\n'
+}
+
+STDERR

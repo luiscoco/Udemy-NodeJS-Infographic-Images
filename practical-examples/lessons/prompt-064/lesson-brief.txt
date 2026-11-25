@@ -1,0 +1,16 @@
+Category: Node.js core · Purpose: Understand concurrent streams within a connection.
+Build an HTTP/2 server and client using node:http2. Send multiple requests over one session, cancel one stream, and verify the remaining streams complete and the session closes.
+
+Focused HTTP2client, prerequisite local node:http2 cleartextserverport3000:
+import { connect, constants } from 'node:http2';
+const session = connect('http://127.0.0.1:3000');
+session.on('error', console.error);
+const first = session.request({ ':path': '/a' });
+const second = session.request({ ':path': '/b' });
+first.on('error', console.error);
+second.on('error', console.error);
+first.on('data', chunk => process.stdout.write(chunk));
+first.on('end', () => session.close());
+first.end(); second.end();
+second.close(constants.NGHTTP2_CANCEL);
+Labelclientfocused, serverfixture mustprovide /a /b; sessionclosegracefulallowsactivefinish. MultiplexseveralstreamsoneTCPsession; cancelone doesn'tcancelother; HTTP2cleartext localonly browser usesTLSandcertconfig; closeallresources; don't usefetch asHTTP2guarantee. Verificationcasesfirstcompletes,secondcancelled,sessioncloses.

@@ -1,0 +1,21 @@
+Category: Node.js core · Purpose: Detect pressure on the event loop.
+Measure operation duration, event-loop utilization, and event-loop delay using node:perf_hooks. Introduce blocking work and verify the measurements reveal it, including correct conversion of reported units.
+
+Complete measure.mjs:
+import { performance, monitorEventLoopDelay } from 'node:perf_hooks';
+import { setTimeout as delay } from 'node:timers/promises';
+const histogram = monitorEventLoopDelay({ resolution: 10 });
+histogram.enable();
+await delay(30);
+const before = performance.eventLoopUtilization();
+const started = performance.now();
+while (performance.now() - started < 80) {}
+await delay(30);
+const elu = performance.eventLoopUtilization(before);
+console.log({
+  durationMs: performance.now() - started,
+  utilization: elu.utilization,
+  maxDelayMs: histogram.max / 1e6
+});
+histogram.disable();
+node measure.mjs. Illustrative output placeholders measured values, never fixed exact. performance.now milliseconds, ELU ratio0..1 (not CPU utilization), monitorEventLoopDelay nanoseconds convert/1e6. Allow sampling before/after block. Source nodejs.org/api/perf_hooks.html.

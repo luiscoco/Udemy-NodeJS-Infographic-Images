@@ -1,0 +1,23 @@
+Category: Ecosystem · Purpose: Observe latency, errors, and workload over time.
+Use prom-client to expose request counters, a duration histogram, and an in-flight gauge. Verify metrics change under success and failure while labels avoid user IDs and unbounded URL values.
+
+npm install --save-exact prom-client. Focused handler excerpt prerequisites app is initialized Fastify instance; doWork provided may resolve or reject, registered metrics shared once. Code:
+import { Counter, Histogram, Gauge, register } from 'prom-client';
+const requests = new Counter({ name: 'app_requests_total', help: 'Requests', labelNames: ['outcome'] });
+const duration = new Histogram({ name: 'app_duration_seconds', help: 'Duration' });
+const active = new Gauge({ name: 'app_inflight', help: 'Active requests' });
+app.get('/work', async () => {
+  active.inc();
+  const stop = duration.startTimer();
+  try {
+    const result = await doWork();
+    requests.inc({ outcome: 'ok' });
+    return result;
+  } catch (error) {
+    requests.inc({ outcome: 'error' });
+    throw error;
+  } finally { stop(); active.dec(); }
+});
+app.get('/metrics', async (_, reply) =>
+  reply.type(register.contentType).send(await register.metrics()));
+Verification scenarios counter success/failure increment, histogram seconds/count, gauge returns0 evenerrors. Low-cardinality outcome label two values; don'tlabelrawURLs/userIDs. Prometheus scrape, restrict metricsendpoint asappropriate. Sources github.com/prometheus/client_js, fastify.dev.

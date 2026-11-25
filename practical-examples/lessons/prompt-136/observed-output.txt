@@ -1,0 +1,100 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+non-root container replied on its assigned loopback port
+
+STDERR
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile:
+#1 transferring dockerfile: 441B 0.3s done
+#1 DONE 1.4s
+
+#2 [internal] load metadata for docker.io/library/node:26.13.1-bookworm-slim
+#2 DONE 3.7s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 82B 0.0s done
+#3 DONE 0.3s
+
+#4 [deps 1/5] FROM docker.io/library/node:26.13.1-bookworm-slim@sha256:0042e17d232a87a2cd485be1da7900fca4d10a4ad11b29e9285da1d2e54798c9
+#4 resolve docker.io/library/node:26.13.1-bookworm-slim@sha256:0042e17d232a87a2cd485be1da7900fca4d10a4ad11b29e9285da1d2e54798c9 0.1s done
+#4 ...
+
+#5 [internal] load build context
+#5 transferring context: 642B 0.1s done
+#5 DONE 0.2s
+
+#4 [deps 1/5] FROM docker.io/library/node:26.13.1-bookworm-slim@sha256:0042e17d232a87a2cd485be1da7900fca4d10a4ad11b29e9285da1d2e54798c9
+#4 DONE 0.4s
+
+#4 [deps 1/5] FROM docker.io/library/node:26.13.1-bookworm-slim@sha256:0042e17d232a87a2cd485be1da7900fca4d10a4ad11b29e9285da1d2e54798c9
+#4 extracting sha256:b1dd3d113aab1041fd80cc61d9db7ffbc058f756bf46fc149a0d9aa8b85935f4
+#4 sha256:24ba9232e7ab25f8b6a718e784c08278266aecca4e35e71a18867fdfe5a999f4 3.31kB / 3.31kB 0.2s done
+#4 sha256:c36b0ce17939466444d2305740f7fdf470d9d03b943e9870d85d20c86a25e184 447B / 447B 0.3s done
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 0B / 55.85MB 0.2s
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 3.15MB / 55.85MB 1.4s
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 6.29MB / 55.85MB 1.9s
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 9.44MB / 55.85MB 2.7s
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 12.58MB / 55.85MB 4.1s
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 15.73MB / 55.85MB 4.9s
+#4 extracting sha256:b1dd3d113aab1041fd80cc61d9db7ffbc058f756bf46fc149a0d9aa8b85935f4 5.6s done
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 19.92MB / 55.85MB 5.5s
+#4 extracting sha256:24ba9232e7ab25f8b6a718e784c08278266aecca4e35e71a18867fdfe5a999f4
+#4 extracting sha256:24ba9232e7ab25f8b6a718e784c08278266aecca4e35e71a18867fdfe5a999f4 0.1s done
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 23.07MB / 55.85MB 5.8s
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 26.21MB / 55.85MB 6.1s
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 30.41MB / 55.85MB 6.6s
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 33.55MB / 55.85MB 6.9s
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 37.75MB / 55.85MB 7.2s
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 41.94MB / 55.85MB 7.5s
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 46.14MB / 55.85MB 7.9s
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 50.33MB / 55.85MB 8.4s
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 53.48MB / 55.85MB 9.0s
+#4 sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 55.85MB / 55.85MB 9.3s done
+#4 DONE 9.8s
+
+#4 [deps 1/5] FROM docker.io/library/node:26.13.1-bookworm-slim@sha256:0042e17d232a87a2cd485be1da7900fca4d10a4ad11b29e9285da1d2e54798c9
+#4 extracting sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5
+#4 extracting sha256:18f32166aa1387b1de5a3b50b8c6d15fcbfbc8021c37a22544117b2b6c649ed5 4.3s done
+#4 DONE 14.1s
+
+#4 [deps 1/5] FROM docker.io/library/node:26.13.1-bookworm-slim@sha256:0042e17d232a87a2cd485be1da7900fca4d10a4ad11b29e9285da1d2e54798c9
+#4 extracting sha256:c36b0ce17939466444d2305740f7fdf470d9d03b943e9870d85d20c86a25e184 0.1s done
+#4 DONE 14.2s
+
+#6 [deps 2/5] WORKDIR /app
+#6 DONE 1.5s
+
+#7 [deps 3/5] COPY container-package.json package.json
+#7 DONE 0.4s
+
+#8 [deps 4/5] COPY container-package-lock.json package-lock.json
+#8 DONE 0.1s
+
+#9 [deps 5/5] RUN npm ci --omit=dev && mkdir -p node_modules
+#9 8.569 
+#9 8.569 up to date, audited 1 package in 1s
+#9 8.575 
+#9 8.575 found 0 vulnerabilities
+#9 DONE 8.8s
+
+#10 [stage-1 3/4] COPY --from=deps --chown=node:node /app/node_modules ./node_modules
+#10 DONE 0.1s
+
+#11 [stage-1 4/4] COPY --chown=node:node server.mjs ./
+#11 DONE 0.1s
+
+#12 exporting to image
+#12 exporting layers
+#12 exporting layers 0.5s done
+#12 exporting manifest sha256:619e348714a68d260a3994dfce9a353c91edae89db174a2b579099d69f245e41 0.1s done
+#12 exporting config sha256:dda5f630df615492491bfac0dd080869a75377f54ba6dca60c11f698ba182bf2 0.0s done
+#12 exporting attestation manifest sha256:d645cdaa29cd0aab1f84e6670c929eeeaa13b8c4dfa67c5e72a641ce96ec5ca1 0.0s done
+#12 exporting manifest list sha256:5e09ec218386b41667c9b9bc9adfbf14156cdb94cd6008f852ea060ff4f7d54b
+#12 exporting manifest list sha256:5e09ec218386b41667c9b9bc9adfbf14156cdb94cd6008f852ea060ff4f7d54b 0.1s done
+#12 naming to docker.io/library/node-course-prompt-136:latest 0.0s done
+#12 unpacking to docker.io/library/node-course-prompt-136:latest
+#12 unpacking to docker.io/library/node-course-prompt-136:latest 8.9s done
+#12 DONE 9.9s

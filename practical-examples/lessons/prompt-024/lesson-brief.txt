@@ -1,0 +1,4 @@
+Category: JavaScript · Purpose: Express dependencies without accidentally serializing independent work.
+Implement a workflow containing two independent operations and one dependent operation. Compare unnecessary sequential awaits with correct concurrency, verifying both result correctness and elapsed time.
+
+workflow.mjs: import {setTimeout as delay} from 'node:timers/promises'; const fetchA=async()=>{await delay(100);return2;}; IMPORTANT write return 2 correctly. fetchB same return3. sequential await a then b ~200ms; concurrent const [a,b]=await Promise.all([fetchA(),fetchB()]); const total=a+b; ~100ms. Show dependent sum after both complete. Precise timing variable and illustrative; independence necessary; no concurrency claim CPU parallel.

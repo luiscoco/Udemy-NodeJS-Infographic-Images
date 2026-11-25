@@ -1,0 +1,12 @@
+Category: Node.js core · Purpose: Distribute a small application with its runtime.
+Package a dependency-free CLI using the baseline’s built-in node --build-sea workflow. Document target-platform signing requirements and verify the executable runs without finding a separate Node.js executable on PATH.
+The built-in generation workflow is available on this baseline; SEA remains in active development. Node.js v26.13.1 Documentation
+
+Single executable application (SEA). Status: Stability 1.1, Active development; the built-in node --build-sea workflow was added in Node.js 25.5 and exists on the 26.13.1 baseline. Dependency-free CLI hello.mjs, exactly:
+const name = process.argv[2] ?? 'world';
+console.log(`Hello, ${name}!`);
+File sea-config.json, exactly:
+{ "main": "hello.mjs", "mainFormat": "module", "output": "hello.exe" }
+On Windows the .exe extension in output is required. Commands (PowerShell, each on one line): node --build-sea sea-config.json then .\hello.exe world. Illustrative output: Hello, world!
+Signing panel: Windows, optional: signtool sign /fd SHA256 hello.exe (needs a certificate; an unsigned binary still runs, but SmartScreen and policy may warn). macOS (label POSIX): codesign --sign - hello (ad-hoc; distribution needs a Developer ID and notarization). Linux: no signing step.
+Verification in prose: open a new PowerShell session, remove every PATH entry that contains node.exe, confirm Get-Command node finds nothing, then run .\hello.exe world again. Better still, copy it to a clean machine or VM without Node.js. Facts: the executable embeds the Node.js binary that built it, so it is large and platform-specific (build once per OS/architecture). The injected main script cannot import files from disk, only node: built-ins, so bundle multi-file apps first. Source: nodejs.org/api/single-executable-applications.html.

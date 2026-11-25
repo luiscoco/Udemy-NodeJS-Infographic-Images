@@ -1,0 +1,15 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+✔ HTTP fixture owns resources (168.3607ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 384.7898
+
+
+STDERR

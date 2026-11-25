@@ -1,0 +1,11 @@
+Category: Node.js core · Purpose: Understand message-oriented communication without reliable delivery guarantees.
+Build a UDP sender and receiver using node:dgram with sequence numbers. Simulate dropped and reordered messages, report missing sequences, and verify sockets close cleanly.
+
+Focused complete receiver.mjs:
+import { createSocket } from 'node:dgram';
+const socket = createSocket('udp4');
+socket.on('error', error => console.error(error.message));
+socket.on('message', data => console.log(data.toString('utf8')));
+socket.bind(41234, '127.0.0.1');
+setTimeout(() => socket.close(), 5000);
+Command node receiver.mjs . Prerequisite a separate sender exercise harness sends JSON datagrams {"seq":1}, {"seq":3}, {"seq":2} and intentionally omits seq4. Show verification cases for harness, not claimed receiveranalysisoutput: receives1,3,2 showsoutoforder; application sequence tracking canreportmissing4; duplicatespossible. UDPpreservesdatagramboundariesbutdoesn'tguaranteedelivery,order,oruniqueness; useprotocolappropriateforrequirement. Receiveronlylogsrawpayload,no gapdetector inshownexcerpt. Close sockets oncompletion,errorcleanupinfullapp. No sender code.

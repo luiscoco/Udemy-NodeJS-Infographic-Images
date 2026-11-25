@@ -1,0 +1,4 @@
+Category: Node.js core · Purpose: Locate assets independently of the working directory.
+Load a text asset relative to import.meta.url and import JSON using the baseline’s supported import attributes. Run the application from another directory and verify both resources still load.
+
+main.mjs: import {readFile} from 'node:fs/promises'; import settings from './settings.json' with {type:'json'}; const text=await readFile(new URL('./message.txt',import.meta.url),'utf8');console.log(settings.title,text.trim()); settings.json {"title":"Demo"}; message.txt Hello. Run absolute script path from another directory, outputs same. Relative filesystem strings use cwd, URL uses module location. Modern import attributes with, not removed assert syntax.

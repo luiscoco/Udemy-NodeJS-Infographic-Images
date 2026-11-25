@@ -1,0 +1,4 @@
+Category: JavaScript · Purpose: Preserve useful failures across asynchronous layers.
+Build a three-layer asynchronous workflow using error causes and try/finally. Inject a failure in each layer and verify that cleanup executes and the original cause remains available.
+
+errors.mjs: async function read(){throw new Error('disk unavailable');} async function service(){try{return await read();}catch(cause){throw new Error('Load failed',{cause});}finally{console.log('cleanup');}} try{await service();}catch(e){console.log(e.message);console.log(e.cause.message);} => cleanup,Load failed,disk unavailable. return await needed for catch/finally around rejection; no return in finally masking error. Test inject per layer; cleanup own resources.

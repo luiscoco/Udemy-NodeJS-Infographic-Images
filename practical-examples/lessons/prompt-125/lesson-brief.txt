@@ -1,0 +1,19 @@
+Category: Node.js core · Purpose: Recover from transient failures without amplifying an outage.
+Implement retries for an idempotent HTTP operation with exponential backoff, jitter, a maximum attempt count, and an overall deadline. Verify permanent errors are not retried and cancellation stops pending attempts.
+
+Focused retry.mjs helper. Prerequisites operation({signal}) performs idempotent I/O, throws errors with boolean retryable (HTTP adapter retries only selected transientstatuses like429/503,never401/400), honorssignal. Code:
+import { setTimeout as delay } from 'node:timers/promises';
+export async function retry(operation, signal) {
+  const deadline = AbortSignal.any([signal, AbortSignal.timeout(3000)]);
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    deadline.throwIfAborted();
+    try { return await operation({ signal: deadline }); }
+    catch (error) {
+      deadline.throwIfAborted();
+      if (!error.retryable || attempt === 4) throw error;
+      const cap = Math.min(1000, 100 * 2 ** (attempt - 1));
+      await delay(Math.random() * cap, undefined, { signal: deadline });
+    }
+  }
+}
+signal requiredcallerAbortSignal,3s overall4totalattempts(not4retries), fulljitter0..cap, cancellationinterruptssleep/cooperativeI/O, idempotencyrequired, respectRetry-Afterwithinremainingbudgetfulltask. Verificationstubfirst2transientthirdsuccess→3calls;permanent→1;abort→nomorecalls;deadlineglobalnotreset. Source nodejs.org/api/timers.html/globals.html.

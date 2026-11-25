@@ -1,0 +1,15 @@
+Category: Node.js core · Purpose: Evaluate startup optimization with evidence.
+Enable the stable module compile cache for a CLI with several modules. Compare cold and repeated startup, report cache status, and verify the application still works when caching is unavailable.
+
+Modulecompilecache stablebaseline officialverify. cache.mjs preload:
+import { enableCompileCache } from 'node:module';
+const result = enableCompileCache();
+console.log(result);
+await import('./cli.mjs');
+cli.mjs suppliedstudentimportsseveralmodules, runtimecodecachepersistnotexports/results, dynamicimportafterenable or preloader. node cache.mjs. AlternativePowerShellenv:
+$env:NODE_COMPILE_CACHE = "$PWD/.compile-cache"
+node cli.mjs
+$env:NODE_DISABLE_COMPILE_CACHE = "1"
+node cli.mjs
+Remove-Item Env:NODE_DISABLE_COMPILE_CACHE
+Measurecold/warmrepeatedstartup withsameNode/files, avoidconsoleconfounding, statusobjectpossibleENABLED/ALREADY_ENABLED/FAILED/DISABLED notclaimfixednumeric, failuredoesnotstopapp. cacheversion/permissions/path matter, not universallyfaster. Source nodejs.org/api/module.html.

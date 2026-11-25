@@ -1,0 +1,17 @@
+Category: Node.js core · Purpose: Move CPU-heavy work away from the main event loop.
+Move a CPU-intensive calculation into node:worker_threads. Compare HTTP responsiveness before and after, and verify worker errors and completion are handled.
+
+main.mjs:
+import { Worker } from 'node:worker_threads';
+const worker = new Worker(new URL('./worker.mjs', import.meta.url), {
+  workerData: 100_000
+});
+worker.on('message', result => console.log(result));
+worker.on('error', console.error);
+worker.on('exit', code => { if (code !== 0) console.error('Worker exit:', code); });
+worker.mjs:
+import { parentPort, workerData } from 'node:worker_threads';
+let total = 0;
+for (let i = 1; i <= workerData; i++) total += i;
+parentPort.postMessage(total);
+node main.mjs=>5000050000. CPUworkonworkerJSthreadnotlibuvpool. MainHTTPresponsivenessmeasureseparatecompleteexercise; workermessagesstructuredclone; workerisnotfreeoverhead; don'taddasyncclaimparallel. Worker ends naturallyaftercode because no listeners/timers.

@@ -1,0 +1,70 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+baseline [
+  {
+    'QUERY PLAN': 'Limit  (cost=156.54..156.61 rows=30 width=16) (actual time=1.787..1.801 rows=50 loops=1)'
+  },
+  { 'QUERY PLAN': '  Buffers: shared hit=85' },
+  {
+    'QUERY PLAN': '  ->  Sort  (cost=156.54..156.61 rows=30 width=16) (actual time=1.782..1.787 rows=50 loops=1)'
+  },
+  { 'QUERY PLAN': '        Sort Key: created_at DESC' },
+  { 'QUERY PLAN': '        Sort Method: quicksort  Memory: 28kB' },
+  { 'QUERY PLAN': '        Buffers: shared hit=85' },
+  {
+    'QUERY PLAN': '        ->  Seq Scan on tasks  (cost=0.00..155.80 rows=30 width=16) (actual time=0.045..1.557 rows=100 loops=1)'
+  },
+  { 'QUERY PLAN': "              Filter: (owner_id = '42'::text)" },
+  { 'QUERY PLAN': '              Rows Removed by Filter: 9900' },
+  { 'QUERY PLAN': '              Buffers: shared hit=82' },
+  { 'QUERY PLAN': 'Planning:' },
+  { 'QUERY PLAN': '  Buffers: shared hit=31' },
+  { 'QUERY PLAN': 'Planning Time: 4.671 ms' },
+  { 'QUERY PLAN': 'Execution Time: 1.866 ms' }
+]
+{
+  phase: 'baseline',
+  requests: 50,
+  p50ms: 18.236900000000105,
+  p95ms: 114.17809999999986
+}
+indexed [
+  {
+    'QUERY PLAN': 'Limit  (cost=95.97..96.09 rows=50 width=16) (actual time=0.382..0.392 rows=50 loops=1)'
+  },
+  { 'QUERY PLAN': '  Buffers: shared hit=82 read=2' },
+  {
+    'QUERY PLAN': '  ->  Sort  (cost=95.97..96.22 rows=100 width=16) (actual time=0.379..0.384 rows=50 loops=1)'
+  },
+  { 'QUERY PLAN': '        Sort Key: created_at DESC' },
+  { 'QUERY PLAN': '        Sort Method: quicksort  Memory: 28kB' },
+  { 'QUERY PLAN': '        Buffers: shared hit=82 read=2' },
+  {
+    'QUERY PLAN': '        ->  Bitmap Heap Scan on tasks  (cost=5.06..92.65 rows=100 width=16) (actual time=0.213..0.353 rows=100 loops=1)'
+  },
+  {
+    'QUERY PLAN': "              Recheck Cond: (owner_id = '42'::text)"
+  },
+  { 'QUERY PLAN': '              Heap Blocks: exact=82' },
+  { 'QUERY PLAN': '              Buffers: shared hit=82 read=2' },
+  {
+    'QUERY PLAN': '              ->  Bitmap Index Scan on tasks_owner_id_created_at_idx  (cost=0.00..5.04 rows=100 width=0) (actual time=0.180..0.181 rows=100 loops=1)'
+  },
+  {
+    'QUERY PLAN': "                    Index Cond: (owner_id = '42'::text)"
+  },
+  { 'QUERY PLAN': '                    Buffers: shared read=2' },
+  { 'QUERY PLAN': 'Planning:' },
+  { 'QUERY PLAN': '  Buffers: shared hit=18 read=1' },
+  { 'QUERY PLAN': 'Planning Time: 0.556 ms' },
+  { 'QUERY PLAN': 'Execution Time: 0.442 ms' }
+]
+{
+  phase: 'indexed',
+  requests: 50,
+  p50ms: 14.119500000000016,
+  p95ms: 20.043899999999894
+}
+
+STDERR

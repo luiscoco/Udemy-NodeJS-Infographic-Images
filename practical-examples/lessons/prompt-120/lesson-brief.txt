@@ -1,0 +1,16 @@
+Category: Ecosystem · Purpose: Follow one operation across service boundaries.
+Instrument two local HTTP services using @opentelemetry/api, @opentelemetry/sdk-node, @opentelemetry/auto-instrumentations-node, and a console exporter from @opentelemetry/sdk-trace-base. Verify a request produces related spans, using the packages’ documented ESM initialization.
+
+Teach two-service trace propagation, initialize before service imports and ESM loader per official docs. Use exact packages npm install --save-exact @opentelemetry/api @opentelemetry/sdk-node @opentelemetry/auto-instrumentations-node @opentelemetry/sdk-trace-base. instrumentation.mjs:
+import { NodeSDK } from '@opentelemetry/sdk-node';
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
+import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-base';
+const sdk = new NodeSDK({
+  traceExporter: new ConsoleSpanExporter(),
+  instrumentations: [getNodeAutoInstrumentations()]
+});
+sdk.start();
+process.once('SIGTERM', () => { void sdk.shutdown(); });
+ServiceA.mjs andB.mjs provided by student, use HTTP client covered by selected instrumentation. Each service separateprocess unique OTEL_SERVICE_NAME andPORT. Documented ESM initialization command:
+node --experimental-loader=@opentelemetry/instrumentation/hook.mjs --import ./instrumentation.mjs service-a.mjs
+Use corresponding service-b.mjs command in second terminal. Note @opentelemetry/instrumentation must be installed explicitly too if loader referenced; add it to installcommand. Expected traces same traceID crossingservices, distinctspanIDs parentlink, not inventedactualIDs. Ensure tracecontextheaders propagate, initializeearly, flushshutdown. Sources opentelemetry.io/docs/languages/js/getting-started/nodejs/.

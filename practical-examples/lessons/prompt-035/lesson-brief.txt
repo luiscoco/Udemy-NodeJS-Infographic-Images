@@ -1,0 +1,4 @@
+Category: Node.js core · Purpose: Recognize initialization-order problems.
+Construct a small circular ESM dependency that fails during initialization. Refactor the shared responsibility into a third module and verify the public behavior remains unchanged.
+
+a.mjs imports valueB from b.mjs and exports const valueA=valueB+1; b.mjs imports valueA and exports const valueB=valueA+1 -> ReferenceError accessing before initialization. Refactor constants into shared.mjs, a/b depend shared without cycle. Diagram cycle vs acyclic shared dependency. Live bindings not copied values; some cycles work, avoid blanket every circular import fails.

@@ -1,0 +1,4 @@
+Category: Node.js core · Purpose: Load optional functionality only when needed.
+Build a plugin loader using dynamic import and an explicit plugin-name allowlist. Verify lazy loading, a missing plugin, and rejection of a path-like unapproved plugin name.
+
+plugins.mjs: const plugins=new Map([['hello',()=>import('./plugins/hello.mjs')]]); const load=plugins.get(process.argv[2]); if(!load)throw Error('Unknown plugin'); const plugin=await load();console.log(plugin.run()); hello.mjs export const run=()=> 'hello'; node plugins.mjs hello =>hello; ../../secret rejected before import. Explicit allowlist prevents arbitrary import paths; handle module missing errors too. trusted plugins only, not security isolation.

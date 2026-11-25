@@ -1,0 +1,12 @@
+Category: Node.js core · Purpose: Reduce data size without buffering entire files.
+Build streaming gzip and Brotli round trips using node:zlib. Verify restored checksums, handle corrupted input, and enforce a decompressed-output limit.
+
+Focused compression.mjs assumes input.txt fixture:
+import { createReadStream, createWriteStream } from 'node:fs';
+import { pipeline } from 'node:stream/promises';
+import { createGzip, createGunzip } from 'node:zlib';
+await pipeline(createReadStream('./input.txt'),
+  createGzip(), createWriteStream('./input.txt.gz'));
+await pipeline(createReadStream('./input.txt.gz'),
+  createGunzip(), createWriteStream('./restored.txt'));
+Brotli counterparts createBrotliCompress/createBrotliDecompress. Roundtrip compares SHA256source/restored, errorsoncorruption; in full exercise enforce decompressedbytes with countingTransform thatcallbackError whenlimitexceeded placedafterdecompressbeforefile; cleanup partial. Compression reduces size often notalways; no fake ratios. Stream backpressure avoids wholefilebuffer.

@@ -1,0 +1,17 @@
+Category: Node.js core · Purpose: Inspect directory trees without loading everything at once.
+Build an asynchronous directory walker using opendir and file metadata. Define a symlink policy, handle inaccessible entries, and verify it avoids cycles and reports correct file counts.
+
+Focused walker excerpt, root is a prepared fixture directory, symbolic links are skipped:
+import { opendir } from 'node:fs/promises';
+import { join } from 'node:path';
+async function* walk(dir) {
+  try {
+    for await (const entry of await opendir(dir)) {
+      const path = join(dir, entry.name);
+      if (entry.isSymbolicLink()) continue;
+      if (entry.isDirectory()) yield* walk(path);
+      else if (entry.isFile()) yield path;
+    }
+  } catch (e) { console.error(e.code, dir); }
+}
+Async generator lazy, for-await closes directory, policy skip links avoids following link cycles. Warn depth and permission/race limits; inaccessible path logs then walker continues parent traversal. Checks known fixtures, symlink loop, denied directory, counts. Label snippet focused, don't pretend standalone prints file count.

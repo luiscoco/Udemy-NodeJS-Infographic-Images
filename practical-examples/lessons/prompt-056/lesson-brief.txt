@@ -1,0 +1,14 @@
+Category: Node.js core · Purpose: Process streams using familiar asynchronous control flow.
+Consume a file stream with for await...of, stopping after a configured byte count. Verify early termination releases the resource and compare this behavior with full consumption.
+
+Focused consume.mjs assumes fixture.bin:
+import { createReadStream } from 'node:fs';
+const stream = createReadStream('./fixture.bin', { highWaterMark: 1024 });
+let bytes = 0;
+for await (const chunk of stream) {
+  bytes += chunk.length;
+  if (bytes >= 4096) break;
+}
+console.log('bytes:', bytes);
+console.log('destroyed:', stream.destroyed);
+Expected >=4096 if sufficientfile, default asynciterator earlybreak destroys stream and releasesresources; fullconsumption endsnormally. Byte threshold mayovershoot byonechunk; strictlimit process slice/countremaining. Do notmix readable,dataevent,asynciterator consumption modes. source stream.html.

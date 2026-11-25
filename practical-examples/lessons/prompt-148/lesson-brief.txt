@@ -1,0 +1,27 @@
+Category: Node.js core · Purpose: Create self-contained filesystem fixtures.
+Use node:vfs with the required experimental flag to build an in-memory fixture tree. Verify reads and writes, unmount cleanup, and a read-only configuration without treating the virtual filesystem as a security boundary.
+The module was added in Node.js 26.4. Node.js v26.13.1 Documentation
+
+node:vfs. Added in Node.js 26.4, Stability 1 Experimental. It requires the --experimental-vfs flag and the node: scheme. File fixtures.mjs, exactly:
+import vfs from 'node:vfs';
+import fs from 'node:fs';
+
+const fixture = vfs.create();
+fixture.mkdirSync('/config', { recursive: true });
+fixture.writeFileSync('/config/app.json', '{"mode":"test"}');
+
+const root = fixture.mount();
+console.log(fs.readFileSync(`${root}/config/app.json`, 'utf8'));
+fixture.unmount();
+console.log(fixture.mounted);
+
+const provider = new vfs.MemoryProvider();
+const locked = vfs.create(provider);
+locked.writeFileSync('/seed.txt', 'initial');
+provider.setReadOnly();
+try {
+  locked.writeFileSync('/x.txt', 'fail');
+} catch (error) {
+  console.log(error.code);
+}
+Command: node --experimental-vfs fixtures.mjs. Illustrative output, three lines: {"mode":"test"} then false then EROFS. Teach: mount() returns a generated mount point under the VFS base path, so read it from the return value and never hard-code it; regular node:fs calls see the files only while mounted; unmount() is idempotent and is the cleanup step (a using declaration also unmounts automatically); setReadOnly() cannot be reverted. Security panel, quote the docs: "The VFS API is not a sandbox, permission system, or access-control mechanism." Use OS-level isolation for untrusted code. Source: nodejs.org/api/vfs.html.

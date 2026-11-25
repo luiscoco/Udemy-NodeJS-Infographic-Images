@@ -1,0 +1,16 @@
+Category: Node.js core · Purpose: Make reliable outbound web requests.
+Build a client using native fetch against a local fault-injection server. Handle non-success HTTP statuses, invalid JSON, cancellation, and timeouts, verifying response bodies are consumed or canceled appropriately.
+
+client.mjs prerequisites localfaultserverport3000:
+async function readJSON(path, signal) {
+  const response = await fetch('http://127.0.0.1:3000' + path, { signal });
+  if (!response.ok) {
+    await response.body?.cancel();
+    throw new Error('HTTP ' + response.status);
+  }
+  return response.json();
+}
+try {
+  console.log(await readJSON('/data', AbortSignal.timeout(1000)));
+} catch (e) { console.error(e.name, e.message); }
+node client.mjs withlocalfixtures. Matrix200validJSON→object;404→ErrorHTTP404;200invalidJSON→SyntaxError; deadlinebeforeheaders→TimeoutError; callerabort→AbortError default reason; bodyphaseabortcanvaryso labelphase. fetch doesn't reject justHTTP404/500; consumeorcancelbody. No credentials or externalURLneeded.

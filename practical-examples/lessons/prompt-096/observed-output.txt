@@ -1,0 +1,17 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{
+  valid: true,
+  code: 0,
+  stdout: '{ secretConfigured: true }\n',
+  stderr: ''
+}
+{
+  valid: false,
+  code: 1,
+  stdout: '',
+  stderr: 'Configuration unavailable\n'
+}
+
+STDERR

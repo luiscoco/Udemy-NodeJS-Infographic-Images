@@ -1,0 +1,13 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+[
+  {
+    id: 'r1',
+    owner_id: 'user-a',
+    status: 'complete',
+    result: { total: 42 }
+  }
+]
+
+STDERR

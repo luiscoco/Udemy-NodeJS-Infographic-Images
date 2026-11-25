@@ -1,0 +1,15 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+order.cjs sync
+nextTick
+promise
+microtask
+
+order.mjs sync
+promise
+microtask
+nextTick
+
+
+STDERR

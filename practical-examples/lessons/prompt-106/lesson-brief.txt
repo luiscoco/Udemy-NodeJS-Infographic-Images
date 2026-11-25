@@ -1,0 +1,22 @@
+Category: Node.js core · Purpose: Verify small pieces of behavior independently.
+Test a configuration parser using node:test and node:assert/strict. Cover valid values, boundaries, and malformed input, and introduce one deliberate defect to verify the tests detect it.
+
+config.mjs:
+export function port(value) {
+  if (!/^\d+$/.test(String(value))) throw new Error('Invalid port');
+  const result = Number(value);
+  if (!Number.isInteger(result) || result < 1 || result > 65535)
+    throw new Error('Invalid port');
+  return result;
+}
+config.test.mjs:
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { port } from './config.mjs';
+test('ports: valid, boundaries, malformed', () => {
+  assert.equal(port('3000'), 3000);
+  assert.equal(port(1), 1); assert.equal(port(65535), 65535);
+  for (const input of [0, -1, 65536, 'abc', ''])
+    assert.throws(() => port(input), /Invalid port/);
+});
+node --test config.test.mjs expected1pass; deliberatelychangeupperboundto65536thenboundarytestfails. Stablecoretest+assert noexternalpackage. Testsverifybehavior/boundaries notmirrorimplementation. No executionclaimed.

@@ -1,0 +1,4 @@
+Category: JavaScript · Purpose: Choose appropriate behavior when several operations complete independently.
+Run three simulated operations with Promise.all, Promise.allSettled, and Promise.any. Make one operation fail and assert the different result and rejection behaviors.
+
+aggregate.mjs: const work=()=>[Promise.resolve('A'),Promise.reject(new Error('B failed')),Promise.resolve('C')]; try{await Promise.all(work());}catch(e){console.log('all:',e.message);} console.log((await Promise.allSettled(work())).map(x=>x.status)); console.log(await Promise.any(work())); => all:B failed; fulfilled,rejected,fulfilled; A. all fail-fast rejection doesn't cancel siblings; allSettled waits for all; any returns first fulfillment, all rejected→AggregateError. Include comparison table.

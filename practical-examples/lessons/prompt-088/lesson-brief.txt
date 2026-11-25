@@ -1,0 +1,16 @@
+Category: Ecosystem · Purpose: Evolve database structure reproducibly.
+Use node-pg-migrate with PostgreSQL to create and evolve a task schema. Verify migration from an empty database and an existing dataset, documenting rollback limitations when data could be lost.
+
+Teach migrationworkflowwithcommandsandSQL, no uncertainmigrationAPIcode. Prerequisites localPostgreSQLfixtureDB and DATABASE_URLenvironmentconfiguration, installedcompatible node-pg-migrate and pg. Commands:
+npm install --save-exact pg
+npm install --save-dev --save-exact node-pg-migrate
+npm exec node-pg-migrate -- create create-tasks
+npm exec node-pg-migrate -- up
+npm exec node-pg-migrate -- down
+Label down destructive rollback in disposablefixtureDB.
+SQLschemaexample (to implement inside generatedmigration):
+CREATE TABLE tasks (
+  id BIGSERIAL PRIMARY KEY,
+  title TEXT NOT NULL
+);
+Workflowcreategeneratedmigration→writeup/downinprojectmoduleformat→apply→verifyexistingdata→reviewrollback. Don'tclaimCLIcreatesfullSQLautomatically. UpemptyDBcreatestable; furtheraddcolumnwithdefaultpreservesrows; downdroptablelosesdata; chooseforwardfixwhenrollbackunsafe; nevereditappliedmigration. Sourcegithub.com/salsita/node-pg-migrate.

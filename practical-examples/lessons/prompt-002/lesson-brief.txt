@@ -1,0 +1,4 @@
+Category: Node.js core · Purpose: Explore runtime behavior without building an application.
+Create a short CLI and REPL lab covering script execution, --eval, --print, --check, and process.versions. Include a syntax error and show the expected command output and exit status.
+
+Title "Node.js CLI & REPL". Teach run script vs evaluate vs print vs syntax check; REPL dot commands. Code main.mjs: console.log('Hello, Node.js!'); Terminal commands with outputs: node main.mjs => Hello, Node.js!; node --eval "2 + 3" => no output; node --print "2 + 3" => 5; node --check main.mjs => no output, exit 0; node -p "process.versions.node" => 26.13.1. Include bad.mjs: const x = ; then node --check bad.mjs => SyntaxError, exit 1. PowerShell command immediately after node: $LASTEXITCODE. REPL: node then 2 + 3 => 5; .help / .exit. Note --check parses without running code; REPL context differs from file modules.

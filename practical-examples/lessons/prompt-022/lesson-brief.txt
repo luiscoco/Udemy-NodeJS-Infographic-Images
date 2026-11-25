@@ -1,0 +1,4 @@
+Category: Node.js core · Purpose: Integrate older asynchronous APIs safely.
+Create an error-first callback API and convert it using node:util.promisify. Verify success and failure, and demonstrate why a callback implementation must not complete twice.
+
+callback.mjs: import {promisify} from 'node:util'; function twice(n,cb){queueMicrotask(()=>{if(n<0)return cb(new Error('negative'));cb(null,n*2);});} const run=promisify(twice); console.log(await run(3)); try{await run(-1);}catch(e){console.log(e.message);} Expected6 then negative. Callback error-first(error,value); return after error prevents double completion. Promisify wraps callback once, does not fix side effects in badly implemented producer. No promisifying already async functions.

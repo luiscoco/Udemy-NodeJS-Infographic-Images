@@ -1,0 +1,4 @@
+scrape_configs:
+  - job_name: course-api
+    static_configs:
+      - targets: ["api1:3000", "api2:3000"]

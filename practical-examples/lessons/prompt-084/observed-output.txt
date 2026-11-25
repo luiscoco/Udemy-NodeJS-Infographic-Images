@@ -1,0 +1,16 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{
+  origin: 'http://localhost:5173',
+  status: 200,
+  allow: 'http://localhost:5173'
+}
+{
+  origin: 'http://untrusted.invalid',
+  status: 200,
+  allow: 'http://localhost:5173'
+}
+CORS headers grant the configured origin; they do not authenticate requests.
+
+STDERR

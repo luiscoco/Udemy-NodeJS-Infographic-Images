@@ -1,0 +1,21 @@
+Category: Node.js core · Purpose: Make asynchronous tests complete and clean up reliably.
+Write tests around a temporary HTTP server and directory using test lifecycle hooks. Verify rejected promises fail the test and teardown closes resources even when an assertion fails.
+
+async.test.mjs:
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+test('HTTP fixture cleans up', async t => {
+  const dir = await mkdtemp(join(tmpdir(), 'node-test-'));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const server = createServer((req, res) => res.end('ok'));
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  t.after(() => new Promise(resolve => server.close(resolve)));
+  const { port } = server.address();
+  const response = await fetch('http://127.0.0.1:' + port);
+  assert.equal(await response.text(), 'ok');
+});
+node --test async.test.mjs expected1pass; t.aftercleanupwhenassertfails, await/returnpromises sofailuresobserved; no floatingasync. Port0avoidsfixedportcollisions; registercleanupbeforeassert. Completeexercisehelperhandleslistenerrorandtestsrejectedpromise. No forcedprocess.exit. Sourcenodetest.

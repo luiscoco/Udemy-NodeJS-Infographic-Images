@@ -1,0 +1,10 @@
+Category: JavaScript · Purpose: Coordinate shared state across execution threads.
+Use SharedArrayBuffer and Atomics to maintain a counter across workers. Reproduce a race without atomic operations, verify the corrected total, and avoid blocking waits on the main thread.
+
+Focused worker counter excerpt:
+import { workerData, parentPort } from 'node:worker_threads';
+const view = new Int32Array(workerData);
+for (let i = 0; i < 100_000; i++) Atomics.add(view, 0, 1);
+parentPort.postMessage('done');
+Main setup snippet const shared = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT);
+Create2workerssamebuffer and awaitbothcompletion then Atomics.load(newInt32Array(shared),0)=>200000. Labelmainorchestrationnotshown. Brokenview[0]++ readmodifywriterace mayloseincrementsnotguaranteedeveryrun; Atomicssafecorrectboundnooverflow. AvoidAtomics.wait mainthread; waitAsyncorworkercoordination; sharedmemoryownershipprotocol.

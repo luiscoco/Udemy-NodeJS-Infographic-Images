@@ -1,0 +1,13 @@
+Category: Tooling · Purpose: Measure application behavior at realistic concurrency.
+Load-test a PostgreSQL-backed endpoint using autocannon and pg. Report latency percentiles, throughput, and errors; inspect the query plan and verify the effect of a justified index.
+
+Tooling autocannon+pgPostgres. npm install --save-dev --save-exact autocannon and npm install --save-exact pg. Provide commands for existingrunning APIlocalhost3000:
+npx autocannon -c 50 -d 20 http://127.0.0.1:3000/tasks
+SQL statements (run in PostgreSQLclient, fixture tabletasks owner_id created_at):
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT id, created_at FROM tasks
+WHERE owner_id = 42
+ORDER BY created_at DESC LIMIT 50;
+CREATE INDEX tasks_owner_created_idx
+ON tasks (owner_id, created_at DESC);
+RepeatplanandloadsamefixturesafterANALYZEtasks; neverclaimindexalwaysbenefits; representativefixtures and queryselectivity determine. Reportblankmeasurementtable baseline/index p50p95p99 req/sec errors environmentalnotes; no fabricated values or winner. EXPLAINANALYZEexecutesquery; fixtureonly. QueryparameterizeAPI, connectionpoolcap. Sources github.com/mcollina/autocannon, node-postgres.com, postgresql.org/docs/current/using-explain.html.

@@ -1,0 +1,7 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+6
+8 [ { phase: 'start', value: 3 }, { phase: 'done' } ]
+
+STDERR

@@ -1,0 +1,4 @@
+Category: Node.js core · Purpose: Understand why a completed program sometimes remains running.
+Create a script that accidentally leaves a timer and server open. Diagnose the active resources using supported process diagnostics, close them, and verify natural process termination.
+
+resources.mjs: import {createServer} from 'node:http'; const timer=setInterval(()=>{},1000); const server=createServer((q,s)=>s.end('ok')); await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve)); console.log(process.getActiveResourcesInfo()); clearInterval(timer); await new Promise((resolve,reject)=>server.close(e=>e?reject(e):resolve())); console.log('closed'); Resource type names platform-dependent; illustrative Timeout/TCPServerWrap. After cleanup natural termination; don't force process.exit and don't use undocumented _getActiveHandles. node resources.mjs.

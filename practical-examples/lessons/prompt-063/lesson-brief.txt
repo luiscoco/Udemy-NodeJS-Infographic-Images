@@ -1,0 +1,12 @@
+Category: Node.js core · Purpose: Understand encrypted connections and trust configuration.
+Create a local HTTPS server with certificates generated using OpenSSL. Verify trusted connections succeed and an untrusted certificate or hostname mismatch fails without disabling certificate verification.
+
+Use only this focused HTTPS server code, file server.mjs:
+import { createServer } from 'node:https';
+import { readFile } from 'node:fs/promises';
+createServer({
+  key: await readFile('./server-key.pem'),
+  cert: await readFile('./server-cert.pem')
+}, (req, res) => res.end('secure')).listen(3443, '127.0.0.1');
+Prerequisites: OpenSSL installed; local CA key/cert; server certificate signed by local CA with subjectAltName DNS:localhost; protect keys. Diagram generate localCA→signservercertificate→server→clienttrustsCAandchecksSAN.
+Commands node server.mjs; another terminal openssl verify -CAfile local-ca.pem server-cert.pem ; curl.exe --cacert local-ca.pem https://localhost:3443 . These commandsverifyandconnect, they do notgeneratecerts. Verify trusted CAcert+hostname succeeds 'secure', untrustedCAfails, hostmismatchfails. Never disable TLSverification. Do not add incompletecertificate-generationorclientcode. Official sources nodejs.org/api/https.html and docs.openssl.org.

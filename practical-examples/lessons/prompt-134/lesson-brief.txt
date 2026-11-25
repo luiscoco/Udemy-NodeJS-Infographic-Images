@@ -1,0 +1,12 @@
+Category: Node.js core · Purpose: Run trusted scripts with separate global state.
+Execute a trusted expression using node:vm with a dedicated context and execution timeout. Verify global-state separation and explain why this mechanism must not be treated as secure isolation for hostile code.
+
+Completevm.mjs trustedscript:
+import vm from 'node:vm';
+const scope = { count: 1 };
+vm.createContext(scope);
+const script = new vm.Script('count += 2; count');
+console.log(script.runInContext(scope, { timeout: 50 }));
+console.log(scope.count);
+console.log(globalThis.count);
+node vm.mjs expected3,3,undefined(cleanprocess). Diagramdedicatedcontextglobalsversushost. timeoutmssynchronousscriptwork notallasyncorI/O. vmNOTsecurityboundaryneveruntrustedcodeinsameprocess; contextseparateglobalstatebuthostobjectbridgescanexposeprivilege. Fulltestinfinitefixturetimeoutseparatetestwithassertthrows. Source nodejs.org/api/vm.html.

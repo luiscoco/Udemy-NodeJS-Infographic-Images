@@ -1,0 +1,32 @@
+Category: Node.js core · Purpose: Explore system interfaces for WebAssembly programs.
+Build a tiny file-reading program with the external WASI SDK and run it through node:wasi. Configure a fixture-directory preopen, verify expected output, and document the implementation’s security limitations.
+Node explicitly cautions against relying on its WASI implementation to run untrusted code securely. Node.js v26.13.1 Documentation
+
+node:wasi. Status: Stability 1, Experimental. Prominent security warning, quote the docs: "do not rely on it to run untrusted code"; Node's WASI does not provide comprehensive filesystem sandboxing. C program read.c, exactly:
+#include <stdio.h>
+
+int main(void) {
+  FILE *file = fopen("/fixtures/hello.txt", "r");
+  if (!file) { perror("open"); return 1; }
+  char line[128];
+  while (fgets(line, sizeof line, file)) fputs(line, stdout);
+  fclose(file);
+  return 0;
+}
+Build with the external WASI SDK (label WASI_SDK_PATH as the install-folder placeholder), one line: & "$env:WASI_SDK_PATH\bin\clang.exe" --target=wasm32-wasip1 -O2 -o read.wasm read.c
+Host run.mjs, exactly:
+import { readFile } from 'node:fs/promises';
+import { WASI } from 'node:wasi';
+
+const wasi = new WASI({
+  version: 'preview1',
+  args: ['read'],
+  preopens: { '/fixtures': './fixtures' },
+});
+const wasm = await WebAssembly.compile(
+  await readFile(new URL('./read.wasm', import.meta.url)),
+);
+const instance = await WebAssembly.instantiate(wasm, wasi.getImportObject());
+process.exitCode = wasi.start(instance);
+Fixture fixtures\hello.txt contains: Hello from WASI
+Command: node run.mjs. Illustrative output: Hello from WASI. Teach: version is mandatory; the program only sees the preopened guest path /fixtures, which maps to the host folder ./fixtures; wasi.start returns the exit code because returnOnExit defaults to true. Limitations panel: preopens are a convenience mapping, not a security boundary; use OS-level isolation for untrusted modules. Sources: nodejs.org/api/wasi.html • github.com/WebAssembly/wasi-sdk.

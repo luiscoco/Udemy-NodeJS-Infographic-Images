@@ -1,0 +1,29 @@
+Category: Node.js core · Purpose: Explore custom module resolution.
+Implement a narrow module alias using module.registerHooks. Verify normal resolution still works, missing aliases fail clearly, and the hook avoids the deprecated module.register API.
+The synchronous hook API is currently classified as a release candidate. Node.js v26.13.1 Documentation
+
+Module customization hooks. module.registerHooks is synchronous and in-thread, Stability 1.2 Release candidate. module.register is deprecated (DEP0205, runtime deprecation since v26.0.0); do not use it. File register.mjs, exactly:
+import { registerHooks } from 'node:module';
+
+const aliases = new Map([
+  ['@app/config', new URL('./src/config.mjs', import.meta.url).href],
+]);
+
+registerHooks({
+  resolve(specifier, context, nextResolve) {
+    if (specifier.startsWith('@app/')) {
+      const url = aliases.get(specifier);
+      if (!url) throw new Error(`Unknown alias: ${specifier}`);
+      return { url, shortCircuit: true };
+    }
+    return nextResolve(specifier, context);
+  },
+});
+File main.mjs, exactly:
+import { readFile } from 'node:fs/promises';
+import { appName } from '@app/config';
+
+console.log(appName, typeof readFile);
+await import('@app/missing').catch((error) => console.error(error.message));
+File src/config.mjs: export const appName = 'course-app';
+Command: node --import ./register.mjs main.mjs. Illustrative output: course-app function then on stderr Unknown alias: @app/missing. Teach: the hook must run before the importing module loads, which is why it uses --import; shortCircuit: true is mandatory when nextResolve is not called; every other specifier goes to nextResolve, so normal resolution (node: built-ins, packages) is unchanged; keep the alias narrow, with an explicit prefix. Mention that package.json "imports" (#subpath) is the stable built-in alternative for many alias needs. Source: nodejs.org/api/module.html.

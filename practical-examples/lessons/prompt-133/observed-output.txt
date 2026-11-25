@@ -1,0 +1,22 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{
+  phase: 'cold',
+  elapsedMs: 126.95060000000001,
+  output: '{"status":1,"directory":"C:\\\\00. IMPORTANTE - Prompts NodeJS, Angular, React, Blazor\\\\Udemy-NodeJS-Infographic-Images\\\\practical-examples\\\\lessons\\\\prompt-133\\\\.compile-cache"}\n' +
+    '42\n'
+}
+{
+  phase: 'warm',
+  elapsedMs: 96.78599999999997,
+  output: '{"status":1,"directory":"C:\\\\00. IMPORTANTE - Prompts NodeJS, Angular, React, Blazor\\\\Udemy-NodeJS-Infographic-Images\\\\practical-examples\\\\lessons\\\\prompt-133\\\\.compile-cache"}\n' +
+    '42\n'
+}
+{
+  phase: 'disabled',
+  elapsedMs: 93.80899999999997,
+  output: '{"status":3,"message":"Disabled by NODE_DISABLE_COMPILE_CACHE"}\n42\n'
+}
+
+STDERR

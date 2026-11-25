@@ -1,0 +1,28 @@
+Category: Node.js core · Purpose: Compare a newer streaming interface with established alternatives.
+Implement a small transformation using node:stream/iter with its required experimental flag. Verify output, cancellation, and slow-consumer behavior, then compare its interface with a stable classic-stream pipeline.
+This API is separate from ordinary, stable for await...of consumption of Node streams. Node.js v26.13.1 Documentation
+
+node:stream/iter (Iterable Streams). Stability 1 Experimental; it requires --experimental-stream-iter. It is separate from the stable for await...of consumption of classic Node streams. File iter.mjs, exactly:
+import { from, pull, text } from 'node:stream/iter';
+
+const upper = (chunks) => {
+  if (chunks === null) return null;
+  return chunks.map((c) => new TextEncoder().encode(
+    new TextDecoder().decode(c).toUpperCase(),
+  ));
+};
+
+console.log(await text(pull(from('hello, iterable streams'), upper)));
+Command: node --experimental-stream-iter iter.mjs. Illustrative output: HELLO, ITERABLE STREAMS
+Comparison file classic.mjs (stable), exactly:
+import { Readable, Transform } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
+
+const upper = new Transform({
+  transform(chunk, _encoding, callback) {
+    callback(null, chunk.toString().toUpperCase());
+  },
+});
+await pipeline(Readable.from(['hello, classic streams']), upper, process.stdout);
+Command: node classic.mjs. Illustrative output: HELLO, CLASSIC STREAMS
+Teach in a two-column comparison: the iter transform is a plain function over batches of Uint8Array chunks, and null signals flush, versus a Transform class with a callback. Pull-based consumption gives natural backpressure (a slow consumer simply pulls less), versus highWaterMark and write() returning false. Cancellation: an AbortSignal makes the pending and later reads reject with signal.reason, versus pipeline destroying every stream on error or abort. Caveat: decoding each chunk separately can split multi-byte UTF-8 characters at chunk boundaries; a production transform must use a streaming TextDecoder. Verification tasks in prose: output, abort mid-stream, slow consumer. Source: nodejs.org/api/stream_iter.html.

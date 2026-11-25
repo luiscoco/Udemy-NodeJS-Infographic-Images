@@ -1,0 +1,9 @@
+# Complete practical applications
+
+- **logtool**: bounded UTF-8/NDJSON streaming, filtering, malformed-record policy, cancellation, atomic file output and measured RSS. Run npm run logtool -- --input FILE --output FILE --malformed count.
+- **task-api**: Fastify validation, real PostgreSQL users/tasks, versioned scrypt passwords, jose JWT verification, owner-scoped SQL, optimistic concurrency, transactional batches, readiness and liveness. Run npm run setup; start root Docker services; run node applications/task-api/migrate.mjs; npm run api.
+- **rooms**: authenticated WebSocket upgrades, two-instance Redis fan-out after PostgreSQL persistence, replay cursors and bounded buffers. After migration and local services, npm run rooms, then node applications/rooms/client.mjs in three terminals. Set ROOM_PORT for a second server and ROOM_URL for its client. The local development client can issue its own short-lived fixture ticket because it runs on the teaching machine with the lab key; a production/browser client must obtain a ticket from an authenticated membership service and must never receive a signing key.
+- **report-worker**: transactional outbox relay, BullMQ attempt/backoff budget, bounded worker concurrency and a database-enforced idempotent business effect. Run npm run worker alongside the task API. POST /reports is authenticated; GET /reports/:id exposes only the owner’s result.
+- **deployment**: deployment/compose.yaml packages the API/worker with two replicas, NGINX, PostgreSQL, Redis, metrics, traces and coordinated shutdown. Prompt 155 exercises the full system. Read ../deployment/README.md.
+
+Prompts 151–155 run assertions against these implementations rather than printing prewritten success messages. Other lesson folders show smaller, focused applications and controlled failures. These are classroom applications with explicit limitations, not a claim of production certification.

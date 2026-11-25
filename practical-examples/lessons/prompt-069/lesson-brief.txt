@@ -1,0 +1,14 @@
+Category: Node.js core · Purpose: Run external programs with controlled arguments and resources.
+Launch a helper using spawn or execFile with an argument array. Capture output, handle spawn failure and timeout, and verify an argument containing shell metacharacters remains ordinary data.
+
+parent.mjs exact:
+import { spawn } from 'node:child_process';
+const child = spawn(process.execPath, ['./helper.mjs', 'hello; & echo data'], {
+  shell: false, stdio: ['ignore', 'pipe', 'pipe'], timeout: 1000
+});
+child.stdout.on('data', chunk => process.stdout.write(chunk));
+child.stderr.on('data', chunk => process.stderr.write(chunk));
+child.on('error', error => console.error(error.code));
+child.on('close', (code, signal) => console.log({ code, signal }));
+helper.mjs exact console.log(process.argv[2]);
+node parent.mjs printsliteralhello;&echodata thencode0signalnull ifsuccess. argumentarraysnointerpolation, explicitexecutable; maxbuffer separateexecFileoption vs streamedspawn, drainpipes. TimeoutuseskillSignalplatformdifferences, errorsspawnnotfoundhandled. No shelltrue.

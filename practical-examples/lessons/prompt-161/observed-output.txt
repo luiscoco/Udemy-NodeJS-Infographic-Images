@@ -1,0 +1,25 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+✔ stable result contract (1.5269ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 161.357
+
+✔ stable result contract (2.6853ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 144.559
+
+
+STDERR

@@ -1,0 +1,15 @@
+Category: Ecosystem · Purpose: Work with a document-oriented persistence model.
+Build a product catalog using the mongodb driver and a local MongoDB service. Add a useful index, validate document boundaries, and verify the query plan and duplicate-key behavior.
+
+catalog.mjs focusedlocalMongo:
+import { MongoClient } from 'mongodb';
+const client = new MongoClient('mongodb://127.0.0.1:27017');
+try {
+  await client.connect();
+  const products = client.db('node_lab').collection('products');
+  await products.createIndex({ sku: 1 }, { unique: true });
+  await products.updateOne({ sku: 'demo-1' },
+    { $setOnInsert: { name: 'Demo', price: 10 } }, { upsert: true });
+  console.log(await products.findOne({ sku: 'demo-1' }));
+} finally { await client.close(); }
+npm install --save-exact mongodb; prereqlocalservice. CompleteexerciseJSONschemaDBvalidationorvalidatedapplicationinput; explainexecutionStats examineIXSCANvsCOLLSCAN usingfind({sku}).explain('executionStats'); explicitduplicateinsertE11000; sampleupsertitselfidempotentdoesn'tshowduplicate. Validateoperatorsnotacceptarbitraryqueryobject. Source mongodb.com/docs/drivers/node/current/.

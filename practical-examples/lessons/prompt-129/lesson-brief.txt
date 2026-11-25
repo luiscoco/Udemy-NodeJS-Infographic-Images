@@ -1,0 +1,19 @@
+Category: Tooling · Purpose: Add static checking and distributable JavaScript.
+Create a TypeScript library using typescript and baseline-compatible @types/node with NodeNext settings. Emit JavaScript, declarations, and source maps, then verify a separate consumer can import the built package.
+
+TypeScripttooling NodeNext ESMlibrary. npm install --save-dev --save-exact typescript @types/node@26 (majorbaselinecompatible,locksresolvedversion). package.jsonexcerpt:
+{ "type": "module", "exports": { ".": {
+  "types": "./dist/index.d.ts", "import": "./dist/index.js"
+} } }
+tsconfig.json:
+{ "compilerOptions": {
+  "target": "ES2022", "module": "NodeNext",
+  "moduleResolution": "NodeNext", "strict": true,
+  "declaration": true, "sourceMap": true,
+  "outDir": "dist", "rootDir": "src"
+}, "include": ["src/**/*.ts"] }
+src/index.ts:
+export function greet(name: string): string {
+  return 'Hello, ' + name;
+}
+npx tsc thennpm pack. FullprojectpackageJSONrequiresnameversion; labelsnippetmergeexistingpackage. Separateconsumerinstallactualgenerated.tgz filename(notinventfixedname), importpublishedname, assertresultandtypes. .jsrelativeextensionsinTSesmimports; runtimeJS+d.tschecker.mapdebug. Sources typescriptlang.org/docs/handbook/modules/reference.html.

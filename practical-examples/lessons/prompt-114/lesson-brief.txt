@@ -1,0 +1,13 @@
+Category: Tooling · Purpose: Relate transformed code failures to original source.
+Bundle a small JavaScript program with esbuild and source maps. Trigger an error and compare stack traces with and without --enable-source-maps, verifying the mapped source location.
+
+esbuild tooling, external package, sourcemap original filename/line. npm install --save-dev --save-exact esbuild. Source src/crash.mjs:
+function fail() {
+  throw new Error('course fixture');
+}
+fail();
+Commands:
+npx esbuild src/crash.mjs --bundle --platform=node --format=esm --sourcemap --outfile=dist/app.mjs
+node dist/app.mjs
+node --enable-source-maps dist/app.mjs
+Expected nonzero both, unmapped dist/app.mjs location vs mapped src/crash.mjs:2. Never claim exact machine absolute path. Keep generated .map with build. Sources esbuild.github.io/api/#sourcemap and nodejs.org/api/cli.html.

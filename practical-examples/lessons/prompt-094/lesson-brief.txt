@@ -1,0 +1,15 @@
+Category: Ecosystem · Purpose: Run recurring work predictably across replicas.
+Configure BullMQ Job Schedulers with an explicit time zone and overlap policy. Start two scheduler instances, run a job longer than its interval, and verify the intended schedule and concurrency behavior.
+
+Focused scheduler.mjs:
+import { Queue } from 'bullmq';
+const queue = new Queue('reports', {
+  connection: { host: '127.0.0.1', port: 6379 }
+});
+try {
+  await queue.upsertJobScheduler('nightly-report', {
+    pattern: '0 0 9 * * *', tz: 'Europe/Madrid'
+  }, { name: 'generate', data: { reportId: 'daily' } });
+  await queue.setGlobalConcurrency(1);
+} finally { await queue.close(); }
+npm install --save-exact bullmq; localRedis; separateworkerrequired. Same schedulerID upsertfrom2instancesavoidduplicatescheduleconfig; globalconcurrency1preventsconcurrentjobsacrossworkersbutqueuecanbacklog, define skip/coalescepolicyseparately; no claimnooverlapautomaticjustscheduler. Timezone DST explicit. Longjob vsintervalcheckactualschedulebehavior scheduler producesnextwhenjobstartsnotguaranteed everywallclockslot. Code midnight? pattern0 0 9=09:00 dailyMadrid. Correcttitle9daily.

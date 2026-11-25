@@ -1,0 +1,7 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+OS localhost lookup: [ { address: '::1', family: 6 }, { address: '127.0.0.1', family: 4 } ]
+Use --network for live DNS record queries; addresses depend on your resolver.
+
+STDERR

@@ -1,0 +1,8 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+install succeeded
+ci succeeded
+manifest/lock mismatch rejected
+
+STDERR

@@ -1,0 +1,10 @@
+Category: Ecosystem · Purpose: Coordinate database changes with eventual message delivery.
+Implement an outbox using pg, PostgreSQL, and bullmq with Redis. Commit business data and an outbox row together, crash the dispatcher at different points, and verify eventual processing with deduplicated business effects.
+
+Transactional outbox architecture no fakecompleteapp. PostgreSQLfocusedSQLtransaction:
+BEGIN;
+INSERT INTO reports(id, status) VALUES ('r1', 'pending');
+INSERT INTO outbox(id, topic, payload)
+VALUES ('event-r1', 'report', '{"reportId":"r1"}');
+COMMIT;
+Assumepreparedschemasoutboxuniqueid,reportsuniqueid. Dispatcher reads pending outbox→BullMQqueue.add(jobidstable)→markpublishedafterenqueue; workerinDBtransactionuniqueprocessed-eventid+businessupdate. Crash beforeenqueue→retry; afterenqueuebeforemark→duplicatepossible→dedupbusiness; Redis+DBnotdistributedatomic. npm install --save-exact pg bullmq; localPostgreSQL+Redis. Diagram DBbusiness+outboxonecommit→dispatcher→Redisqueue→idempotentworker→businessresult. Fulltest crashpoints,eventuallyprocessedexactlyonebusinessresult notclaimexactlyoncedelivery. Source node-postgres.com docs.bullmq.io.

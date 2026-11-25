@@ -1,0 +1,15 @@
+Category: Ecosystem · Purpose: Preserve invariants across related database changes.
+Implement a two-record transfer using pg and one checked-out PostgreSQL client. Inject failure between updates and verify rollback preserves the total and the client returns to the pool.
+
+Focused transfer function with pool and accountsfixtureprovided:
+const client = await pool.connect();
+try {
+  await client.query('BEGIN');
+  await client.query('UPDATE accounts SET balance = balance - $1 WHERE id = $2', [10, 1]);
+  await client.query('UPDATE accounts SET balance = balance + $1 WHERE id = $2', [10, 2]);
+  await client.query('COMMIT');
+} catch (error) {
+  await client.query('ROLLBACK');
+  throw error;
+} finally { client.release(); }
+Samecheckedoutclientforentiretransactionnotpool.query mix. Show failureinjectionbetweenupdatesrollbackpreservestotal; successmoves10 preservingtotal. Completeexercise lockaffectedrowsconsistentordercheckrowcountsandinsufficientfunds, DBconstraints/concurrencyinvariants. Snippetonlytransactioncontrolnotfullbusinessvalidation. Source node-postgres.com/features/transactions.

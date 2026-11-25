@@ -1,0 +1,15 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{
+  items: [ { id: 1, title: 'Task 1' }, { id: 2, title: 'Task 2' } ],
+  next: 2
+}
+{
+  items: [ { id: 3, title: 'Task 3' }, { id: 4, title: 'Task 4' } ],
+  next: 4
+}
+{ items: [ { id: 5, title: 'Task 5' } ], next: 5 }
+{ items: [], next: null }
+
+STDERR

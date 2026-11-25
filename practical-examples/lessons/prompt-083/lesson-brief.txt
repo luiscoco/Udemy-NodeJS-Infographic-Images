@@ -1,0 +1,13 @@
+Category: Node.js core · Purpose: Push server updates to browser clients.
+Build an SSE endpoint with node:http and a browser client. Include event IDs, heartbeats, and bounded retained history; verify reconnection and an explicit response when requested history has expired.
+
+Focused SSEhandler excerpt, req/res supplied HTTPserver:
+res.writeHead(200, {
+  'content-type': 'text/event-stream',
+  'cache-control': 'no-cache',
+  connection: 'keep-alive'
+});
+res.write('id: 1\nevent: ready\ndata: {"ok":true}\n\n');
+const heartbeat = setInterval(() => res.write(': heartbeat\n\n'), 15000);
+req.on('close', () => clearInterval(heartbeat));
+Browser client separate snippet new EventSource('/events'); usesaddEventListenerready notonmessagebecausecustomevent. CompleteexerciseboundedhistoryeventIDs+Last-Event-IDreplay, ifhistoryexpiredexplicitresync event or409beforestream (EventSource409retriesbehaviorneedsclientresync), chooseexplicitresync eventwithsnapshot URL. SSEserver→browseronlynotbidirectional; flush/bufferingproxyneedsconfig; slowclientbackpressurepolicy. No fakefullserveroutput; verificationcasesdisconnectclearsheartbeat,reconnectreplay,expiredresync.

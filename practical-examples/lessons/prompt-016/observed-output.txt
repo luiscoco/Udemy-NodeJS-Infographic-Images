@@ -1,0 +1,7 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+/io 308 measured ms
+/cpu 220 measured ms
+
+STDERR

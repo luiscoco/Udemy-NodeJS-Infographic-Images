@@ -1,0 +1,6 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+owner=200, another user=404, unauthenticated=401; forged role header rejected; signed admin claim accepted by role-aware route
+
+STDERR

@@ -1,0 +1,11 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{
+  digest: '5e5a9a9ba72ed54c046f9d8123d9bb798d44730f29303d380175557bab1636bb',
+  elapsedMs: 54.93129999999999
+}
+
+Open in DevTools: CPU.20261125.150059.87568.0.001.cpuprofile
+
+STDERR

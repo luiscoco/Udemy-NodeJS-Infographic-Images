@@ -1,0 +1,4 @@
+Category: JavaScript · Purpose: Preserve meaning when data crosses JSON boundaries.
+Create a serializer for records containing dates and large integer identifiers. Demonstrate BigInt, unsafe integer precision, and cyclic-object failures, then verify a documented JSON representation round-trips correctly.
+
+serialize.mjs: const row = { id: 9007199254740993n, createdAt: new Date('2026-01-01T00:00:00Z') }; const json = JSON.stringify({ id: row.id.toString(), createdAt: row.createdAt.toISOString() }); const value=JSON.parse(json); const restored = { id: BigInt(value.id), createdAt: new Date(value.createdAt) }; console.log(restored.id === row.id); => true. Default JSON.stringify(BigInt) throws TypeError; cycles throw TypeError; Number.MAX_SAFE_INTEGER 9007199254740991. Dates serialize ISO strings; restore explicitly. Explain decimal strings prevent numeric precision loss. node serialize.mjs.

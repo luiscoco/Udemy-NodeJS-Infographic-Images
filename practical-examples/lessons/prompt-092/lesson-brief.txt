@@ -1,0 +1,11 @@
+Category: Ecosystem · Purpose: Choose messaging behavior according to delivery requirements.
+Use the redis package to compare Pub/Sub with Redis Streams consumer groups. Disconnect a consumer, publish messages, reconnect, and verify the different recovery and acknowledgment behavior.
+
+Compare Pub/Sub ephemeral vs RedisStreams durablelogwithconsumergroups. Commands RedisCLI (explicitexternaltool, notPowerShellbuiltins):
+SUBSCRIBE updates
+PUBLISH updates hello
+XADD events * type hello
+XGROUP CREATE events workers 0 MKSTREAM
+XREADGROUP GROUP workers c1 COUNT 10 STREAMS events >
+XACK events workers <id>
+Eachcommandseparateappropriateconnections; grouponexistingstream works; RedisCLI idplaceholderreplacerealreturnedid. PubSubofflineconsumerlosesmessages; streamsretainedentriesreplay,pending/unacked recovery XAUTOCLAIM afteridle; retentiontrimmingcanremovehistory; ACKdoesn'tmeanexactlyoncebusiness. node-redis packageintegrationflow no inventedAPI. Exerciseverifydisconnectpublishreconnect; securelocalfixture. source redis.io/docs/latest/develop/data-types/streams/ andpubsub.

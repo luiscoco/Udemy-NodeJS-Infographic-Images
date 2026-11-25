@@ -1,0 +1,4 @@
+Category: JavaScript · Purpose: Select collections according to lookup and ownership needs.
+Build a deduplication example using Set, an ID lookup using Map, and object metadata using WeakMap. Verify equality behavior and explain which collections support enumeration and predictable retention.
+
+collections.mjs: console.log([...new Set([1,1,2])]); const users = new Map([[7, {name:'Luis'}]]); console.log(users.get(7).name); const meta = new WeakMap(); const user = users.get(7); meta.set(user, {selected:true}); console.log(meta.get(user).selected); console.log(new Set([{}, {}]).size); => [1,2],Luis,true,2. Set values unique using SameValueZero; Map keys object identity; WeakMap object/symbol keys no enumeration no size and no predictable garbage collection time. Avoid claim WeakMap strings allowed.

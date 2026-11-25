@@ -1,0 +1,17 @@
+Category: Node.js core · Purpose: Prevent user input from choosing unintended network destinations.
+Build a download service whose destination comes from a fixed server-side allowlist rather than an arbitrary user URL. Disable or revalidate redirects and verify attempts to reach unapproved destinations fail.
+
+Focused server-owned destination allowlist:
+const destinations = new Map([
+  ['docs', new URL('https://nodejs.org/en/docs/')]
+]);
+async function download(name) {
+  const url = destinations.get(name);
+  if (!url) throw new Error('Unknown destination');
+  const response = await fetch(url, {
+    redirect: 'error', signal: AbortSignal.timeout(2000)
+  });
+  if (!response.ok) { await response.body?.cancel(); throw Error('HTTP failure'); }
+  return response;
+}
+Callerconsumes/cancelsbodyandboundsbytes in fullapp. Config fixedURLsownedserver, useronlyselectsname; unknownname/internalURL/fileURLrejectedbeforefetch. redirect:errorpreventredirectescape; DNSandnetworkegresspolicystrongerboundary, notarbitraryuserURLregexvalidator. DeadlineboundIO. Harnesscasesallowlistedfetchneedsnetwork,unknownreject,redirectreject,oversizebodyabortfullapp. Source nodefetchdocs.

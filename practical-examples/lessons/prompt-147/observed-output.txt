@@ -1,0 +1,8 @@
+Runtime: v26.13.1 linux (Docker)
+Status: passed
+STDOUT
+42
+
+STDERR
+(node:16) ExperimentalWarning: FFI is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

@@ -1,0 +1,4 @@
+Category: JavaScript · Purpose: Present time and numeric values consistently across locales.
+Format the same timestamp and currency amount using Intl for Spain and the United States. Specify time zones explicitly and verify examples around a daylight-saving transition without relying on the machine’s default locale.
+
+intl.mjs: const times=['2026-03-29T00:30:00Z','2026-03-29T01:30:00Z']; const fmt=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Madrid',hour:'2-digit',minute:'2-digit',hour12:false}); console.log(times.map(t=>fmt.format(new Date(t)))); console.log(new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(1234.5)); console.log(new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(1234.5)); Expected times 01:30 → 03:30 spring forward; localized currency spacing/punctuation may vary with ICU. Always name time zone and locale. Spain vs US currency formatting not exchange-rate conversion. node intl.mjs.

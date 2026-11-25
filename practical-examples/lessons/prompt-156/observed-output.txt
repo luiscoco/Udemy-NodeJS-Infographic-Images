@@ -1,0 +1,7 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+hello
+removed
+
+STDERR

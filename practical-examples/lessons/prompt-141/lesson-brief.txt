@@ -1,0 +1,12 @@
+Category: Tooling · Purpose: Release changes while preserving a recovery path.
+Build a local deployment rehearsal with two application versions and a backward-compatible PostgreSQL migration. Verify both versions work during transition and demonstrate rollback without reversing an unsafe data transformation.
+
+Deploymentrehearsalexpand/contract,2versions+compatPGschema. SQL:
+ALTER TABLE tasks ADD COLUMN display_title text;
+UPDATE tasks SET display_title = title WHERE display_title IS NULL;
+Onlyfixturecontrolledlabbackfilllargeprodneedbatchednotlockedlong; sourceappv1usesoldtitle;v2readsCOALESCE(display_title,title) anddualwritesbothcolumns. Focusv2parameterizedquery (poolprovided):
+await pool.query(
+  'UPDATE tasks SET title = $1, display_title = $1 WHERE id = $2',
+  [newTitle, taskId]
+);
+WARNINGv1updatesonlyoldtitlewouldleavestalenewcolumnwhilemixeddeployment! Need avoidinvalidcompat: v2readoldtitlethroughtransition (newcolbackfillderivedbutnotuseduntilalloldwritersgone). State v2 reads authoritative title during mixed versions, dualwrite both. Flowexpandnullable→deploycompatv2dualwritebutreadtitle→backfillafteroldwritersdrained→laterreadnew→contractseparatereleaseafterrollbackwindow. Rollbackapplicationv1whilekeepadditivecolumn; doNOTdropcolumns/reverseunsafechanges. Verificationv1read/writev2read/write no lostupdates testfixtures,routeback+smoketests. Sources postgresql.org/docs/current/ddl-alter.html.

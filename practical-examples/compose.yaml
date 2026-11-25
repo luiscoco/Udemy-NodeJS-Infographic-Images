@@ -1,0 +1,33 @@
+name: node-course-lab
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: course
+      POSTGRES_DB: course_lab
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Run node tools/setup.mjs}
+    ports: ["127.0.0.1:55432:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U course -d course_lab"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  redis:
+    image: redis:7
+    command: ["redis-server", "--appendonly", "yes"]
+    ports: ["127.0.0.1:56379:6379"]
+    volumes: ["redisdata:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  mongo:
+    image: mongo:8
+    ports: ["127.0.0.1:57017:27017"]
+    volumes: ["mongodata:/data/db"]
+volumes:
+  pgdata:
+  redisdata:
+  mongodata:

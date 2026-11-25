@@ -1,0 +1,4 @@
+Category: JavaScript · Purpose: Process real-world text without assuming one character equals one byte.
+Build a Unicode-aware identifier validator and text-normalization example. Test accented characters, combining marks, and emoji; explain the distinction between code units, code points, and encoded bytes.
+
+unicode.mjs: const valid = s => /^[$_\p{ID_Start}][$\u200C\u200D\p{ID_Continue}]*$/u.test(s.normalize('NFC')); const a='café'; const b='cafe\u0301'; console.log(a===b, a.normalize('NFC')===b.normalize('NFC')); const face='😀'; console.log(face.length, [...face].length, Buffer.byteLength(face,'utf8')); console.log(valid('café'),valid('😀')); => false true; 2 1 4; true false. Code unit / code point / UTF-8 byte distinct; graphemes can contain several code points. Identifier-shaped validation doesn't reject reserved words; label this limitation. node unicode.mjs.

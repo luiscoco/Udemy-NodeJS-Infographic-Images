@@ -1,0 +1,21 @@
+Category: Node.js core · Purpose: Store password verification material appropriately.
+Implement password registration and verification using asynchronous crypto.scrypt, random salts, and safe comparison. Verify correct and incorrect passwords, malformed stored records, and distinct stored values for identical passwords.
+
+Focused password helpers, copy EXACTLY:
+import { randomBytes, scrypt, timingSafeEqual } from 'node:crypto';
+import { promisify } from 'node:util';
+const scryptAsync = promisify(scrypt);
+const derive = (password, salt) => scryptAsync(password, salt, 64, {
+  N: 131072, r: 8, p: 1, maxmem: 256 * 1024 * 1024
+});
+async function register(password) {
+  const salt = randomBytes(16).toString('hex');
+  const key = await derive(password, salt);
+  return salt + ':' + key.toString('hex');
+}
+async function verify(password, record) {
+  if (!/^[0-9a-f]{32}:[0-9a-f]{128}$/.test(record)) return false;
+  const [salt, hex] = record.split(':');
+  return timingSafeEqual(await derive(password, salt), Buffer.from(hex, 'hex'));
+}
+Harness scenarios correct password true, wrong false, malformed false, samepassword different randomsalt records. Async scrypt memory-hard derivation, NOT fastSHApasswordhash. 16byte randomsalt stored openly with hash, no plaintext logging. N131072 r8 p1 about128MiB peractiveoperation, maxmem256MiB, bound concurrency/rate-limit/benchmark. Version stored format for future parameter migration; fixed cost not from attackerrecord. Source nodecrypto and OWASP Password Storage Cheat Sheet. No standalone command output without caller.

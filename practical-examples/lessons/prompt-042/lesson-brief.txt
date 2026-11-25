@@ -1,0 +1,4 @@
+Category: Tooling · Purpose: Verify what consumers will actually receive.
+Prepare a library with a files allowlist, README, license, and release metadata. Inspect npm pack --dry-run and npm publish --dry-run, install the resulting archive into a consumer, and verify secrets and development fixtures are excluded.
+
+package.json focused "files":["dist","README.md","LICENSE"], main exports dist entry, version1.0.0. Commands npm pack --dry-run; npm pack; npm publish --dry-run; npm install ../demo-lib-1.0.0.tgz in separate consumer. Never actually publish. Include allowlist excludes fixtures and secrets; README/LICENSE included by npm defaults; inspect tar contents. Dry-run not proof of runtime correctness.

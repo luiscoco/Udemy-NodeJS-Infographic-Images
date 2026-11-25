@@ -1,0 +1,15 @@
+Category: Ecosystem · Purpose: Authenticate browser sessions with appropriate request protection.
+Build a cookie-session example using fastify, @fastify/secure-session, and @fastify/csrf-protection. Verify cookie settings, rejected CSRF attempts, expiration, and the revocation limitations of a stateless session design.
+
+Focused plugin configuration, existing Fastify app and HTTPS required:
+import secureSession from '@fastify/secure-session';
+import csrfProtection from '@fastify/csrf-protection';
+const hex = process.env.SESSION_KEY;
+if (!/^[0-9a-f]{64}$/i.test(hex ?? '')) throw new Error('Invalid session key');
+await app.register(secureSession, {
+  key: Buffer.from(hex, 'hex'),
+  expiry: 3600,
+  cookie: { path: '/', httpOnly: true, secure: true, sameSite: 'lax' }
+});
+await app.register(csrfProtection, { sessionPlugin: '@fastify/secure-session' });
+npm install --save-exact fastify @fastify/secure-session @fastify/csrf-protection. Server-generated32bytekeysecureenv, do not embedkeys. Flowlogin→authenticatedencryptedcookie→generateCSRFtoken→clientheader→protectedroutechecksCSRF+auth. Full exercise token route and hook per official docs notimplementedjustregisteringplugin. SecurecookieHTTPSonly; httpOnlyrestrictsJSreads; SameSiteadditionaldefense notsoleCSRF. Expiry1h; statelesssessionsindividualrevocationrequiresserverstate/versioning or keyrotation. Testmissing/wrongCSRFdenied,validaccepted,expiration,credentialredaction. Source officialFastify GitHub plugins.

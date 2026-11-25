@@ -1,0 +1,10 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{
+  first: { invocations: 1, name: 'course' },
+  warm: { invocations: 2, name: 'course' }
+}
+fresh process counter=1; same environment counter=2
+
+STDERR

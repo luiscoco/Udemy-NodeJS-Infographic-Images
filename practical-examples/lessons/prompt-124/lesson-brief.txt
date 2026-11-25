@@ -1,0 +1,22 @@
+Category: Node.js core · Purpose: Keep overload from causing uncontrolled memory growth.
+Build a service with explicit limits for concurrent work, queued work, and payload size. Apply a documented heap limit, overload the service, and verify predictable rejection while tracking heap and total process memory separately.
+
+Focused admission helper, prerequisites work is provided asynchronousserviceoperation; fullqueue/payloadlimitsseparateexercise. Code:
+const MAX_ACTIVE = 8;
+const MAX_QUEUED = 32;
+let active = 0;
+const queue = [];
+export function submit(work) {
+  if (active >= MAX_ACTIVE && queue.length >= MAX_QUEUED) {
+    return Promise.reject(new Error('OVERLOADED'));
+  }
+  return new Promise((resolve, reject) => {
+    const run = async () => {
+      active++;
+      try { resolve(await work()); } catch (error) { reject(error); }
+      finally { active--; queue.shift()?.(); }
+    };
+    if (active < MAX_ACTIVE) void run(); else queue.push(run);
+  });
+}
+Command forfullprovidedserver node --max-old-space-size=256 server.mjs (MiBV8oldspace,notRSSlimit). MapOVERLOADED→503,bodylimit64KiB→413,queuedclientcancellation/timeoutsfulltask; helperdoesnotremoveabandonedqueuedwork. TrackheapUsed/RSSseparate external/Buffer memoryadditional. Matrix8running32queuednextreject,countsbounded. Source nodejs.org/api/cli.html/process.html.

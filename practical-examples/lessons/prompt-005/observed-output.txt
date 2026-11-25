@@ -1,0 +1,26 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{
+  args: [ '--input', 'demo' ],
+  code: 0,
+  signal: null,
+  stdout: '{"input":"demo"}\n',
+  stderr: ''
+}
+{
+  args: [ '--help' ],
+  code: 0,
+  signal: null,
+  stdout: 'Usage: --input NAME\n',
+  stderr: ''
+}
+{
+  args: [ '--unknown' ],
+  code: 1,
+  signal: null,
+  stdout: '',
+  stderr: "Unknown option '--unknown'\n"
+}
+
+STDERR

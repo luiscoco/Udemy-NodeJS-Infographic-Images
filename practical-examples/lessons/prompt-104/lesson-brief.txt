@@ -1,0 +1,11 @@
+Category: Ecosystem · Purpose: Limit resource consumption by expensive requests.
+Add @fastify/rate-limit to a fastify API with body limits and execution deadlines. Verify rejection behavior and configure trusted proxies explicitly so forged forwarding headers cannot bypass the chosen policy.
+
+Focused complete app.mjs:
+import Fastify from 'fastify';
+import rateLimit from '@fastify/rate-limit';
+const app = Fastify({ bodyLimit: 1024, trustProxy: false });
+await app.register(rateLimit, { max: 20, timeWindow: '1 minute' });
+app.get('/work', async () => ({ ok: true }));
+await app.listen({ port: 3000, host: '127.0.0.1' });
+npm install --save-exact fastify @fastify/rate-limit; node app.mjs. 20/min perclientIPexample, excess429. Full exercise addbodyacceptingPOSTrouteverify413above1024bytes, executiondeadlinepropagatetoasyncIO, concurrency/queuecapsCPUworkers. DeadlinecannotinterruptsynchronousCPU. trustProxyfalseignoresforgedforwardheaders; knownproxyexplicitpolicy. Perprocessinmemorylimiternotglobalacrossreplicasuseexternalstore. Source github.com/fastify/fastify-rate-limit.

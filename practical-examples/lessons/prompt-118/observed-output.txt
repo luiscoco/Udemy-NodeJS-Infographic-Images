@@ -1,0 +1,10 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{
+  durationMs: 72.00060000000002,
+  utilization: 0.5669666801532718,
+  maxDelayMs: 40.959999
+}
+
+STDERR

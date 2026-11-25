@@ -1,0 +1,20 @@
+Category: Ecosystem · Purpose: Verify real collaboration between application components.
+Test a fastify API backed by PostgreSQL using pg and node:test. Create isolated fixture data, exercise a rollback path, and verify the suite can run repeatedly without relying on test order.
+
+Focused integration-test excerpt, buildApp({pool}) factory and dedicatedfixturePostgreSQLpool supplied byharness:
+import test from 'node:test';
+import assert from 'node:assert/strict';
+test('task API persists in PostgreSQL', async t => {
+  const app = await buildApp({ pool });
+  t.after(() => app.close());
+  const title = 'fixture-' + crypto.randomUUID();
+  const response = await app.inject({
+    method: 'POST', url: '/tasks', payload: { title }
+  });
+  assert.equal(response.statusCode, 201);
+  const created = response.json();
+  t.after(() => pool.query('DELETE FROM tasks WHERE id = $1', [created.id]));
+  const result = await pool.query('SELECT title FROM tasks WHERE id = $1', [created.id]);
+  assert.equal(result.rows[0].title, title);
+});
+RequiresrealFastifyappandDBschema, callerclosespool; nofakefullrunneroutput. IsolatedtestDB+uniquerows,nosuiteorderdependency. Completeexerciseinjecttransactionfailureverifyrollbackallwrites,repeatedrunscleanup. Outertransactioncan'trollbackappusingotherconnectionunlessinjectedsharedclient. SourceFastifytesting/node-postgres.

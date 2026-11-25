@@ -1,0 +1,19 @@
+Category: Node.js core · Purpose: React to changes while accommodating imperfect notifications.
+Build a directory watcher with debouncing and periodic reconciliation. Test rapid edits, replacement, and deletion, treating notifications as hints rather than assuming one event per change.
+
+Focused watcher excerpt with reconcile explicitly injected:
+import { watch } from 'node:fs';
+function monitor(dir, reconcile) {
+  let debounce;
+  const watcher = watch(dir, () => {
+    clearTimeout(debounce);
+    debounce = setTimeout(reconcile, 100);
+  });
+  watcher.on('error', error => console.error(error.code));
+  const periodic = setInterval(reconcile, 1000);
+  reconcile();
+  return () => {
+    clearTimeout(debounce); clearInterval(periodic); watcher.close();
+  };
+}
+Label reconcile must scan and compare actual directory state, serialize overlapping scans in complete implementation. Events maycoalesce/miss/file namesnull/platformdependent; replacement changes inode; periodic rescan catches missed hints. Test rapid edits/replacement/deletion, cleanup close. Don't claim fs.watch delivers exact change log.

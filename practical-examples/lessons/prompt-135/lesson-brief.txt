@@ -1,0 +1,18 @@
+Category: Node.js core · Purpose: Recognize and remove outdated runtime dependencies.
+Create a small legacy fixture using deprecated Buffer construction and node:domain, then migrate it to appropriate current APIs. Use deprecation diagnostics and regression tests to verify the replacement behavior.
+
+Deprecationlab oldfixture notrecommended:
+import domain from 'node:domain';
+const data = new Buffer('hello');
+const scope = domain.create();
+scope.run(() => console.log(data.toString()));
+labellegacy.mjs.
+Modern.mjs:
+const data = Buffer.from('hello', 'utf8');
+try {
+  console.log(data.toString());
+} catch (error) {
+  console.error(error.message);
+  process.exitCode = 1;
+}
+Commands node --pending-deprecation --trace-deprecation legacy.mjs andnode modern.mjs. Expectedbothhello,legacydiagnosticsdependingdeprecatedAPInoassumeeverydeprecatedAPIwarns. Domainisdeprecatednotreplacementbyautomatictrycatchforarbitraryasync; asyncawaiterrorsuseawaittrycatch, emittererrorshandlers, AsyncLocalStorageforcontext. Buffer.alloczeroedsize Buffer.fromdata; neverallocUnsafeuninitializedunlessexpert. Regressionpreservecontent/errorcleanup. Source nodejs.org/api/deprecations.html/domain.html/buffer.html.

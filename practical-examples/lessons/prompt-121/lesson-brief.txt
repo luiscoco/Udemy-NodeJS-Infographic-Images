@@ -1,0 +1,20 @@
+Category: Node.js core · Purpose: Locate expensive execution before optimizing it.
+Profile a CPU-heavy endpoint using --cpu-prof and inspect the generated profile. Optimize the dominant function and compare correctness and timing over repeated runs.
+
+Teach profiler harness requires provided server.mjs CPUheavyendpoint and deterministic load script. PowerShell commands:
+New-Item -ItemType Directory -Force profiles
+node --cpu-prof --cpu-prof-dir=./profiles server.mjs
+Run workload in secondterminal then gracefulstop toflush. Open generated .cpuprofile in DevTools JavaScriptprofiler. Focused timing snippet benchmark.mjs prerequisites candidate/fixturesfromproject:
+import { performance } from 'node:perf_hooks';
+import assert from 'node:assert/strict';
+for (const fixture of fixtures) {
+  assert.deepEqual(candidate(fixture.input), fixture.expected);
+}
+const samples = [];
+for (let run = 0; run < 10; run++) {
+  const start = performance.now();
+  for (let i = 0; i < 1000; i++) candidate(input);
+  samples.push(performance.now() - start);
+}
+console.log(samples);
+No fabricated timings. CPUprofileidentifyhotfunction optimize once sameworkload,warmup,comparemedian+spread,correctnessfirst. Source nodejs.org/api/cli.html and perf_hooks.

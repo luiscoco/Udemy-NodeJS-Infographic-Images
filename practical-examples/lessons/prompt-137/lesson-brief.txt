@@ -1,0 +1,23 @@
+Category: Tooling · Purpose: Check changes consistently before delivery.
+Create a GitHub Actions workflow that installs from the lockfile, checks formatting, lints, and runs tests. Include appropriate OS coverage and verify an intentionally broken change fails the pipeline.
+
+GitHubActionsworkflow .github/workflows/ci.yml exact:
+name: checks
+on: [push, pull_request]
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '26.13.1'
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm test
+Prereqscheckedinpackage-lockpackagejsonscriptsPrettiercheckESLintnode--test; noexternaldbunlessservicestartseparatelyandOSsupport. Actionsv4stablemajorchosencompatnotclaimlatest; optionalpinreviewedcommitSHAfullsupplychain. Expectedmatrix3checksbrokenassertfailsjobred,fixgreenillustrative. Secretsnotavailable/untrustedPRscriptpermissionsscopeproseavoidunsolicited. Sources docs.github.com/actions • docs.npmjs.com/cli/commands/npm-ci.

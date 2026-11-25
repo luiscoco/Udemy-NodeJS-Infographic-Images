@@ -1,0 +1,9 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+threads 2 elapsed ms: 446
+
+threads 8 elapsed ms: 152
+
+
+STDERR

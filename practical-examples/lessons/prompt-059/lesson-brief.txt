@@ -1,0 +1,13 @@
+Category: Node.js core · Purpose: Construct and interpret URLs correctly.
+Build a URL utility using WHATWG URL and URLSearchParams. Test repeated parameters, encoded characters, relative URLs, and invalid input without manually concatenating query strings.
+
+urls.mjs exact:
+const url = new URL('/search', 'https://example.org');
+url.searchParams.append('tag', 'node js');
+url.searchParams.append('tag', 'streams');
+console.log(url.searchParams.getAll('tag'));
+console.log(url.href);
+console.log(new URL('../docs', 'https://example.org/course/one').href);
+try { new URL('not a URL'); }
+catch (e) { console.log(e.name); }
+node urls.mjs expected ['node js','streams']; https://example.org/search?tag=node+js&tag=streams ; https://example.org/docs ; TypeError. URL relative requiresbase; searchParams handlesencoding; getfirstvsgetAll; don't doubleencode or concat unescapedquery. No networkrequestfromnewURL.

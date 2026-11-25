@@ -1,0 +1,7 @@
+Category: Tooling · Purpose: Prove that recovery procedures work.
+Create a PostgreSQL backup-and-restore drill using pg_dump and pg_restore. Verify restored records and constraints, and provide a Node.js patch-upgrade procedure that reruns the project’s checks before rollout.
+
+BackuprestoreexternalPostgreSQLCLIinstalled,sourceandfreshseparaterestoreDBalreadycreated, credentialsenv/pgpassnotcommandinline. PowerShellcommands:
+pg_dump --host=127.0.0.1 --username=course --dbname=course --format=custom --file=course.dump
+pg_restore --host=127.0.0.1 --username=course --dbname=course_restore --exit-on-error --no-owner course.dump
+SQLrestorechecksSELECTcount(*)tasks,expectedfixtureIDs,FKanduniqueconstraintviolationtests. Backupnotproofuntilrestoretested;freshrestoretargetneversource, encryptedbackup/retentionpolicyrestoretimeobjectivefuture measured values placeholders. UpgradeprocedurepinnewNodepatchcompatiblemajor, npm ci/npmrunformat:check/npmrunlint/npmtest onnewruntime, rebuildnativeaddons/container, stagingload/health, canaryrollbackpriorartifact databasecompat. Don'tinventnewpatchversion. Sources postgresql.org/docs/current/app-pgdump.html and app-pgrestore.html • nodejs.org.

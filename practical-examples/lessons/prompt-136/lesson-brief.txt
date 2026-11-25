@@ -1,0 +1,18 @@
+Category: Tooling · Purpose: Deliver a reproducible application environment.
+Containerize a Node.js API using Docker with an explicitly pinned runtime, npm ci, a non-root user, and a minimal runtime stage. Verify startup, signal delivery, and exclusion of source secrets and unnecessary development dependencies.
+
+DockerfilecontainerAPIprojectESMserverprovidedport3000bound0.0.0.0 packagejsonlock; pinnedimage node:26.13.1-bookworm-slim verifytagbeforebuild nofakeverifieddigest. Code:
+FROM node:26.13.1-bookworm-slim AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+FROM node:26.13.1-bookworm-slim AS runtime
+ENV NODE_ENV=production
+WORKDIR /app
+COPY --from=deps --chown=node:node /app/node_modules ./node_modules
+COPY --chown=node:node package.json server.mjs ./
+USER node
+EXPOSE 3000
+CMD ["node", "server.mjs"]
+.dockerignoreconceptnode_modules,.git,.env*,outputcredentials includeotherappruntimefilesexplicitlyfullproject. docker build -t course-api:local . then docker run --rm --init -p 3000:3000 course-api:local. ExecformCMDsignals node;--initreapschildren,nonroot,imagepatchpinlockfile, pinverifieddigestforimmutability. No embeddedcredentials. Sources docs.docker.com/build/building/multi-stage/ • hub.docker.com/_/node.

@@ -1,0 +1,6 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+startup=503, healthy=200, injected dependency outage=503 with live=200, stopping=503
+
+STDERR

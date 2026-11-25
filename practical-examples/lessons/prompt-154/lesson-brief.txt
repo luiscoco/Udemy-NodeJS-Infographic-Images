@@ -1,0 +1,38 @@
+Category: EcosystemPurpose: Make asynchronous work recoverable under partial failure.
+Learning goals: Durable queues, idempotency, scheduling, retries, bounded concurrency, transactional outbox, and failure inspection.
+Implementation prompt:
+Build a report-processing system using fastify, pg, and bullmq configured with Redis. Accept requests through an API, persist business state and an outbox entry transactionally, and process jobs with bounded retries and idempotent result publication. Include scheduling, progress reporting, and a script that interrupts workers at controlled points.
+Acceptance criteria:
+Killing a worker during processing permits recovery.
+Repeating the same logical operation produces one durable business result.
+Transient failures retry within a configured budget.
+Permanent failures become visible after the attempt limit.
+Worker concurrency stays within the configured bound.
+Scheduling has explicit time-zone, overlap, and restart policies.
+Queue delivery behavior and business-effect guarantees are explained separately.
+Suggested point: After Module 16.
+
+Capstone: report processing using fastify, pg and bullmq with Redis. Architecture flow: POST /reports → one database transaction writes the business row plus an outbox row → an outbox relay adds a BullMQ job with jobId = reportId → worker (bounded concurrency) → idempotent result publication guarded by a unique constraint. One focused snippet, the transactional outbox, src/create-report.mjs (pool supplied by the app), exactly:
+export async function createReport(pool, reportId, ownerId) {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const { rows } = await client.query(
+      'INSERT INTO reports (id, owner_id, status) VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING RETURNING id',
+      [reportId, ownerId, 'pending'],
+    );
+    if (rows.length > 0) {
+      await client.query(
+        'INSERT INTO outbox (id, topic, payload) VALUES ($1, $2, $3)',
+        [reportId, 'report.requested', { reportId }],
+      );
+    }
+    await client.query('COMMIT');
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+Teach in two separate columns. Queue delivery: BullMQ is at-least-once; a killed worker's job becomes stalled and is retried from the start, not resumed from the crash point; attempts with exponential backoff bound retries; jobs that fail after the last attempt stay in the failed set for inspection. Business effect: exactly one durable result, enforced by the reports and outbox unique ids plus idempotent publication. Worker concurrency is set explicitly. Scheduling policy: explicit time zone (tz), no overlapping runs, restart behavior. Command: node --test, plus an interruption script that kills the worker at controlled points (described, not shown). Acceptance criteria checklist: recovery after a worker kill; a repeated operation gives one durable result; transient failures retry within budget; permanent failures visible after the attempt limit; concurrency stays within the bound; documented time-zone, overlap and restart policy. Sources: docs.bullmq.io • node-postgres.com/features/transactions.

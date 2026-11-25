@@ -1,0 +1,18 @@
+Category: Node.js core · Purpose: Protect confidentiality while detecting tampering.
+Encrypt and decrypt a small record using Web Crypto AES-GCM with a fresh nonce for each encryption. Verify round-trip output and failure after changing ciphertext, authentication data, or the key.
+
+Complete encrypt.mjs:
+const key = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+const nonce = crypto.getRandomValues(new Uint8Array(12));
+const aad = new TextEncoder().encode('record:v1');
+const plain = new TextEncoder().encode('hello');
+const encrypted = await crypto.subtle.encrypt(
+  { name: 'AES-GCM', iv: nonce, additionalData: aad }, key, plain);
+const restored = await crypto.subtle.decrypt(
+  { name: 'AES-GCM', iv: nonce, additionalData: aad }, key, encrypted);
+console.log(new TextDecoder().decode(restored));
+const changed = new Uint8Array(encrypted.slice(0));
+changed[0] ^= 1;
+try { await crypto.subtle.decrypt({ name: 'AES-GCM', iv: nonce, additionalData: aad }, key, changed); }
+catch (e) { console.log(e.name); }
+node encrypt.mjs=>hello and OperationError. Unique12bytenonceperkeyessential, neverreuse; store nonce+ciphertexttag+metadata; AADauthenticatednotencrypted. Ephemeralnonextractablekeydemo, securelypersistrealkey; wrongkey/AADtamperfails. Boundrandomnoncecollisionbudgetlargevolumeuseproperprotocol. Source nodejs.org/api/webcrypto.html.

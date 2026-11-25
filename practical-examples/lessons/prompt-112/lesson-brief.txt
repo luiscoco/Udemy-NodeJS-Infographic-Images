@@ -1,0 +1,15 @@
+Category: Tooling · Purpose: Catch common mistakes and maintain consistent source formatting.
+Configure eslint, @eslint/js, and prettier for an ESM project. Add check-only CI commands and verify they detect an unused variable, an undefined identifier, and a formatting violation.
+
+eslint.config.mjs:
+import js from '@eslint/js';
+export default [
+  js.configs.recommended,
+  { files: ['**/*.mjs'], languageOptions: {
+    globals: { console: 'readonly', process: 'readonly' }
+  } }
+];
+package.json scripts fragment:
+"lint": "eslint .",
+"format:check": "prettier --check ."
+Install npm install --save-dev --save-exact eslint @eslint/js prettier . Commands npm run lint ; npm run format:check . CheckonlyCI, noautoedits. Modernflatconfig,recommendedno-unused-vars/no-undef, explicitNodeglobals. Prettierformattingdifferentfromlint; unusedvariable/undefinedidentifierlintfails, formattingPrettiercheckfails. Commitresolvedversionslockfile; prettierignoregenerateddist. Sourceseslint.org/docs/latest/use/configure/configuration-files andprettier.io/docs/cli.

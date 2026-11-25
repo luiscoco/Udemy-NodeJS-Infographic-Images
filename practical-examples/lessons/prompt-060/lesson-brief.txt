@@ -1,0 +1,31 @@
+Category: Node.js core · Purpose: Understand the request-response foundation beneath frameworks.
+Build a node:http JSON server with two routes, explicit status codes, body-size limits, and request timeouts. Verify unknown routes, malformed JSON, and oversized requests.
+
+Full core HTTP server server.mjs, preserve complete code, use a wide code panel:
+import { createServer } from 'node:http';
+const server = createServer((req, res) => {
+  const send = (status, data) => {
+    res.writeHead(status, { 'content-type': 'application/json' });
+    res.end(JSON.stringify(data));
+  };
+  if (req.method === 'GET' && req.url === '/health')
+    return send(200, { ok: true });
+  if (req.method !== 'POST' || req.url !== '/echo')
+    return send(404, { error: 'Not found' });
+  let size = 0, tooLarge = false, chunks = [];
+  req.on('data', chunk => {
+    size += chunk.length;
+    if (size > 1024) { tooLarge = true; chunks = []; }
+    else chunks.push(chunk);
+  });
+  req.on('end', () => {
+    if (tooLarge) return send(413, { error: 'Too large' });
+    try { send(200, JSON.parse(Buffer.concat(chunks).toString('utf8'))); }
+    catch { send(400, { error: 'Invalid JSON' }); }
+  });
+  req.on('error', () => res.destroy());
+});
+server.requestTimeout = 5000;
+server.headersTimeout = 5000;
+server.listen(3000, '127.0.0.1');
+node server.mjs prerequisite runclientanotherterminal. GET/health200; POST/echoJSON200; unknown404; malformed400; over1024bytes413. Body overlimit drained butnotbuffered, timeoutboundsupload. Use verificationtable requests and expectedstatus instead longquotedcurlcommands. Noclaim completeproductionserver.

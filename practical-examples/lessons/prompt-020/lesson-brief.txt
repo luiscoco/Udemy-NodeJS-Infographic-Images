@@ -1,0 +1,4 @@
+Category: Node.js core · Purpose: Schedule work without assuming exact execution times.
+Build an abortable delay with node:timers/promises. Measure actual elapsed time, demonstrate ref versus unref behavior, and verify cancellation leaves no unnecessary timer keeping the process alive.
+
+delay.mjs: import { setTimeout as delay } from 'node:timers/promises'; const controller=new AbortController(); const t=setTimeout(()=>controller.abort(),50); const start=performance.now(); try { await delay(1000,null,{signal:controller.signal}); } catch(e){console.log(e.name);} finally {clearTimeout(t);} console.log(Math.round(performance.now()-start)); Expected AbortError, about50ms not exact. Separate demo setTimeout(()=>console.log('maybe'),1000).unref(); permits process to exit if nothing else keeps loop alive. ref re-adds liveness, abort cancels promise timer.

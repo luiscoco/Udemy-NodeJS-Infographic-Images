@@ -1,0 +1,19 @@
+Category: Ecosystem · Purpose: Support bidirectional communication over persistent connections.
+Build a WebSocket server using ws and a native WebSocket client. Add message validation, heartbeat cleanup, and a bounded outbound-buffer policy; verify disconnected and slow clients are handled.
+
+Focused ws server:
+import { WebSocketServer } from 'ws';
+const server = new WebSocketServer({ port: 8080, maxPayload: 1024 });
+server.on('connection', socket => {
+  socket.on('error', console.error);
+  socket.on('message', data => {
+    if (socket.bufferedAmount > 65536) return socket.close(1013, 'Slow client');
+    try {
+      const message = JSON.parse(data.toString());
+      if (typeof message.text !== 'string') return socket.close(1008, 'Invalid message');
+      socket.send(JSON.stringify({ text: message.text }));
+    } catch { socket.close(1008, 'Invalid JSON'); }
+  });
+});
+Nativeclient separate client.mjs: const client=new WebSocket('ws://localhost:8080');client.addEventListener('open',()=>client.send(JSON.stringify({text:'hello'})));client.addEventListener('message',e=>{console.log(e.data);client.close();});
+npm install --save-exact ws; nodeserverotherterminalclient. NativeWebSocketclientstableNode26; serverexternalws. Completeexerciseheartbeatping/pongisAlive+terminateclearintervalonserverclose; shownexcerptnotclaimhasheartbeat. BoundoutboundqueuepolicycheckbufferedAmount before sends, bytecap+messagevalidation.

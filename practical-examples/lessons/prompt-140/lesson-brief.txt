@@ -1,0 +1,17 @@
+Category: Tooling · Purpose: Run multiple instances without relying on local process state.
+Run two application replicas behind an NGINX reverse proxy with shared state in Redis and PostgreSQL. Verify requests reach both replicas and calculate a database connection budget across all instances.
+
+NGINXconfigexcerpt2APIservicesapi1api2port3000:
+upstream course_api {
+  server api1:3000;
+  server api2:3000;
+}
+server {
+  listen 80;
+  location / {
+    proxy_pass http://course_api;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
+}
+PrereqsDocker/networknamesresolve,2appsreturninstanceIDreadonlymetadataforlab,sharedRedisandPostgreSQLnotlocalmemoryauthstate. pgpoolmax10each;2replicas×10=20 plusworker/admin/migrations10 →30≤DBbudget50 exampleallocationnotmeasuredcurrent. Scaling4→40+10=50. NGINXdistributionobservemultiplecallskeepaliveeffectnofakealternationguarantee. trustProxyexplicitknownproxy;WebSocketupgradeconfigfulltaskifappneeds. RedisnotreplacingPostgresdurability. Sources nginx.org/en/docs/http/ngx_http_upstream_module.html • node-postgres.com/features/pooling.

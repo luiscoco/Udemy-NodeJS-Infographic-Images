@@ -1,0 +1,13 @@
+Category: Ecosystem · Purpose: Reuse workers and control CPU-work admission.
+Use piscina to process CPU-heavy jobs with a fixed worker limit and bounded queue. Overload the pool and verify excess work is rejected or delayed according to an explicit policy.
+
+Use Piscinaexternal, officialpiscinajs.dev. Focus pool configexcerpt:
+import { Piscina } from 'piscina';
+const pool = new Piscina({
+  filename: new URL('./worker.mjs', import.meta.url).href,
+  minThreads: 2, maxThreads: 2, maxQueue: 4
+});
+try { console.log(await pool.run(100_000)); }
+finally { await pool.destroy(); }
+worker.mjs export default n => { let total=0; for(let i=1;i<=n;i++)total+=i;return total; };
+npm install --save-exact piscina (resolvedversionfromregistry recordedlockfile,noinventversion). Node26compatcheck. Boundedactive2queue4; overfillrunrejectpromise, catchrejections; pooldestroycleanup. TaskadmissionnotunboundedPromiseallmillion. Verifyreturned5000050000; timingsmeasurednotinvented.

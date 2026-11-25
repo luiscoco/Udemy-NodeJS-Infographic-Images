@@ -1,0 +1,4 @@
+Category: Node.js core · Purpose: Structure applications with explicit module boundaries.
+Create an ESM application using "type": "module", named exports, and explicit relative extensions. Introduce a missing-extension error and verify the corrected module graph runs successfully.
+
+package.json {"type":"module"}; math.js export const add=(a,b)=>a+b; main.js import {add} from './math.js'; console.log(add(2,3)); command node main.js =>5. Relative import './math' fails ERR_MODULE_NOT_FOUND; explicit .js fix. Node ESM differs from bundler resolution. .mjs always ESM. Clear exports boundaries.

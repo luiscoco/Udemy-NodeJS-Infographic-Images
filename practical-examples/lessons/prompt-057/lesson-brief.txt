@@ -1,0 +1,16 @@
+Category: Node.js core · Purpose: Connect browser-style APIs with Node stream APIs.
+Fetch a large response from a local server and connect its Web Stream body to a Node writable using supported adapters. Verify cancellation propagates and output matches the source.
+
+Focused fetch-to-file.mjs:
+import { Readable } from 'node:stream';
+import { createWriteStream } from 'node:fs';
+import { pipeline } from 'node:stream/promises';
+const signal = AbortSignal.timeout(1000);
+const response = await fetch('http://127.0.0.1:3000/file', { signal });
+if (!response.ok || !response.body) {
+  await response.body?.cancel();
+  throw Error('Download failed');
+}
+await pipeline(Readable.fromWeb(response.body),
+  createWriteStream('./download.part'), { signal });
+Prereq local fixture server; this is focused adapterexcerpt, fullapp cleanup partial onerror+renameonlyonsuccess. AdapterfromWeb WebReadable→NodeReadable; toWeb reverse. Sharedsignal propagates abort; consumeorcancelbody, checksum verifiesbyteidentical. Native fetch no externalpackage;don'tpromise Web stream has .pipe.

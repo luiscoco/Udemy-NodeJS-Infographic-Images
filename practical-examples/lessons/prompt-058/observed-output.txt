@@ -1,0 +1,19 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{
+  codec: 'gzip',
+  sourceBytes: 26000,
+  compressedBytes: 128,
+  checksumVerified: true,
+  oversizedRestoreRejected: true
+}
+{
+  codec: 'brotli',
+  sourceBytes: 26000,
+  compressedBytes: 43,
+  checksumVerified: true,
+  oversizedRestoreRejected: true
+}
+
+STDERR

@@ -1,0 +1,14 @@
+Category: Node.js core · Purpose: Identify behavior that tests have not exercised.
+Collect coverage with node --test --experimental-test-coverage. Find an uncovered failure branch, add a behavior-focused test, and explain why higher coverage alone does not establish correctness.
+
+Title "Test Coverage · Experimental". Commands:
+node --test --experimental-test-coverage
+node --test --experimental-test-coverage config.test.mjs
+Focused helper:
+export function discount(total, member) {
+  if (total < 0) throw new Error('Invalid total');
+  return member ? total * 0.9 : total;
+}
+Behaviorassertion insideexistingtestharness:
+assert.throws(() => discount(-1, true), /Invalid total/);
+Testimports/node:test suppliedbyharness; nofakepercentage. Flowcollectreport→finduncoverederrorbranch→addbehaviorassert→rerun. Experimentalcoverageflagvsstabletestrunner; branchcoveragehighnotproofcorrectassertions/correctness; errorcleanuprelevant. Source nodejs.org/api/test.html#collecting-code-coverage.

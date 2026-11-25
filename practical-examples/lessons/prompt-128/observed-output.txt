@@ -1,0 +1,9 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+runtime: 42
+
+checker: native.ts(4,7): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+STDERR

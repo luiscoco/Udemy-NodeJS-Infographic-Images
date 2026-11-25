@@ -1,0 +1,16 @@
+Category: Node.js core · Purpose: Decode streamed text without corrupting characters.
+Split UTF-8 text containing emoji into arbitrary byte chunks and decode it with StringDecoder. Compare naive decoding and verify the correct output for every possible split point.
+
+decode.mjs exact:
+import { StringDecoder } from 'node:string_decoder';
+import assert from 'node:assert/strict';
+const text = 'café 😀';
+const bytes = Buffer.from(text, 'utf8');
+for (let i = 0; i <= bytes.length; i++) {
+  const decoder = new StringDecoder('utf8');
+  const actual = decoder.write(bytes.subarray(0, i))
+    + decoder.end(bytes.subarray(i));
+  assert.equal(actual, text);
+}
+console.log('All split points preserved');
+node decode.mjs =>All split points preserved. UTF8 emoji4bytes split acrosschunks; naive chunk.toString produces replacementchars at split. Decoder buffers incomplete multibyte sequence, end flushes remaining. Maximum length bounds if accumulating whole records; code uses generated tiny fixture.

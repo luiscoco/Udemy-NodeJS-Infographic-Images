@@ -1,0 +1,7 @@
+{
+  "engines": { "node": "26.13.1" },
+  "dependencies": { "runtime-lib": "file:./runtime-lib" },
+  "devDependencies": { "test-lib": "file:./test-lib" },
+  "peerDependencies": { "host-lib": "^1.0.0" },
+  "optionalDependencies": { "optional-lib": "file:./optional-lib" }
+}

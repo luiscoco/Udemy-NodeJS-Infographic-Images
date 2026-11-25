@@ -1,0 +1,16 @@
+Category: Ecosystem · Purpose: Produce logs that support filtering and diagnosis.
+Add pino logging to a small API with structured errors and request identifiers. Configure redaction and verify credentials and sensitive fields are absent from captured logs.
+
+npm install --save-exact pino. Focused logger.mjs runnable example (API request child logger pattern demonstrated; full API is exercise):
+import pino from 'pino';
+const log = pino({
+  redact: { paths: ['password', 'req.headers.authorization'], remove: true }
+});
+const requestLog = log.child({ requestId: 'req-001' });
+requestLog.info({
+  req: { headers: { authorization: 'Bearer demo-secret' } },
+  password: 'demo-password',
+  action: 'login'
+}, 'request');
+requestLog.error({ err: new Error('fixture failure') }, 'failed');
+node logger.mjs. Expected JSON lines include requestId/action and structured err, absent sensitive properties and literal demo secrets. Redaction paths case-sensitive and depend actual log shape; avoid putting secrets in error.message/free text. Capture logs and assert secret strings absent. Sources github.com/pinojs/pino and redaction docs.

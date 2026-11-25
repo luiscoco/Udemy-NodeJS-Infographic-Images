@@ -1,0 +1,17 @@
+Category: Node.js core · Purpose: Control access and prevent accidental overwrites.
+Create a private temporary file using appropriate modes and exclusive creation flags. Verify a second creation attempt fails and explain which permission expectations differ on Windows.
+
+private.mjs exact:
+import { mkdtemp, open, rm } from 'node:fs/promises';
+import { join } from 'node:path';
+import { tmpdir } from 'node:os';
+const dir = await mkdtemp(join(tmpdir(), 'node-private-'));
+const file = join(dir, 'secret.txt');
+try {
+  const handle = await open(file, 'wx', 0o600);
+  try { await handle.writeFile('fixture only'); }
+  finally { await handle.close(); }
+  try { await open(file, 'wx', 0o600); }
+  catch (e) { console.log(e.code); }
+} finally { await rm(dir, { recursive: true, force: true }); }
+node private.mjs => EEXIST. wx exclusive create no accidental overwrite; mode600 POSIX owner read/write, umask may further restrict; Windows ACL semantics differ, do not promise POSIX privacy on Windows. Temporary fixture only.

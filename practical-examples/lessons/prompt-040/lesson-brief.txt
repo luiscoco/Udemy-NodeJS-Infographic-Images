@@ -1,0 +1,4 @@
+Category: Tooling · Purpose: Develop related packages in one repository.
+Create npm workspaces containing a reusable library and a CLI consumer. Run targeted and repository-wide scripts, then verify a change in the library is consumed without publishing it.
+
+root package.json {"private":true,"workspaces":["packages/*"],"scripts":{"test":"node --test"}}; packages/math package.json name @demo/math version1.0.0 type module exports ./index.js; packages/cli dependency @demo/math1.0.0. npm install at root creates links if compatible. commands npm test --workspaces --if-present; npm run start --workspace=@demo/cli. Library change consumed locally; don't use unsupported workspace:* protocol in npm.

@@ -1,0 +1,12 @@
+Category: Node.js core · Purpose: Explore a database without a separate server.
+Build a local notes CLI using the experimental node:sqlite module and its current Database class. Use prepared statements, verify persistence after restart, and measure the effect of synchronous queries on an active timer.
+
+Title "Embedded SQLite · Experimental". Course baseline Node.js26.13.1, node:sqlite current Database class, synchronousqueries. Code notes.mjs:
+import { Database } from 'node:sqlite';
+const db = new Database('./notes.db');
+try {
+  db.exec('CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY, text TEXT NOT NULL)');
+  db.prepare('INSERT INTO notes(text) VALUES (?)').run('Learn Node.js');
+  console.log(db.prepare('SELECT id, text FROM notes ORDER BY id').all());
+} finally { db.close(); }
+node notes.mjs. Rerunaddsrowpersistentnotidempotent; expectedtablewith1then2notesnotreset. Preparedparametersavoidconcat; synchronousAPIblockseventloopdespiteDatabaseclassname. DatabaseSyncdeprecatedaliasonbaseline; no externaldbserver/package; experimentalRCstatusseparateLTSruntime. Fulltimerlatencymeasurementrepeatfixture. Sourcenodejs.org/api/sqlite.html. Don'tsubstituteolderDatabaseSync.

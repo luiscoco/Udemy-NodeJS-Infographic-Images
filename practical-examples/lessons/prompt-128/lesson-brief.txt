@@ -1,0 +1,10 @@
+Category: Node.js core · Purpose: Understand the runtime’s limited TypeScript support.
+Run a small .ts program containing erasable types directly with Node.js. Demonstrate that a type mismatch can still execute, identify unsupported syntax, and explain why execution is not type checking.
+
+Node26nativeTS erasabletypes, no runtimechecker, tsconfignotapplied, don'tuse removed--experimental-transform-types. Files native.ts:
+function twice(value: number): number {
+  return value * 2;
+}
+const input: number = '21'; // static type error
+console.log(twice(input));
+node native.ts expected42 despite type mismatch(coercion), show typeserased execution. Checker separately npm install --save-dev --save-exact typescript then npx tsc --noEmit --target ES2022 native.ts expectedtypeerrornotfakecode. No fileasESMneedsimports here. Unsupportednativelyenum/parameterproperties/runtime namespaces,tsx;usecompilerforthem. State baselineTypeStrippingstable ifofficial confirms; don'tinventstatus. Source nodejs.org/api/typescript.html.

@@ -1,0 +1,15 @@
+Category: Node.js core · Purpose: Recognize contention outside the JavaScript execution thread.
+Run concurrent filesystem operations and asynchronous crypto.scrypt calls while measuring latency. Compare two startup values of UV_THREADPOOL_SIZE and explain the observed contention without assuming more threads always improve performance.
+
+Create a fresh image. The following is the ONLY code snippet and must be copied exactly; do not add more numeric arguments to scryptAsync or split array items across lines.
+File pool.mjs:
+import { readFile } from 'node:fs/promises';
+import { scrypt } from 'node:crypto';
+import { promisify } from 'node:util';
+const scryptAsync = promisify(scrypt);
+const start = performance.now();
+const jobs = Array.from({ length: 8 }, () => scryptAsync('fixture', 'salt', 64));
+await Promise.all([...jobs, readFile(new URL(import.meta.url))]);
+console.log('elapsed ms:', Math.round(performance.now() - start));
+
+PowerShell commands $env:UV_THREADPOOL_SIZE='2'; node pool.mjs then $env:UV_THREADPOOL_SIZE='8'; node pool.mjs then Remove-Item Env:UV_THREADPOOL_SIZE. Output only 'elapsed ms: <measured value>', do not invent measurements. Explain file reads and async crypto may contend for worker pool; default4; more threads not always faster; startup configuration; fixed salt only benchmark fixture. Diagram8 crypto jobs+file read→shared libuv pool→latency. No extra code.

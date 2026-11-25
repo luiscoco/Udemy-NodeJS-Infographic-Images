@@ -1,0 +1,12 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+[
+  {
+    name: 'course:227fa3ac-8208-473c-a8ea-515b3c9d8f21:events',
+    messages: [ [Object] ]
+  }
+]
+Pub/Sub live delivery vs retained stream read+ACK
+
+STDERR

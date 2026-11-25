@@ -1,0 +1,18 @@
+Category: Node.js core · Purpose: Execute a portable compiled computation from JavaScript.
+Use the wabt package to compile a small WAT function into WebAssembly and invoke it from Node.js. Verify numeric boundaries and compare call overhead with an equivalent JavaScript implementation.
+
+npm install --save-exact wabt. Completewasm.mjs:
+import wabtInit from 'wabt';
+const wabt = await wabtInit();
+const parsed = wabt.parseWat('double.wat', `
+(module (func (export "double") (param i32) (result i32)
+  local.get 0
+  i32.const 2
+  i32.mul))
+`);
+const { buffer } = parsed.toBinary({});
+parsed.destroy();
+const { instance } = await WebAssembly.instantiate(buffer);
+const double = instance.exports.double;
+console.log(double(21), double(2147483647));
+node wasm.mjs expected42 -2 duei32wrap. EquivalentJSfunction x=>(x*2)|0 forvalidi32inputs; benchmarkfulltaskwarmuprepeatedcalls+correctness/boundarychecks, wasmnotautomaticallyfastertinycalloverhead. Sources github.com/AssemblyScript/wabt.js • developer.mozilla.org/en-US/docs/WebAssembly.

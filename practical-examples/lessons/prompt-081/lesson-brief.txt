@@ -1,0 +1,21 @@
+Category: Ecosystem · Purpose: Accept uploads without unbounded buffering or unsafe filenames.
+Build an upload endpoint using fastify and @fastify/multipart. Generate storage names, limit file sizes and part counts, and verify oversized or interrupted uploads remove partial files.
+
+Focused upload route, app Fastifyexists, destinationdirectoryprepared, pluginregistered:
+import multipart from '@fastify/multipart';
+import { pipeline } from 'node:stream/promises';
+import { createWriteStream } from 'node:fs';
+import { rm } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
+await app.register(multipart, { limits: { fileSize: 1_000_000, files: 1, parts: 2 } });
+app.post('/upload', async (request, reply) => {
+  const part = await request.file();
+  if (!part) return reply.code(400).send({ error: 'File required' });
+  const path = './uploads/' + randomUUID();
+  try {
+    await pipeline(part.file, createWriteStream(path, { flags: 'wx' }));
+    if (part.file.truncated) throw new Error('Upload too large');
+    return { stored: true };
+  } catch (error) { await rm(path, { force: true }); throw error; }
+});
+Labelfocused excerpt, fullapp maplimiterror413 andinterruptedrequestaborts+cleanup signal, testdisconnect. Generatedfilenamesnotclientfilename, validatecontentseparatelyMIMEuntrusted. Streamdon'ttoBufferlargebodies. Sourcegithub.com/fastify/fastify-multipart. npm install --save-exact fastify @fastify/multipart neededfullproject.

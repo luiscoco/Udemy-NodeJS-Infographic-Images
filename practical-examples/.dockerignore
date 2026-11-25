@@ -1,0 +1,12 @@
+node_modules
+.npm-cache
+.env
+validation
+lessons/**/observed-output.txt
+lessons/**/profiles
+lessons/**/dist
+tools/__pycache__
+
+lessons/**/build/
+lessons/**/mylib.*
+lessons/**/*.obj

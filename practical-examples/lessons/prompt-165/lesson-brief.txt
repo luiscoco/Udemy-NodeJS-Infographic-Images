@@ -1,0 +1,23 @@
+Generate an Ed25519 key pair, sign a message and verify it after exporting and importing the public key. Demonstrate tamper rejection and distinguish public-key formats from private-key storage and peer identity.
+
+Course baseline: Node.js 26.13.1. Ed25519 uses null as the algorithm parameter to sign/verify. A private key signs; the corresponding public key verifies. SPKI describes this public-key encoding; PKCS#8 is a private-key format. PEM is text armor, DER is binary encoding, JWK is JSON key representation. A successful verification checks bytes against the supplied key, not the real-world identity of its owner; distribute trusted public keys through an authenticated channel. Signatures do not encrypt messages and do not by themselves prevent replay. Never log or commit private keys. The ephemeral key and synchronous generation are a small lab; choose secure storage and suitable generation strategy for production. Complete the exercise: wrong public key fails, changed signature fails, format round trips and key rotation. No external package required.
+Files (copy exactly):
+sign.mjs:
+import { generateKeyPairSync, createPublicKey, sign, verify } from 'node:crypto';
+
+const { privateKey, publicKey } = generateKeyPairSync('ed25519');
+const pem = publicKey.export({ type: 'spki', format: 'pem' });
+const imported = createPublicKey(pem);
+const message = Buffer.from('course:v1');
+const signature = sign(null, message, privateKey);
+
+console.log(verify(null, message, imported, signature));
+console.log(verify(null, Buffer.from('tampered'), imported, signature));
+console.log(imported.asymmetricKeyType);
+Commands (PowerShell, each a single unwrapped line):
+node sign.mjs
+Essential expected output (illustrative):
+true
+false
+ed25519
+Sources: https://nodejs.org/api/crypto.html

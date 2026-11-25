@@ -1,0 +1,11 @@
+Category: Node.js core · Purpose: Reduce the capabilities available to a trusted application.
+Run a file-processing CLI under --permission with only the required filesystem access. Verify permitted operations succeed and denied file, network, and child-process operations fail; document why this is not a malicious-code sandbox.
+
+Permission model stable opt-in onNode26, notmaliciouscodesandbox. Exact command singleline:
+node --permission --allow-fs-read=./lab --allow-fs-write=./lab/output ./lab/main.mjs
+Prepared lab/input.txt, lab/output and entry required. lab/main.mjs:
+import { readFile, writeFile } from 'node:fs/promises';
+const text = await readFile(new URL('./input.txt', import.meta.url), 'utf8');
+await writeFile(new URL('./output/result.txt', import.meta.url), text.toUpperCase());
+console.log('done');
+Expected allowed=>done; outsidegrantread deniedERR_ACCESS_DENIED; networkandchildprocesswithoutgrantsdenied separateharnesschecks. Grantonlyneededcapabilities, noallowall; permissionoffdefaultdifferent; securityisolationneedsOS/containerpolicy. CLIgrantpathsrelativecwd, fileURLsruntimerelativemodule. Source nodejs.org/api/permissions.html.

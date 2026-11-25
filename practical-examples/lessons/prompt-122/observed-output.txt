@@ -1,0 +1,23 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+bounded {"batch":0,"size":1000,"heapUsed":4449392}
+{"batch":1,"size":1000,"heapUsed":4811168}
+{"batch":2,"size":1000,"heapUsed":4814416}
+{"batch":3,"size":1000,"heapUsed":4814544}
+{"batch":4,"size":1000,"heapUsed":4813960}
+{"batch":5,"size":1000,"heapUsed":4815040}
+{"batch":6,"size":1000,"heapUsed":4815040}
+{"batch":7,"size":1000,"heapUsed":4815040}
+
+unbounded {"batch":0,"size":10000,"heapUsed":7082824}
+{"batch":1,"size":20000,"heapUsed":10381088}
+{"batch":2,"size":30000,"heapUsed":12865488}
+{"batch":3,"size":40000,"heapUsed":16262992}
+{"batch":4,"size":50000,"heapUsed":18742536}
+{"batch":5,"size":60000,"heapUsed":21229424}
+{"batch":6,"size":70000,"heapUsed":25537992}
+{"batch":7,"size":80000,"heapUsed":28018632}
+
+
+STDERR

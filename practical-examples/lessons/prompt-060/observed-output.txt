@@ -1,0 +1,10 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+/health 200 {"ok":true}
+/missing 404 {"error":"Not found"}
+/echo 200 {"ok":true}
+/echo 400 {"error":"Invalid JSON"}
+/echo 413 {"error":"Too large"}
+
+STDERR

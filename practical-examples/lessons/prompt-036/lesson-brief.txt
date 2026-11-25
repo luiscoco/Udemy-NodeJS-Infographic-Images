@@ -1,0 +1,4 @@
+Category: Tooling · Purpose: Declare how a package should be installed and consumed.
+Create a package manifest demonstrating dependencies, development dependencies, peer dependencies, optional dependencies, and an engine requirement. Use tiny local fixture packages and verify which relationships appear in the installed dependency tree.
+
+package.json tiny example distinguishes dependencies runtime; devDependencies tests/lint; peerDependencies host compatibility; optionalDependencies failure may be tolerated; engines node "26.13.1". Show npm ls --all; npm install --omit=dev; npm explain <package>. Use local fixture packages, not fabricated external versions. engines often advisory unless engine-strict enforced. Optional package must be handled if missing.

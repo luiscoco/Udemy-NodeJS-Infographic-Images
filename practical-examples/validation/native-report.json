@@ -1,0 +1,20 @@
+{
+  "lessons": [
+    {
+      "number": 131,
+      "status": "passed",
+      "runtime": "v26.13.1",
+      "platform": "linux (Docker)",
+      "stdout": "make: Entering directory '/work/lessons/prompt-131/build'\n  CC(target) Release/obj.target/nothing/../../node_modules/node-addon-api/nothing.o\nrm -f Release/obj.target/../../node_modules/node-addon-api/nothing.a Release/obj.target/../../node_modules/node-addon-api/nothing.a.ar-file-list; mkdir -p `dirname Release/obj.target/../../node_modules/node-addon-api/nothing.a`\nar crs Release/obj.target/../../node_modules/node-addon-api/nothing.a @Release/obj.target/../../node_modules/node-addon-api/nothing.a.ar-file-list\n  COPY Release/nothing.a\n  CXX(target) Release/obj.target/addon/native.o\n  SOLINK_MODULE(target) Release/obj.target/addon.node\n  COPY Release/addon.node\nmake: Leaving directory '/work/lessons/prompt-131/build'\n42\n",
+      "stderr": "gyp info it worked if it ends with ok\ngyp info using node-gyp@13.1.0\ngyp info using node@26.13.1 | linux | x64\ngyp info find Python using Python version 3.11.2 found at \"/usr/bin/python3\"\ngyp info spawn /usr/bin/python3\ngyp info spawn args [\ngyp info spawn args '/work/node_modules/node-gyp/gyp/gyp_main.py',\ngyp info spawn args 'binding.gyp',\ngyp info spawn args '-f',\ngyp info spawn args 'make',\ngyp info spawn args '-I',\ngyp info spawn args '/work/lessons/prompt-131/build/config.gypi',\ngyp info spawn args '-I',\ngyp info spawn args '/work/node_modules/node-gyp/addon.gypi',\ngyp info spawn args '-I',\ngyp info spawn args '/usr/local/include/node/common.gypi',\ngyp info spawn args '-Dlibrary=shared_library',\ngyp info spawn args '-Dvisibility=default',\ngyp info spawn args '-Dnode_root_dir=/usr/local',\ngyp info spawn args '-Dnode_gyp_dir=/work/node_modules/node-gyp',\ngyp info spawn args '-Dnode_lib_file=/usr/local/$(Configuration)/node.lib',\ngyp info spawn args '-Dmodule_root_dir=/work/lessons/prompt-131',\ngyp info spawn args '-Dnode_engine=v8',\ngyp info spawn args '--depth=.',\ngyp info spawn args '--no-parallel',\ngyp info spawn args '--generator-output',\ngyp info spawn args 'build',\ngyp info spawn args '-Goutput_dir=.'\ngyp info spawn args ]\ngyp info spawn make\ngyp info spawn args [ 'BUILDTYPE=Release', '-C', 'build' ]\ngyp info ok \n"
+    },
+    {
+      "number": 147,
+      "status": "passed",
+      "runtime": "v26.13.1",
+      "platform": "linux (Docker)",
+      "stdout": "42\n",
+      "stderr": "(node:16) ExperimentalWarning: FFI is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+    }
+  ]
+}

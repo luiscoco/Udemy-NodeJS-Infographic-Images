@@ -1,0 +1,2 @@
+Category: Tooling · Purpose: Reproduce the same runtime across development environments.
+Set up Node.js 26.13.1 using the external fnm version manager, with commands appropriate to my OS. Pin the project version and verify the active executable, Node.js version, and npm version; demonstrate diagnosing a conflicting installation.

@@ -1,0 +1,4 @@
+Category: Node.js core · Purpose: Understand existing Node.js packages and applications.
+Build a small .cjs application using require and module.exports. Demonstrate module caching with a stateful export and verify how repeated imports share that state.
+
+state.cjs: let count=0; module.exports={next:()=>++count}; main.cjs: const a=require('./state.cjs');const b=require('./state.cjs');console.log(a===b,a.next(),b.next()); =>true1 2. Require caching resolved filename shares state. Assign module.exports vs exports alias; exports={} doesn't replace module.exports. .cjs CommonJS even type module.

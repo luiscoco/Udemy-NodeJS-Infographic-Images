@@ -1,0 +1,17 @@
+Category: Ecosystem · Purpose: Enforce an API contract at its boundaries.
+Add trusted JSON Schemas to a fastify endpoint for parameters, body, and response. Verify invalid requests fail and internal fields do not appear in serialized responses.
+
+Focused Fastifyroute snippet app exists:
+app.post('/tasks/:id', {
+  schema: {
+    params: { type: 'object', required: ['id'], properties: { id: { type: 'integer' } } },
+    body: { type: 'object', required: ['title'], properties: { title: { type: 'string', minLength: 1 } } },
+    response: { 201: { type: 'object', additionalProperties: false,
+      properties: { id: { type: 'integer' }, title: { type: 'string' } } } }
+  }
+}, async (request, reply) => {
+  return reply.code(201).send({
+    id: request.params.id, title: request.body.title, internal: 'hidden'
+  });
+});
+PrereqFastifyapp,mountstatictrustedJSONschemas. Missingtitle400; nonnumericid400; valid201outputidtitleonlyinternalexcluded. JSONschemaresponsecontrolsserializationnotauthorization; don'tacceptusersuppliedschemasbecausecompilationcode. Sourcefastify.dev ReferenceValidation-and-Serialization. No inventedfullappcommands as standaloneexcerpt.

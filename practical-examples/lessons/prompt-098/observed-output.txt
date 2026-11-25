@@ -1,0 +1,6 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+secure encrypted session cookie; missing CSRF=403, valid CSRF=200
+
+STDERR

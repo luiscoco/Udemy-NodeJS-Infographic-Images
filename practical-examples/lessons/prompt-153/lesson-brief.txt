@@ -1,0 +1,25 @@
+Category: EcosystemPurpose: Manage persistent connections and recoverable shared state.
+Learning goals: WebSockets, authorization, connection cleanup, replay, slow-client policies, and multi-instance communication.
+Implementation prompt:
+Build a room-based collaboration application using fastify, ws, pg, and redis, with PostgreSQL message history and Redis live fan-out. Authenticate room access, assign persistent event IDs, and support reconnecting clients through history-based resynchronization. Demonstrate operation across two application instances with bounded per-client buffering.
+Acceptance criteria:
+At least three clients communicate through two server instances.
+Unauthorized room subscriptions fail.
+Reconnection follows a documented replay or resynchronization policy.
+Missed events can be recovered from durable history.
+Slow clients cannot create unlimited outbound buffering.
+Disconnecting releases listeners, timers, and connection state.
+Suggested point: After Module 15.
+
+Capstone: real-time rooms using fastify, ws, pg and redis. Architecture flow: client → WebSocket upgrade with an authenticated room check → instance A or B → message stored in PostgreSQL first (gets a persistent, increasing event id) → published to a Redis channel → every instance fans out to its local sockets. On reconnect the client sends its last event id and the server replays the missed events from PostgreSQL (WHERE room_id = $1 AND id > $2 ORDER BY id, with a limit) before resuming live delivery. One focused snippet, bounded per-client buffering, src/send.mjs, exactly:
+const MAX_BUFFERED_BYTES = 1_000_000;
+
+export function sendOrClose(socket, event) {
+  if (socket.bufferedAmount > MAX_BUFFERED_BYTES) {
+    socket.close(1013, 'Client too slow');
+    return false;
+  }
+  socket.send(JSON.stringify(event));
+  return true;
+}
+Teach: Redis pub/sub is fire-and-forget, so PostgreSQL is the durable history and Redis is only live fan-out. A slow client is disconnected and recovers through replay instead of growing server memory. On close, remove the socket from its room set, clear heartbeat timers, and unsubscribe from the Redis channel when a room has no local sockets. Unauthorized room subscriptions are rejected before joining. Acceptance criteria checklist: 3 or more clients across 2 server instances; unauthorized subscriptions fail; a documented replay policy; missed events recovered from durable history; bounded outbound buffering; disconnect releases listeners, timers and state. Sources: github.com/websockets/ws • redis.io/docs • postgresql.org/docs.

@@ -1,0 +1,13 @@
+Category: Node.js core · Purpose: Verify message authenticity before processing side effects.
+Implement webhook verification using crypto.createHmac over the original request bytes. Add timestamp and event-ID checks, and verify modified bodies, stale timestamps, and repeated events are rejected.
+
+Focused webhook helper, defined LAB signature contract timestamp+'.'+original rawbytes:
+import { createHmac, timingSafeEqual } from 'node:crypto';
+function verify(rawBody, timestamp, signature, key) {
+  if (!/^\d+$/.test(timestamp) || !/^[0-9a-f]{64}$/i.test(signature)) return false;
+  if (Math.abs(Date.now() / 1000 - Number(timestamp)) > 300) return false;
+  const expected = createHmac('sha256', key)
+    .update(timestamp + '.').update(rawBody).digest();
+  return timingSafeEqual(expected, Buffer.from(signature, 'hex'));
+}
+Inputs rawBody Buffer, serverheldkey, headerstrings; realprovidercontracts differ followdocs. VerifybeforeJSONparse/sideeffects. Timestamp5min freshnessnotdedup; eventIDmustauthenticated and durableuniqueprocessed_event_id inSAMEtransactionbusinessupdate. Matrixmodifiedbodyfalse,staletimestampfalse,badsigfalse,repeatedsignedIDdedupbyDB nothelper. Fixedlengthhex prevents timingSafeEqual mismatchedlengththrow. Never log key/rawsecrets. Sourcenodecrypto.

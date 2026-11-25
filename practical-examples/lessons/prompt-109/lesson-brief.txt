@@ -1,0 +1,16 @@
+Category: Node.js core · Purpose: Test time and dependencies without slow or fragile waits.
+Test a retrying function using injected dependencies, built-in function mocks, and timer mocks. Advance time deterministically and verify the attempt limit and cancellation behavior.
+
+retry.test.mjs focused timer primitive:
+import test from 'node:test';
+import assert from 'node:assert/strict';
+test('timer fires only after deadline', t => {
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const call = t.mock.fn();
+  setTimeout(call, 100);
+  t.mock.timers.tick(99);
+  assert.equal(call.mock.callCount(), 0);
+  t.mock.timers.tick(1);
+  assert.equal(call.mock.callCount(), 1);
+});
+node --test retry.test.mjs expected1pass. t.mockrestoresaftertest. Completeexerciseinjectoperation/sleep/clock/RNG, operationfailstwicesucceedsthird; assertattemptbudgetandcancellation; asyncmicrotaskawaitwithtimerpromises. Virtualtime notexternalnetworktime. Function/timermocksstablebaseline,modulemocksseparateexperimental. Source nodejs.org/api/test.html.

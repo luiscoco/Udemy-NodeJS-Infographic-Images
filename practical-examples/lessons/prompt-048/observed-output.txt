@@ -1,0 +1,6 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+<Buffer 01 00 00 00 05 68 65 6c 6c 6f> hello
+
+STDERR

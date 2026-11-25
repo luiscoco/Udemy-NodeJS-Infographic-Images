@@ -1,0 +1,10 @@
+from pathlib import Path
+root=Path(__file__).resolve().parents[1]
+p=root/'shared/telemetry.mjs';s=p.read_text().replace("const sdk=new NodeSDK({spanProcessors:[new SimpleSpanProcessor({exporter})]});", "const processor=new SimpleSpanProcessor({exporter});const sdk=new NodeSDK({spanProcessors:[processor]});").replace('return{sdk,exporter}','return{sdk,exporter,processor}');p.write_text(s)
+p=root/'lessons/prompt-120/demo.mjs';p.write_text(p.read_text().replace('{sdk,exporter}=await telemetry()','{sdk,exporter,processor}=await telemetry()').replace('assert.equal(exporter.getFinishedSpans().length,1);','await processor.forceFlush();assert.equal(exporter.getFinishedSpans().length,1);'))
+p=root/'lessons/prompt-130/demo.mjs';p.write_text(p.read_text().replace("assert.equal(check.code,file==='fixed.js'?0:2);","if(file==='fixed.js')assert.equal(check.code,0,check.stdout+check.stderr);else{assert.notEqual(check.code,0);assert.ok(check.stdout.includes('TS2345'));}"))
+p=root/'lessons/prompt-162/demo.mjs';p.write_text(p.read_text().replace("insert.run(9007199254740993n, 'safe');","insert.setReadBigInts(true);\ninsert.run(9007199254740993n, 'safe');"))
+p=root/'lessons/prompt-162/README.md';p.write_text(p.read_text()+'\nThe practical application also enables BigInt results on the INSERT statement: run() returns lastInsertRowid, which otherwise overflows Number for this fixture. Enabling it only on the SELECT is insufficient.\n')
+p=root/'shared/env.mjs';p.write_text(p.read_text().replace("!['127.0.0.1','localhost'].includes(url.hostname)","!['127.0.0.1','localhost',...(process.env.COURSE_CONTAINER_LAB==='1'?['db','redis','mongo']:[])].includes(url.hostname)"))
+p=root/'deployment/compose.yaml';p.write_text(p.read_text().replace('environment: &env','environment: &env\n    COURSE_CONTAINER_LAB: "1"'))
+p=root/'tools/validate.mjs';s=p.read_text().replace('},30000);','},item.mode.includes(\'docker\')?600000:30000);');p.write_text(s)

@@ -1,0 +1,4 @@
+Category: Node.js core · Purpose: Integrate packages using different module systems.
+Create ESM and CommonJS consumers of a small library. Demonstrate createRequire and dynamic import, then test how top-level await affects synchronous loading from CommonJS.
+
+ESM main.mjs: import {createRequire} from 'node:module'; const require=createRequire(import.meta.url); const cjs=require('./helper.cjs'); console.log(cjs.answer); helper.cjs module.exports={answer:42}; CJS main.cjs: (async()=>{const esm=await import('./helper.mjs');console.log(esm.answer);})().catch(console.error); helper.mjs export const answer=await Promise.resolve(42); require of async ESM throws ERR_REQUIRE_ASYNC_MODULE; dynamic import handles TLA. require(esm) only synchronous graphs; no outdated claim require never loads ESM.

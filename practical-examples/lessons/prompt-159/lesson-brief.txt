@@ -1,0 +1,27 @@
+Build a multipart upload client with native Blob, File, FormData, Headers and Request objects. Send it with fetch to the upload fixture from Prompt 81, inspect the response, and verify the multipart boundary is generated automatically.
+
+Course baseline: Node.js 26.13.1. Prerequisite: the separate local upload server from Prompt 81 is listening and accepts the multipart file field. No external client package is required. Blob holds immutable bytes, File adds name/metadata, FormData encodes multipart fields, Headers manages headers, Request describes the request and fetch resolves to a Response. Let fetch/FormData set Content-Type with its boundary; never manually set a bare multipart/form-data header. Request and Response bodies are one-use streams; clone before consuming if a second independent read is needed. The status comes from the fixture; HTTP errors do not automatically reject fetch. The tiny in-memory Blob is a lab example, not a bounded-memory large-file uploader. Complete the exercise: missing file, server 413, cancellation, and body consumption/cleanup.
+Files (copy exactly):
+upload-client.mjs:
+const blob = new Blob(['hello\n'], { type: 'text/plain' });
+const file = new File([blob], 'note.txt', { type: blob.type });
+const form = new FormData();
+form.append('file', file);
+
+const request = new Request('http://127.0.0.1:3000/upload', {
+  method: 'POST',
+  headers: new Headers({ Accept: 'application/json' }),
+  body: form,
+  signal: AbortSignal.timeout(1_000),
+});
+console.log(request.headers.get('content-type')
+  .startsWith('multipart/form-data; boundary='));
+const response = await fetch(request);
+console.log(response.status);
+await response.body?.cancel();
+Commands (PowerShell, each a single unwrapped line):
+node upload-client.mjs
+Essential expected output (illustrative):
+true
+<fixture-defined HTTP status>
+Sources: https://nodejs.org/api/globals.html

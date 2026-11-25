@@ -1,0 +1,11 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+v26.13.1
+true
+report.20261125.150148.9148.0.001.json
+
+STDERR
+
+Writing Node.js report to file: report.20261125.150148.9148.0.001.json
+Node.js report completed

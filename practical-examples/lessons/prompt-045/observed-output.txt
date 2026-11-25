@@ -1,0 +1,9 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+[
+  'C:\\Users\\luisc\\AppData\\Local\\Temp\\node-course-rQ7j3W\\a.txt',
+  'C:\\Users\\luisc\\AppData\\Local\\Temp\\node-course-rQ7j3W\\nested\\b.txt'
+]
+
+STDERR

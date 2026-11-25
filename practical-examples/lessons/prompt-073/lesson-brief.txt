@@ -1,0 +1,14 @@
+Category: Node.js core · Purpose: Understand the cost and ownership of cross-thread communication.
+Compare cloning an ArrayBuffer with transferring it through a MessageChannel. Verify sender-side detachment after transfer and measure the difference using a documented payload size.
+
+transfer.mjs:
+import { MessageChannel } from 'node:worker_threads';
+const { port1, port2 } = new MessageChannel();
+const buffer = new ArrayBuffer(1024 * 1024);
+port2.once('message', value => {
+  console.log('received:', value.byteLength);
+  port1.close(); port2.close();
+});
+port1.postMessage(buffer, [buffer]);
+console.log('sender:', buffer.byteLength);
+node transfer.mjs =>sender:0 thenreceived:1048576. Transferownershipdetachesoriginal; clonevariant omittransferlist, senderretains1048576. Typedarrayviewbuffertransferdetachesallviews; beware pooledNodeBuffer underlyingbuffer anduntransferable backingstore; useownedArrayBuffer. Benchmarkrepeatedpayloadsame1MiB,nofakemeasurements. SharedArrayBuffer neither cloneddata nortransferred.

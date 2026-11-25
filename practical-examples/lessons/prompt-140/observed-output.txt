@@ -1,0 +1,12 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{
+  replicas: 2,
+  apiConnectionCap: 20,
+  exampleWithOverhead: 30,
+  exampleBudget: 50,
+  sharedTask: 'shared persistent task'
+}
+
+STDERR

@@ -1,0 +1,22 @@
+Capture a diagnostic report for a controlled Node.js process. Locate runtime metadata, JavaScript and native stacks, heap statistics and libuv handles. Omit environment variables and explain how to handle the resulting diagnostic artifact.
+
+Course baseline: Node.js 26.13.1. process.report is stable. getReport returns an object; writeReport writes JSON with a generated timestamp/PID/sequence filename. Report generation may also log to stderr; show essential output only. Inspect javascriptStack, nativeStack, javascriptHeap and libuv. A report is a diagnostic snapshot, not a heap snapshot or proof of root cause. excludeEnv omits environment variables but does not make the remaining artifact public-safe: review paths, command arguments and other metadata before sharing. Windows lab uses programmatic capture; no POSIX signal commands. Complete the exercise: compare reports with and without an open timer/server and close all lab resources.
+Files (copy exactly):
+report.mjs:
+import { mkdir } from 'node:fs/promises';
+
+await mkdir('./reports', { recursive: true });
+process.report.directory = './reports';
+process.report.excludeEnv = true;
+
+const data = process.report.getReport(new Error('Lab checkpoint'));
+console.log(data.header.nodejsVersion);
+console.log(Array.isArray(data.libuv));
+console.log(process.report.writeReport());
+Commands (PowerShell, each a single unwrapped line):
+node report.mjs
+Essential expected output (illustrative):
+v26.13.1
+true
+<generated report filename>
+Sources: https://nodejs.org/api/report.html | https://nodejs.org/api/process.html

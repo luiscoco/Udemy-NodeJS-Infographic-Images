@@ -1,0 +1,13 @@
+Category: Node.js core · Purpose: Diagnose hostname resolution and connectivity problems.
+Compare dns.lookup with DNS record-resolution APIs for controlled examples. Handle nonexistent names and IPv4/IPv6 results, explaining why OS name resolution and DNS queries can differ.
+
+dns.mjs:
+import { lookup, resolve4, resolve6 } from 'node:dns/promises';
+console.log(await lookup('localhost', { all: true }));
+for (const resolve of [resolve4, resolve6]) {
+  try { console.log(await resolve('example.org')); }
+  catch (e) { console.log(e.code); }
+}
+try { await resolve4('does-not-exist.invalid'); }
+catch (e) { console.log(e.code); }
+node dns.mjs; liveaddressesplatform/networkdependent useplaceholders notinventedIPs. lookupusesOSresolverhostsNSS typicallylibuvpool; resolve4/6queriesDNSrecords nothostsfile, networkquerynotworkerpool sameway. IPv4/IPv6 addressfamily selectionnotassumefirstalways4, cache/TTLpolicyseparate. .invalid guaranteedreserved butfailurecodeENOTFOUNDtypically.

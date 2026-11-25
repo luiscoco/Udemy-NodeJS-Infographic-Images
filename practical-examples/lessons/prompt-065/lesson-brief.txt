@@ -1,0 +1,16 @@
+Category: Node.js core · Purpose: Build protocols that do not confuse chunks with messages.
+Implement a length-prefixed TCP client and server using node:net. Test fragmented and combined writes, reject oversized frames, and verify message reconstruction independently of received chunk boundaries.
+
+Focused TCP decoder excerpt, socket and handleMessage supplied by harness:
+let pending = Buffer.alloc(0);
+socket.on('data', chunk => {
+  pending = Buffer.concat([pending, chunk]);
+  while (pending.length >= 4) {
+    const length = pending.readUInt32BE(0);
+    if (length > 65536) return socket.destroy(new Error('Frame too large'));
+    if (pending.length < 4 + length) break;
+    handleMessage(pending.subarray(4, 4 + length));
+    pending = pending.subarray(4 + length);
+  }
+});
+4byteBEpayloadlength thenpayload. TCPbyte stream no messageboundaries: fragmentedheader/payload, combinedframes,testeachsplit+multiframechunks. Boundreadchunks/totalbuffer too, excerptconcatmaylargeallocation needfullappmemorybudgetanderrorhandler; neverclaimdataevent==message. Handlercallback sync/writablebackpressurefullimplementation.

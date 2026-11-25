@@ -1,0 +1,9 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{"mode":"test"}
+unmounted=false; read-only writes throw EROFS
+
+STDERR
+(node:21444) ExperimentalWarning: VirtualFileSystem is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

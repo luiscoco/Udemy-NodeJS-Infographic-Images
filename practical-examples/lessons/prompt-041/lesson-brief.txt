@@ -1,0 +1,4 @@
+Category: Tooling · Purpose: Understand and review transitive dependencies.
+Inspect a project with npm ls, npm explain, npm outdated, and npm audit. Review an installation script and a lockfile change, producing an evidence-based update decision rather than automatically applying forced upgrades.
+
+commands npm ls --all,npm explain <package>,npm outdated,npm audit,npm audit --omit=dev. Workflow inspect package graph→review advisory/reachability→check install scripts+lockfile diff→choose update→test. Don't use npm audit fix --force blindly; severity isn't complete exploitability assessment. No fake scan output or vulnerability counts. npm ci --ignore-scripts can be useful review step but may break native builds.

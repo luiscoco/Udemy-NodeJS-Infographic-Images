@@ -1,0 +1,9 @@
+{
+  "name": "@node-course/prompt-148",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --experimental-vfs demo.mjs"
+  }
+}

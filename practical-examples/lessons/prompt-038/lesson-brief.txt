@@ -1,0 +1,4 @@
+Category: Tooling · Purpose: Recreate the intended dependency graph.
+Generate a lockfile and verify installation with npm ci in a clean directory. Deliberately introduce a manifest mismatch and demonstrate the expected failure and correct repair workflow.
+
+Workflow npm install creates/updates package-lock.json; commit package.json+lock; clean checkout npm ci. npm ci fails manifest/lock mismatch, never edits lock, removes existing node_modules. Deliberately edit dependency manifest then npm ci expected failure; repair intentional npm install and review diff then npm ci. npm ci --omit=dev appropriate runtime install; environment and native tooling also affect reproducibility.

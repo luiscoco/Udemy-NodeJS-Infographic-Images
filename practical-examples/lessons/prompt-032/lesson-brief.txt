@@ -1,0 +1,4 @@
+Category: Node.js core · Purpose: Define a deliberate public package interface.
+Create a package using exports for public entry points and imports for internal aliases. Install its packed archive into a separate consumer and verify public imports succeed while an unexported subpath fails.
+
+package.json focused {"name":"demo-lib","type":"module","exports":{".":"./src/index.js"},"imports":{"#utils":"./src/utils.js"}}. src/index.js import from '#utils', export public helper. Commands npm pack; in separate consumer npm install ../demo-lib/demo-lib-1.0.0.tgz (set version1.0.0 in manifest). import 'demo-lib' succeeds; import 'demo-lib/src/utils.js' fails ERR_PACKAGE_PATH_NOT_EXPORTED. exports is API boundary not security sandbox.

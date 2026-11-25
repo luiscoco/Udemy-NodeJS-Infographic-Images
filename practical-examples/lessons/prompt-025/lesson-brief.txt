@@ -1,0 +1,4 @@
+Category: JavaScript · Purpose: Prevent large workloads from overwhelming resources.
+Implement an asynchronous task runner with a configurable concurrency limit and no external package. Process twenty tasks, inject failures, and assert that active work never exceeds the configured limit.
+
+Show focused dependency-free function async run(tasks,limit){if(!Number.isInteger(limit)||limit<1)throw Error('limit');let next=0;const results=[];await Promise.all(Array.from({length:Math.min(limit,tasks.length)},async()=>{while(next<tasks.length){const i=next++;try{results[i]={status:'fulfilled',value:await tasks[i]()};}catch(reason){results[i]={status:'rejected',reason};}}}));return results;} Label task factory array, 20 tasks, limit3; expected maxActive<=3 even after failures. Reject invalid limit; preserve input result order; avoid Promise.all(tasks.map(fn=>fn())) unbounded.

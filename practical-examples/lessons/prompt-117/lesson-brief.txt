@@ -1,0 +1,22 @@
+Category: Node.js core · Purpose: Expose instrumentation without coupling business logic to subscribers.
+Instrument a reusable operation with node:diagnostics_channel. Add and remove a subscriber, verify start and completion events, and avoid constructing expensive diagnostic payloads when nobody subscribes.
+
+Complete channels.mjs uses two channels and explicit subscription lifecycle:
+import { channel } from 'node:diagnostics_channel';
+const start = channel('course.operation.start');
+const done = channel('course.operation.done');
+const listener = message => console.log(message);
+start.subscribe(listener);
+done.subscribe(listener);
+function operation(value) {
+  if (start.hasSubscribers) start.publish({ phase: 'start', value });
+  try { return value * 2; }
+  finally {
+    if (done.hasSubscribers) done.publish({ phase: 'done' });
+  }
+}
+console.log(operation(3));
+start.unsubscribe(listener);
+done.unsubscribe(listener);
+console.log(operation(4));
+node channels.mjs essential output startvalue3,done,6,8 with no diagnostic events secondcall. Check hasSubscribers before constructing expensive payload. Subscribers run synchronously; subscriber errors must not crash business path; don't publish secrets. Source nodejs.org/api/diagnostics_channel.html.

@@ -1,0 +1,21 @@
+Category: Tooling · Purpose: Understand how hosted runtimes constrain application design.
+Use AWS SAM CLI and Docker to run a minimal Lambda handler locally. Verify the platform’s supported runtime first, document any deviation from the main baseline, and test repeated invocations for accidental shared-state leakage.
+
+AWS Lambda with the AWS SAM CLI and Docker. First check the runtime: the AWS Lambda runtimes page lists nodejs26.x (Node.js 26, Amazon Linux 2023). AWS manages the patch version, so it is not pinned to the course patch 26.13.1; record that deviation. If the installed SAM CLI or its local build image does not yet support nodejs26.x, upgrade SAM CLI and do not silently switch runtimes. File src/index.mjs, exactly:
+let invocations = 0;
+
+export const handler = async (event) => {
+  invocations += 1;
+  return { invocations, name: event.name ?? null };
+};
+File template.yaml, exactly:
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  HelloFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: index.handler
+      Runtime: nodejs26.x
+File events/event.json: {"name":"course"}
+Commands, each on one line: sam build and sam local invoke HelloFunction --event events/event.json. Illustrative output: {"invocations":1,"name":"course"}. Key teaching point about shared state: module-scope variables persist across warm invocations in the same execution environment. sam local invoke normally starts a fresh container each time, so the counter usually stays at 1 locally; that does NOT prove there is no leakage. Explain that a deployed warm environment would return 2, 3 and so on. Rule: keep per-request data inside the handler; use module scope only for safe reusable clients and configuration. Do not invent cold-start timings. Sources: docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html • docs.aws.amazon.com/serverless-application-model.

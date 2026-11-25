@@ -1,0 +1,4 @@
+Category: JavaScript · Purpose: Consume asynchronous sequences lazily.
+Implement an async generator over a simulated paginated data source. Stop consumption early with for await...of and verify that later pages are not requested and cleanup runs.
+
+pages.mjs: let requested=0; async function* pages(){try{for(let page=1;page<=5;page++){requested++;yield [page*10];}}finally{console.log('cleanup');}} for await(const page of pages()){console.log(page);break;} console.log(requested); => [10],cleanup,1. Contrast async iterable pull/on demand vs eager Promise.all; break closes generator and runs finally; abort remote request separately when needed.

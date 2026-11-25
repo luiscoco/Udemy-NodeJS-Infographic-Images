@@ -1,0 +1,18 @@
+Category: Node.js core · Purpose: Distinguish retained objects from normal allocation activity.
+Create a controlled leak caused by a growing cache or retained listener. Compare memory measurements and heap evidence before and after fixing ownership, avoiding claims based on one memory sample.
+
+Runnable cache.mjs controlled retainedcache lab, default fixedboundedcache, --leak enablesunbounded:
+const cache = new Map();
+const leak = process.argv.includes('--leak');
+for (let batch = 0; batch < 8; batch++) {
+  for (let i = 0; i < 10000; i++) {
+    const key = batch * 10000 + i;
+    cache.set(key, { label: 'x'.repeat(100), key });
+    if (!leak && cache.size > 1000) {
+      cache.delete(cache.keys().next().value);
+    }
+  }
+  global.gc?.();
+  console.log(batch, cache.size, process.memoryUsage().heapUsed);
+}
+Commands node --expose-gc cache.mjs --leak vs node --expose-gc cache.mjs. Expected leakcachesizegrows10000eachbatch, boundedsize1000; heapnumbersvary nofakeMB. --expose-gc onlycontrolledlab; notproductionfix. Heap snapshotsviaDevTools compare retainedMapentries/retainingpaths, snapshotpausesandmemorycost, never singlememorysampleproof. Source nodejs.org/api/v8.html, process.html.

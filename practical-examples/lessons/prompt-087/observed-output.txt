@@ -1,0 +1,6 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+[ { id: 1, balance: 90 }, { id: 2, balance: 60 } ]
+
+STDERR

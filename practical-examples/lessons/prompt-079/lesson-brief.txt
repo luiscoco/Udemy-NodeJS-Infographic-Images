@@ -1,0 +1,14 @@
+Category: Ecosystem · Purpose: Design predictable collection endpoints.
+Build a paginated collection endpoint with fastify, stable sorting, and bounded page size. Verify traversal has no duplicates for a fixed dataset and invalid cursors receive a defined error.
+
+Focused paginationroute/harness prepared fixed array tasks sorted uniqueintegerid:
+app.get('/tasks', async (request, reply) => {
+  const after = Number(request.query.after ?? 0);
+  const limit = Number(request.query.limit ?? 10);
+  if (!Number.isSafeInteger(after) || after < 0 ||
+      !Number.isInteger(limit) || limit < 1 || limit > 100)
+    return reply.code(400).send({ error: 'Invalid cursor or limit' });
+  const items = tasks.filter(task => task.id > after).slice(0, limit);
+  return { items, next: items.length ? items.at(-1).id : null };
+});
+Assumes tasks sorted ascendinguniqueids fixedfixture; notfullDBquery. Cursorseekid>after orderedidlimit, noduplicatesforfixeddata. Querynextuntilitems empty; lastnonemptycanreturncursorleadingextraemptyrequest acceptable. Changeswhilepagingrequire snapshotpolicy; boundedlimits1–100. Requestsafter2limit2→ids3,4iffixture1..5; invalidnegative400. Sourcefastify.dev.

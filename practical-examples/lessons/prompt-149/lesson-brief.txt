@@ -1,0 +1,27 @@
+Category: Node.js core · Purpose: Explore structured runtime benchmarking.
+Use node:bench with its required experimental flag to compare two equivalent implementations. Include warmup and repeated measurements, verify equal outputs, and report variability instead of declaring a winner from one sample.
+The benchmark runner was added in Node.js 26.9 and is in early development. Node.js v26.13.1 Documentation
+
+node:bench. Added in Node.js 26.9, Stability 1.0 Early development. It requires the --experimental-bench flag and the node: scheme. File compare.mjs, exactly:
+import { bench, suite } from 'node:bench';
+
+const parts = Array.from({ length: 1_000 }, (_, i) => `item${i}`);
+const expected = parts.join(',');
+
+suite('join strings', () => {
+  bench('Array.join', { samples: 30, warmup: 10 }, (b) => {
+    b.start();
+    const result = parts.join(',');
+    b.end(1);
+    if (result !== expected) throw new Error('join mismatch');
+  });
+
+  bench('concatenation loop', { samples: 30, warmup: 10 }, (b) => {
+    b.start();
+    let result = parts[0];
+    for (let i = 1; i < parts.length; i++) result += `,${parts[i]}`;
+    b.end(1);
+    if (result !== expected) throw new Error('loop mismatch');
+  });
+});
+Command: node --experimental-bench --bench compare.mjs. Do NOT show invented numbers; the output panel shows placeholders such as mean ops/s <measured>, stddev <measured>, coefficient of variation <measured>, confidence interval <measured>. Teach: warmup invocations are unreported (default 10); samples is the number of measured invocations; each function calls b.start() and b.end(operations) exactly once; the correctness check stays outside the timed region and throws on mismatch. Interpretation: compare confidence intervals and coefficient of variation; if intervals overlap, report no clear winner; rerun on an idle machine and record the Node.js version and hardware. Source: nodejs.org/api/bench.html.

@@ -1,0 +1,8 @@
+Category: Tooling · Purpose: Gain static feedback without changing the implementation language.
+Add JSDoc types to an existing JavaScript module and check it with typescript using checkJs and no emit. Introduce an incorrect argument type and verify the checker catches it while Node still runs ordinary JavaScript.
+
+npm install --save-dev --save-exact typescript. package.json type:module fixture; file math.js:
+/** @param {number} a @param {number} b @returns {number} */
+export function add(a, b) { return a + b; }
+console.log(add('2', 3));
+Commands node math.js expected23(string) and npx tsc --allowJs --checkJs --noEmit --module NodeNext --target ES2022 math.js expectedrejectstringargument; fixedadd(2,3)prints5checkerpasses. JSDoccompiletimeonlynoenforcementruntime, noemitpreventsrewritingsource. tsconfigproject alternativeproseonly. Source typescriptlang.org/docs/handbook/check-js.html.

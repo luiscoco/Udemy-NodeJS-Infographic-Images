@@ -1,0 +1,14 @@
+Category: Ecosystem · Purpose: Find edge cases beyond handpicked examples.
+Use fast-check to test a binary encoder-decoder round trip. Introduce an endianness or length bug, capture the minimized failing case, and verify the corrected implementation passes.
+
+binary.test.mjs focused property test:
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fc from 'fast-check';
+import { encode, decode } from './binary.mjs';
+test('binary round trip', () => {
+  fc.assert(fc.property(fc.uint8Array({ maxLength: 1024 }), bytes => {
+    assert.deepEqual(decode(encode(bytes)), bytes);
+  }), { numRuns: 1000, seed: 42 });
+});
+PrereqencodeUint8Array→framedbytes,decode→sameUint8Arraytype implementedinbinary.mjs. npm install --save-dev --save-exact fast-check ; node --test binary.test.mjs . Introduceendiannessbug, shrinkcounterexample, recordseedandpathforreplay; 1000casesnotproofallinputs; manualboundarytestscomplement. Expectedpassonlycorrectimplementation, noactualtestclaim. Source github.com/dubzzz/fast-check.

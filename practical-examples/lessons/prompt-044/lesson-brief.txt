@@ -1,0 +1,16 @@
+Category: Node.js core · Purpose: Keep file access within an intended directory.
+Implement a file resolver using node:path and appropriate real-path checks inside a controlled fixture directory. Test traversal, absolute paths, and symlinks; document remaining race-condition limitations.
+
+Focus existing-file containment, label snippet "Existing files only · focused resolver". Exact snippet:
+import { realpath } from 'node:fs/promises';
+import { resolve, relative, isAbsolute, sep } from 'node:path';
+async function resolveInside(root, input) {
+  if (isAbsolute(input)) throw new Error('Absolute path rejected');
+  const base = await realpath(root);
+  const target = await realpath(resolve(base, input));
+  const rel = relative(base, target);
+  if (rel === '..' || rel.startsWith('..' + sep) || isAbsolute(rel))
+    throw new Error('Outside root');
+  return target;
+}
+Explain root and target resolved through symlinks; lexical path.resolve alone insufficient; remaining check/open TOCTOU race; not a complete hostile-filesystem security boundary. Verification matrix allowed fixture.txt; ../outside rejected; absolute rejected; symlink pointing outside rejected; missing ENOENT. No false claim handles nonexistent destinations.

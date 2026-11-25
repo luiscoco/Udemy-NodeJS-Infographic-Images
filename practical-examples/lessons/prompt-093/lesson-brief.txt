@@ -1,0 +1,20 @@
+Category: Ecosystem · Purpose: Process work independently of an HTTP request.
+Process report-generation jobs using bullmq configured with Redis. Bound concurrency and attempts, terminate a worker mid-job, and verify idempotent output after recovery or redelivery.
+
+Focused producer:
+import { Queue } from 'bullmq';
+const connection = { host: '127.0.0.1', port: 6379 };
+const queue = new Queue('reports', { connection });
+try {
+  await queue.add('generate', { reportId: 'r1' }, {
+    jobId: 'report-r1', attempts: 3,
+    backoff: { type: 'exponential', delay: 1000 }
+  });
+} finally { await queue.close(); }
+Focusedworker separate:
+import { Worker } from 'bullmq';
+const worker = new Worker('reports', async job => {
+  await publishReportIdempotently(job.data.reportId);
+}, { connection, concurrency: 2 });
+worker.on('error', console.error);
+Workerexcerptexplicitconnectionandpublishhelperprovidedbymodule/harness. npm install --save-exact bullmq; localRedispersistenceconfigured. Atleastonceprocessing,stalledredelivery,jobIddedupnotsufficientpermanentbusinessidempotencyespafterjobremoved. Killworkercrashfixture&retry, durableuniqueoutput DBconstraint, worker.closegraceful. Source docs.bullmq.io.

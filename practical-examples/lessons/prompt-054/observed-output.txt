@@ -1,0 +1,8 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{"text":"café","level":"info"}
+{"level":"info"}
+ { read: 3, accepted: 2, malformed: 0 }
+
+STDERR

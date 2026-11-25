@@ -1,0 +1,4 @@
+Category: JavaScript · Purpose: Produce values lazily instead of allocating entire datasets.
+Implement a custom iterable and a generator that yields a large numeric range. Consume only the first ten values and verify that the remaining values were never generated.
+
+range.mjs: let produced = 0; function* range(n) { for (let i = 0; i < n; i++) { produced++; yield i; } } const values=[]; for (const n of range(1_000_000)) { values.push(n); if (values.length === 10) break; } console.log(values); console.log(produced); => 0 through 9 and 10. for...of break calls iterator.return() when present; generator cleanup finally runs. Lazy doesn't compute remaining values. Explain custom iterable returns iterator via Symbol.iterator; show concise object snippet if room.

@@ -1,0 +1,6 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{ availableMiB: 2410, constrainedBytes: 0, workers: 4 }
+
+STDERR

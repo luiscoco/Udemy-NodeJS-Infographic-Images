@@ -1,0 +1,4 @@
+Category: Node.js core · Purpose: Diagnose scheduling surprises and starvation.
+Compare promise callbacks, queueMicrotask, and legacy process.nextTick in separate ESM and CommonJS programs. Demonstrate bounded starvation and verify that yielding restores timer progress.
+
+Separate order.cjs and order.mjs same snippet: console.log('sync'); process.nextTick(()=>console.log('nextTick')); Promise.resolve().then(()=>console.log('promise')); queueMicrotask(()=>console.log('microtask')); Expected CJS sync,nextTick,promise,microtask; ESM sync,promise,microtask,nextTick for this top-level example. process.nextTick is Legacy, not deprecated. Bounded starvation demonstration recursive microtasks with counter limit; yielding via await setImmediate from node:timers/promises. Never recommend endless recursion or claim phase order identical CJS/ESM.

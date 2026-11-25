@@ -1,0 +1,6 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{"id":"9007199254740993","createdAt":"2026-01-01T00:00:00.000Z"} true
+
+STDERR

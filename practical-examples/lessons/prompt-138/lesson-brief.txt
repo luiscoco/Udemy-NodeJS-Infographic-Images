@@ -1,0 +1,32 @@
+Category: Tooling · Purpose: Assemble application services predictably.
+Create a Docker Compose deployment for a Node.js API and PostgreSQL with persistent data and externalized configuration. Verify startup from a clean environment and persistence after replacing the application container.
+
+Focused Docker Compose excerpt with two services: api (built from the provided Dockerfile from Prompt 136) and db (PostgreSQL). Do NOT show any Dockerfile contents; just state "Prerequisite: the Dockerfile from Prompt 136". The API reads the standard PG* environment variables; do not mention DATABASE_URL_FILE or secret files at all. Show each docker compose command on ONE unwrapped line in a wide panel. The db service publishes no host port, so it stays on the internal Compose network. Show compose.yaml exactly:
+services:
+  api:
+    build: .
+    environment:
+      PGHOST: db
+      PGPORT: 5432
+      PGDATABASE: course
+      PGUSER: course
+      PGPASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+    ports: ["3000:3000"]
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: course
+      POSTGRES_USER: course
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U course -d course"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  pgdata:
+Configuration: DB_PASSWORD comes from the PowerShell environment or from a git-ignored .env file; never show a real secret value. postgres:17 is a valid major tag; for a reproducible release, pin a patch tag or a verified digest. Commands, each on one line: docker compose up -d --build and docker compose up -d --force-recreate api. Verification in prose: insert a record through the API, recreate only the api container, and confirm the record is still there because it lives in the pgdata volume. Common mistake: docker compose down -v deletes the named volume and the data with it. Note that depends_on with service_healthy only orders startup; it does not give runtime resilience, and migrations and connection retry are separate tasks. Sources: docs.docker.com/compose • hub.docker.com/_/postgres.

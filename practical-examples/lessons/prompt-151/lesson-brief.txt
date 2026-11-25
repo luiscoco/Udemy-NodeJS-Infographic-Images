@@ -1,0 +1,28 @@
+Category: Node.js corePurpose: Consolidate CLI design, filesystem safety, and streaming.
+Learning goals: Argument parsing, stdin/stdout, UTF-8 decoding, transformations, backpressure, cancellation, exit codes, and tests.
+Implementation prompt:
+Build logtool, a dependency-free Node.js CLI that filters newline-delimited JSON logs and produces aggregate statistics. Support files and stdin, streamed output, configurable malformed-record handling, cancellation, and safe output replacement. Provide generated fixtures and tests demonstrating correctness and bounded memory.
+Acceptance criteria:
+Processes a generated 1 GiB input with correct counts and a documented memory budget substantially below input size.
+Handles empty input, split UTF-8 sequences, malformed records, and an incomplete final line.
+Enforces a maximum record length.
+Produces clean machine-readable stdout and appropriate stderr diagnostics.
+Returns meaningful exit codes and removes incomplete output after cancellation.
+Suggested point: After Module 8.
+
+Capstone, logtool: a dependency-free command-line tool that filters newline-delimited JSON (NDJSON) logs. Architecture flow: input (file or stdin) → line splitter with a maximum record length and a streaming UTF-8 decoder → JSON parse with a malformed-record policy (skip, count or fail) → filter → aggregate statistics → stdout as JSON, diagnostics to stderr. Show one focused snippet, safe output replacement, logtool/write-atomically.mjs, exactly:
+import { createWriteStream } from 'node:fs';
+import { rename, rm } from 'node:fs/promises';
+import { pipeline } from 'node:stream/promises';
+
+export async function writeAtomically(target, source, signal) {
+  const temp = `${target}.${process.pid}.tmp`;
+  try {
+    await pipeline(source, createWriteStream(temp, { flags: 'wx' }), { signal });
+    await rename(temp, target);
+  } catch (error) {
+    await rm(temp, { force: true });
+    throw error;
+  }
+}
+Explain: the output is written to a temporary file next to the target and renamed only on success, so cancellation (Ctrl+C mapped to an AbortController) leaves no partial output; pipeline gives backpressure. Exit codes: 0 success, 1 data error under the fail policy, 2 usage error. Command: node --test. Acceptance criteria checklist (measurable): a generated 1 GiB fixture gives correct counts with peak RSS under a documented budget (placeholder <budget> MiB, measured, not assumed); empty input; a UTF-8 character split across chunks; malformed records; an incomplete final line; records over the maximum length rejected; stdout stays machine-readable; cancellation removes incomplete output. Sources: nodejs.org/api/stream.html • nodejs.org/api/fs.html.

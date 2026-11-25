@@ -1,0 +1,16 @@
+Category: Ecosystem · Purpose: Reduce repeated work while managing stale data.
+Implement cache-aside reads using the redis package and a local Redis service. Add TTLs and write invalidation, then verify cache misses, stale-entry removal, and a defined cache-outage fallback.
+
+Focused cache-aside helper cache+databaseprovided:
+async function loadTask(id) {
+  const key = 'task:' + id;
+  try {
+    const cached = await cache.get(key);
+    if (cached !== null) return JSON.parse(cached);
+  } catch { /* cache outage: fall back */ }
+  const task = await database.loadTask(id);
+  try { await cache.set(key, JSON.stringify(task), { EX: 30 }); }
+  catch { /* cache is optional */ }
+  return task;
+}
+Prereqnode-redisconnectederrorlistener, localRedis+DBstubservice. WritecommitDBthen DELkey; invalidationrace/stampedeTTLnotstrictconsistency; no claimTTLguaranteesfreshness. getnullmissvsfalseyvalues; boundtimeoutsfallthrough. npm install --save-exact redis. Validationmatrixmiss→DB+setTTL,hit→cache,write→delete,cacheoffline→DBfallback. Source redis.io/docs/latest/develop/clients/nodejs/.

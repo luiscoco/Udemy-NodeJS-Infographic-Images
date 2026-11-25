@@ -1,0 +1,4 @@
+Category: JavaScript · Purpose: Understand captured state and variable lifetime.
+Implement a counter factory using closures and block-scoped variables. Create two counters and verify independent state; include a loop-capture example that demonstrates the difference between var and let.
+
+counter.mjs: function counter() { let value = 0; return () => ++value; } const a = counter(); const b = counter(); console.log(a(), a(), b()); => 1 2 1. Loop capture: for (var i = 0; i < 3; i++) setTimeout(() => console.log(i), 0); => 3 3 3; separate let loop outputs 0 1 2. Closures retain bindings, not frozen copies; each factory call owns independent state. Command node counter.mjs. Distinguish let block scope from var function scope.

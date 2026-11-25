@@ -1,0 +1,30 @@
+Use using and await using to manage file handles and temporary directories. Verify resources are disposed in reverse declaration order on normal completion and on an exception; distinguish scope exit from process termination.
+
+Course baseline: Node.js 26.13.1. using is JavaScript syntax; Node resources expose Symbol.dispose or Symbol.asyncDispose. await using awaits cleanup. The file closes before the temporary folder is removed (reverse declaration order). Normal block exit, return and thrown exceptions trigger disposal; abrupt process termination does not guarantee it. This sample requires no external package. Complete the exercise: throw inside the block and verify cleanup in a surrounding catch; compare with try/finally. Disposal errors can also propagate.
+Files (copy exactly):
+dispose.mjs:
+import { mkdtempDisposable, open, readFile, access } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
+let path;
+{
+  await using temp = await mkdtempDisposable(join(tmpdir(), 'node-lab-'));
+  path = temp.path;
+  await using file = await open(join(path, 'note.txt'), 'w+');
+  await file.writeFile('hello');
+  console.log(await readFile(join(path, 'note.txt'), 'utf8'));
+}
+try {
+  await access(path);
+  console.log('exists');
+} catch (error) {
+  if (error.code !== 'ENOENT') throw error;
+  console.log('removed');
+}
+Commands (PowerShell, each a single unwrapped line):
+node dispose.mjs
+Essential expected output (illustrative):
+hello
+removed
+Sources: https://nodejs.org/api/fs.html

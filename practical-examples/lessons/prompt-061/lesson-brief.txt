@@ -1,0 +1,20 @@
+Category: Node.js core · Purpose: Understand socket reuse and client resource ownership.
+Build a node:http client using an explicitly configured Agent. Measure connection reuse across requests, enforce a socket limit, and verify the Agent is closed after the workload.
+
+Focused client.mjs, prerequisite localHTTPserverport3000:
+import { Agent, get } from 'node:http';
+const agent = new Agent({ keepAlive: true, maxSockets: 2 });
+function request() {
+  return new Promise((resolve, reject) => {
+    const req = get('http://127.0.0.1:3000/health', { agent }, res => {
+      res.resume();
+      res.on('end', () => resolve(req.reusedSocket));
+      res.on('error', reject);
+    });
+    req.setTimeout(1000, () => req.destroy(new Error('Timeout')));
+    req.on('error', reject);
+  });
+}
+try { console.log(await request(), await request()); }
+finally { agent.destroy(); }
+node client.mjs expected false true if serverkeepalivesupportedandsocketstillavailable; NOT unconditionalguarantee. Drainbodyforreuse; maxSockets perorigin; destroyagentfinally. CorehttpAgent not nativefetch dispatcher; don'tclaimagentconfig appliesfetch. Socketreusemeasuredviareq.reusedSocket.

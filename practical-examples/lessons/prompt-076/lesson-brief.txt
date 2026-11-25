@@ -1,0 +1,17 @@
+Category: Ecosystem · Purpose: Organize web behavior beyond a raw HTTP callback.
+Build a small task API using fastify with route registration, lifecycle hooks, and centralized error handling. Verify successful requests, unknown routes, and an intentionally rejected handler.
+
+app.mjs:
+import Fastify from 'fastify';
+const app = Fastify({ logger: true });
+app.addHook('onRequest', async request => {
+  request.log.info({ path: request.url }, 'request received');
+});
+app.setErrorHandler((error, request, reply) => {
+  request.log.error(error);
+  reply.code(500).send({ error: 'Internal error' });
+});
+app.get('/tasks', async () => [{ id: 1, title: 'Learn Node.js' }]);
+app.get('/fail', async () => { throw new Error('Fixture failure'); });
+await app.listen({ port: 3000, host: '127.0.0.1' });
+npm install --save-exact fastify ; node app.mjs. VerificationGET/tasks200array; unknown404default; GET/fail500sanitizedbody. Fastifyecosystemnotcore; lifecycleonRequest→handler→serialization, errorhandlercatchesrejection. Recordresolvedversionlockfile notinvented. CompleteexercisePOSTandshutdown app.close(). Sourcefastify.dev.

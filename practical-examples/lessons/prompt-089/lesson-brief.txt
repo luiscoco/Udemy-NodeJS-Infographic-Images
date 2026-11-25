@@ -1,0 +1,13 @@
+Category: Ecosystem · Purpose: Prevent one request from silently overwriting another.
+Implement optimistic concurrency using pg, PostgreSQL, and a version column. Submit competing updates with the same version and verify exactly one succeeds while the other receives a conflict.
+
+Focused optimisticconcurrency SQLwithpg:
+const result = await pool.query(
+  'UPDATE tasks SET title = $1, version = version + 1 WHERE id = $2 AND version = $3 RETURNING id, title, version',
+  [nextTitle, taskId, expectedVersion]
+);
+if (result.rowCount === 0) {
+  return reply.code(409).send({ error: 'Version conflict' });
+}
+return result.rows[0];
+ContextauthenticatedFastifyhandler,pool/validatedinputsprovided; expectedversioninteger; PostgreSQLversionNOTNULLDEFAULT0. Twochangeswithsameid/version exactlyonesucceeds andincrements; other409; existencevsconflictpolicydefinedrowCount0includesnotfound. ValidationauthorizationscopealsoinWHEREfullapp. AtomicWHEREcompare+increment avoidsreadthenseparatewrite. Sourcepostgresql.org docs SQLupdate,node-postgres.com.

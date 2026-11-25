@@ -1,0 +1,10 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+bad.js runtime 23
+bad.js(5,17): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+fixed.js runtime 5
+
+
+STDERR

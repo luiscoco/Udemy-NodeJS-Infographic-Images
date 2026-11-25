@@ -1,0 +1,46 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+{
+  PORT: '3000',
+  code: 0,
+  signal: null,
+  stdout: '{ port: 3000, debug: false }\n',
+  stderr: ''
+}
+{
+  PORT: '0',
+  code: 1,
+  signal: null,
+  stdout: '',
+  stderr: 'file:///C:/00.%20IMPORTANTE%20-%20Prompts%20NodeJS,%20Angular,%20React,%20Blazor/Udemy-NodeJS-Infographic-Images/practical-examples/lessons/prompt-004/config.mjs:3\r\n' +
+    '  throw Error("Invalid PORT");\r\n' +
+    '        ^\r\n' +
+    '\r\n' +
+    'Error: Invalid PORT\r\n' +
+    '    at file:///C:/00.%20IMPORTANTE%20-%20Prompts%20NodeJS,%20Angular,%20React,%20Blazor/Udemy-NodeJS-Infographic-Images/practical-examples/lessons/prompt-004/config.mjs:3:9\r\n' +
+    '    at ModuleJob.run (node:internal/modules/esm/module_job:569:25)\r\n' +
+    '    at async node:internal/modules/esm/loader:650:26\r\n' +
+    '    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:105:5)\r\n' +
+    '\r\n' +
+    'Node.js v26.13.1\r\n'
+}
+{
+  PORT: 'not-a-port',
+  code: 1,
+  signal: null,
+  stdout: '',
+  stderr: 'file:///C:/00.%20IMPORTANTE%20-%20Prompts%20NodeJS,%20Angular,%20React,%20Blazor/Udemy-NodeJS-Infographic-Images/practical-examples/lessons/prompt-004/config.mjs:3\r\n' +
+    '  throw Error("Invalid PORT");\r\n' +
+    '        ^\r\n' +
+    '\r\n' +
+    'Error: Invalid PORT\r\n' +
+    '    at file:///C:/00.%20IMPORTANTE%20-%20Prompts%20NodeJS,%20Angular,%20React,%20Blazor/Udemy-NodeJS-Infographic-Images/practical-examples/lessons/prompt-004/config.mjs:3:9\r\n' +
+    '    at ModuleJob.run (node:internal/modules/esm/module_job:569:25)\r\n' +
+    '    at async node:internal/modules/esm/loader:650:26\r\n' +
+    '    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:105:5)\r\n' +
+    '\r\n' +
+    'Node.js v26.13.1\r\n'
+}
+
+STDERR

@@ -1,0 +1,8 @@
+Runtime: v26.13.1 win32 x64
+Status: passed
+STDOUT
+[ '01:30', '03:30' ]
+1234,50 €
+$1,234.50
+
+STDERR

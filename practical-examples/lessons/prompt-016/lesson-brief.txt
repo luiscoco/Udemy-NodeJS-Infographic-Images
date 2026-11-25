@@ -1,0 +1,4 @@
+Category: Node.js core · Purpose: Understand why a responsive server can become blocked.
+Build a server with one delayed-I/O endpoint and one CPU-heavy endpoint. Send overlapping requests and measure responsiveness; demonstrate why adding async to CPU-heavy code does not make that work parallel.
+
+One focused server.mjs with createServer from node:http; import setTimeout as delay from node:timers/promises; /io awaits delay(1000); /cpu busy loops synchronously for 1000ms; async callback replies 'done'. Explain overlapping /io overlaps waits but CPU loop delays all callbacks; marking async doesn't run CPU in parallel. Commands node server.mjs and two simultaneous client terminals curl.exe localhost:3000/io then /cpu. Mark timings illustrative and measurement-dependent. Diagram main JS event loop distinct from OS I/O. CPU→worker threads. Ensure async handler catches errors.

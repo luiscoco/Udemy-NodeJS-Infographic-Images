@@ -1,0 +1,26 @@
+Category: Node.js core · Purpose: Explore calling a native shared library without writing an addon.
+Compile a tiny C shared library and call one function through node:ffi. State build and architecture requirements, verify the signature and result, and explain the consequences of incorrect native type or memory declarations.
+This API was added in Node.js 26.1 and remains experimental. Node.js v26.13.1 Documentation
+
+node:ffi. Added in Node.js 26.1, Stability 1 Experimental. Under the Permission Model it requires --allow-ffi. Docs warning, quote: "This API is unsafe. Passing invalid pointers, using an incorrect symbol signature, or accessing memory after it has been freed can crash the process or corrupt memory." File add.c, exactly:
+#include <stdint.h>
+#if defined(_WIN32)
+#define EXPORT __declspec(dllexport)
+#else
+#define EXPORT
+#endif
+
+EXPORT int32_t add_i32(int32_t a, int32_t b) {
+  return a + b;
+}
+Build commands, each on one line: Windows, in a Developer PowerShell for Visual Studio: cl /LD add.c /Fe:mylib.dll. Linux (POSIX label): cc -shared -fPIC -o mylib.so add.c. macOS (POSIX label): cc -dynamiclib -o mylib.dylib add.c
+File call.mjs, exactly:
+import { dlopen, suffix } from 'node:ffi';
+
+const { lib, functions } = dlopen(`./mylib.${suffix}`, {
+  add_i32: { arguments: ['int32', 'int32'], return: 'int32' },
+});
+
+console.log(functions.add_i32(20, 22));
+lib.close();
+Command: node call.mjs (run from the folder that contains the library). Illustrative output: 42. Requirements: the library architecture must match process.arch (x64 vs arm64), and suffix is dll, so or dylib. Consequences panel in prose: a declared signature that does not match the C function (for example int64 vs int32, or a wrong argument count) is not detected and gives garbage results or crashes; never call functions after lib.close(); never resize, transfer or detach a buffer while a native call is using it; native crashes cannot be caught with try/catch. Source: nodejs.org/api/ffi.html.

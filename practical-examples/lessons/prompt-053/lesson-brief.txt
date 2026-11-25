@@ -1,0 +1,10 @@
+Category: Node.js core · Purpose: Keep producer speed aligned with consumer capacity.
+Connect a fast producer to a deliberately slow writable stream. Respect write() results and drain, and verify buffered data remains bounded as total processed input increases.
+
+Focused producer snippet, writable is an existing slow writable:
+import { once } from 'node:events';
+for (let i = 0; i < 1000; i++) {
+  if (!writable.write(Buffer.alloc(1024))) await once(writable, 'drain');
+}
+writable.end();
+Explain false means chunk accepted but pause until drain; not retry samechunk; highWaterMark threshold not hard memory cap; oversized singlechunk still large; boundedchunk sizes+honorbackpressure+errorhandling. Prefer pipeline for end-to-end cleanup; manual excerpt assume error propagation complete implementation. Verify writableLength/maxqueued vs totalinputs and slowconsumer. No fake memorymeasurements.

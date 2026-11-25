@@ -1,0 +1,15 @@
+Category: Node.js core · Purpose: Make termination behavior deliberate.
+Build a long-running CLI that handles supported termination signals and uses meaningful exit codes. Verify cleanup executes once and document how signal behavior differs between Windows and POSIX.
+
+lifecycle.mjs:
+let closing = false;
+const timer = setInterval(() => console.log('working'), 1000);
+function shutdown() {
+  if (closing) return;
+  closing = true;
+  clearInterval(timer);
+  console.log('cleaned up');
+}
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
+node lifecycle.mjs thenCtrl+C supportedinteractiveWindows/POSIX; aftercleanupnaturalexit. SIGTERMdeliveryWindowsnotPOSIXequivalent, processkill mayterminateunconditionally; testplatform. Asyncworkinexitlistener notawaited; beforeExitnotgeneralterminationhandler; cleanupidempotent. Errorsprocess.exitCode1 vs forceprocess.exittruncatesoutput. No fakeWindowskill-SIGTERMcommands.

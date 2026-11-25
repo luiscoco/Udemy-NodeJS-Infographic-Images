@@ -1,0 +1,12 @@
+Category: Node.js core · Purpose: Coordinate separate Node.js processes.
+Build a parent and forked child communicating through request IDs and replies. Add request deadlines and simulate a child crash, verifying pending requests fail rather than hang.
+
+Focused parent-childIPC pattern show child.mjs only:
+process.on('message', async message => {
+  if (message.type !== 'double') return;
+  process.send?.({ id: message.id, value: message.value * 2 });
+});
+Parentfocusedmatching:
+const child = fork(new URL('./child.mjs', import.meta.url));
+child.send({ id: 'r1', type: 'double', value: 21 });
+Importfork fromnode:child_process requiredifshowparentsnippet. Labelpartialparent excerpt. DiagramparentpendingMaprequestID→childmessage→replysameID→resolve; deadlineclearentry; childexitrejectallpending; disconnectcleanup. Verificationr1value42,missingreplydeadlineerror,crashrejectpendingnot hang. Don'tclaimfullrequestmanagerimplementedin2lines.

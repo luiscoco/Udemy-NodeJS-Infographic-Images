@@ -1,0 +1,1 @@
+<!doctype html><title>CORS client</title><button id="load">Fetch API</button><pre id="output"></pre><script>document.querySelector("#load").onclick=async()=>{try{const r=await fetch("http://localhost:3000/data",{credentials:"include"});document.querySelector("#output").textContent=await r.text();}catch(e){document.querySelector("#output").textContent=e.message;}};</script>

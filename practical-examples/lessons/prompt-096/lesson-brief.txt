@@ -1,0 +1,16 @@
+Category: Node.js core · Purpose: Keep credentials out of source and accidental output.
+Build startup configuration that reads secrets from environment variables or a mounted file. Validate missing values and verify sanitized diagnostics never reveal the secret or its source file contents.
+
+Complete config.mjs:
+import { readFile } from 'node:fs/promises';
+try {
+  const value = process.env.APP_SECRET ??
+    (process.env.APP_SECRET_FILE
+      ? await readFile(process.env.APP_SECRET_FILE, 'utf8') : '');
+  if (!value.trim()) throw new Error('Missing secret');
+  console.log({ secretConfigured: true });
+} catch {
+  console.error('Configuration unavailable');
+  process.exitCode = 1;
+}
+Run node config.mjs after setting APP_SECRET or APP_SECRET_FILE. No real secret values. Existing env wins; blank/missing invalid. Expected valid=>{secretConfigured:true}; missing=>generic diagnostic and exit1. No logging secret, mounted-file contents, complete config, credentialURLs. Ignore .env in versioncontrol, limit filepermissions, rotate secrets. .env not a secret vault.

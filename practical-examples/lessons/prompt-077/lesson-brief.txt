@@ -1,0 +1,15 @@
+Category: Ecosystem · Purpose: Understand a common request-processing abstraction.
+Build a minimal express application with request logging, routing, and error middleware. Record execution order and verify an error reaches the error handler without sending two responses.
+
+Express 5.x example app.mjs:
+import express from 'express';
+const app = express();
+app.use((req, res, next) => { console.log('before', req.path); next(); });
+app.get('/tasks', (req, res) => res.json([]));
+app.get('/fail', async () => { throw new Error('Fixture failure'); });
+app.use((error, req, res, next) => {
+  if (res.headersSent) return next(error);
+  res.status(500).json({ error: 'Internal error' });
+});
+app.listen(3000, '127.0.0.1');
+npm install --save-exact express ; node app.mjs. Orderlogger→route→errorhandlerwhenfailure; 4paramsrequired. Express5forwardsrejectedroutepromisesautomatically; distinguishExpress4needsmanualnextcatch. returnafterresponseavoidnextsendtwice; unknownroute404notservererror. Sourceexpressjs.com/en/guide/error-handling/.
