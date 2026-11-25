@@ -17,9 +17,61 @@ Open `demo.mjs` beside this file. Every imported shared helper is supplied in `.
 
 Real signed identities and PostgreSQL owner predicates prevent cross-user access.
 
+<!-- prompt-concepts:start -->
+## Prompt concepts explained with code
+
+### What this application teaches
+
+Authentication identifies a caller; authorization decides which resource that caller may access. Owner checks belong in the data-access predicate rather than depending on hard-to-guess IDs.
+
+### Follow the implementation
+
+From [demo.mjs, lines 9-20](demo.mjs#L9) (source excerpt; run the full application using the command above):
+
+```javascript
+app.get("/role-tasks/:id", { preHandler: app.authenticate }, async (q, r) => {
+  const id = Number(q.params.id);
+  if (!Number.isSafeInteger(id) || id < 1)
+    return r.code(400).send({ error: "Invalid id" });
+  const row = (
+    await db.pool.query(
+      "SELECT id,title FROM tasks WHERE id=$1 AND (owner_id=$2 OR $3::boolean)",
+      [id, q.user.sub, q.user.role === "admin"],
+    )
+  ).rows[0];
+  return row ?? r.code(404).send({ error: "Not found" });
+});
+```
+
+From [demo.mjs, lines 41-49](demo.mjs#L41) (source excerpt; run the full application using the command above):
+
+```javascript
+  assert.equal((await app.inject("/tasks")).statusCode, 401);
+  assert.equal(
+    (
+      await app.inject({
+        url: "/role-tasks/" + id,
+        headers: { ...b.headers, role: "admin" },
+      })
+    ).statusCode,
+    404,
+```
+
+### Why this produces the observed result
+
+The role-aware route uses owner identity and an admin role from the verified JWT. A forged role header grants nothing, and owner-only capstone routes intentionally keep their stricter policy.
+
+Compare the behavior described above with [the captured run](observed-output.txt). That file records one validation run; timing, generated paths, ports, and identifiers can differ on your machine. Read the assertions in [demo.mjs](demo.mjs) to see which outcomes the demo actually checks.
+
+### Student exercise
+
+Use user B's token to read user A's task and compare 404 with an unauthenticated 401. Explain where the administrator exception is implemented and why an arbitrary header cannot enable it.
+
+<!-- prompt-concepts:end -->
+
 ## Walkthrough and experiments
 
-Follow the values through the implementation. Change one input, predict the result, then run again. Assertions intentionally stop the example when its contract is violated.
+Use the student exercise above to change one input at a time. Predict the result, run the application, and explain which assertion or output confirms your prediction. Restore your experiment before running the course validation again.
 
 ## Requirements and validation
 

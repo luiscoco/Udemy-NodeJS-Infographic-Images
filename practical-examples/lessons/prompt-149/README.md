@@ -18,9 +18,53 @@ Open `demo.mjs` beside this file. Every imported shared helper is supplied in `.
 
 The actual experimental benchmark runner measures two equivalent string operations. Results depend on runtime and hardware.
 
+<!-- prompt-concepts:start -->
+## Prompt concepts explained with code
+
+### What this application teaches
+
+A benchmark must compare operations that produce the same result and define which region is timed. Warmup and repeated samples reduce some measurement noise without removing all runtime effects.
+
+### Follow the implementation
+
+From [compare.mjs, lines 1-18](compare.mjs#L1) (source excerpt; run the full application using the command above):
+
+```javascript
+import { bench, suite } from "node:bench";
+const parts = Array.from({ length: 1000 }, (_, i) => `item${i}`),
+  expected = parts.join(",");
+suite("join strings", () => {
+  bench("Array.join", { samples: 30, warmup: 10 }, (b) => {
+    b.start();
+    const result = parts.join(",");
+    b.end(1);
+    if (result !== expected) throw Error("join mismatch");
+  });
+  bench("concatenation loop", { samples: 30, warmup: 10 }, (b) => {
+    b.start();
+    let result = parts[0];
+    for (let i = 1; i < parts.length; i++) result += `,${parts[i]}`;
+    b.end(1);
+    if (result !== expected) throw Error("loop mismatch");
+  });
+});
+```
+
+### Why this produces the observed result
+
+Each benchmark validates its result outside the timed region and reports measurements from the experimental built-in runner. The result applies to this workload and hardware, not all string construction.
+
+Compare the behavior described above with [the captured run](observed-output.txt). That file records one validation run; timing, generated paths, ports, and identifiers can differ on your machine. Read the assertions in [demo.mjs](demo.mjs) to see which outcomes the demo actually checks.
+
+### Student exercise
+
+Change the number of parts and compare another run. Explain why a faster implementation that produces different separators would not be a valid optimization.
+
+<!-- prompt-concepts:end -->
+
 ## Walkthrough and experiments
 
-Follow the values through the implementation. Change one input, predict the result, then run again. Assertions intentionally stop the example when its contract is violated.
+Use the student exercise above to change one input at a time. Predict the result, run the application, and explain which assertion or output confirms your prediction. Restore your experiment before running the course validation again.
 
 ## Requirements and validation
 

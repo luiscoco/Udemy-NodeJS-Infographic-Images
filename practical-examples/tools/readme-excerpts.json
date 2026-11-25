@@ -1,0 +1,1346 @@
+[
+  {
+    "readme": "lessons/prompt-001/README.md",
+    "source": "lessons/prompt-001/demo.mjs",
+    "start": 1,
+    "end": 10
+  },
+  {
+    "readme": "lessons/prompt-002/README.md",
+    "source": "lessons/prompt-002/demo.mjs",
+    "start": 1,
+    "end": 12
+  },
+  {
+    "readme": "lessons/prompt-003/README.md",
+    "source": "lessons/prompt-003/src/add.js",
+    "start": 1,
+    "end": 2
+  },
+  {
+    "readme": "lessons/prompt-003/README.md",
+    "source": "lessons/prompt-003/test/add.test.js",
+    "start": 1,
+    "end": 4
+  },
+  {
+    "readme": "lessons/prompt-004/README.md",
+    "source": "lessons/prompt-004/config.mjs",
+    "start": 1,
+    "end": 7
+  },
+  {
+    "readme": "lessons/prompt-004/README.md",
+    "source": "lessons/prompt-004/demo.mjs",
+    "start": 1,
+    "end": 13
+  },
+  {
+    "readme": "lessons/prompt-005/README.md",
+    "source": "lessons/prompt-005/cli.mjs",
+    "start": 1,
+    "end": 14
+  },
+  {
+    "readme": "lessons/prompt-006/README.md",
+    "source": "lessons/prompt-006/ask.mjs",
+    "start": 1,
+    "end": 24
+  },
+  {
+    "readme": "lessons/prompt-007/README.md",
+    "source": "lessons/prompt-007/demo.mjs",
+    "start": 1,
+    "end": 5
+  },
+  {
+    "readme": "lessons/prompt-007/README.md",
+    "source": "lessons/prompt-007/main.mjs",
+    "start": 1,
+    "end": 2
+  },
+  {
+    "readme": "lessons/prompt-007/README.md",
+    "source": "lessons/prompt-007/message.mjs",
+    "start": 1,
+    "end": 1
+  },
+  {
+    "readme": "lessons/prompt-008/README.md",
+    "source": "lessons/prompt-008/demo.mjs",
+    "start": 1,
+    "end": 18
+  },
+  {
+    "readme": "lessons/prompt-009/README.md",
+    "source": "lessons/prompt-009/demo.mjs",
+    "start": 1,
+    "end": 17
+  },
+  {
+    "readme": "lessons/prompt-010/README.md",
+    "source": "lessons/prompt-010/demo.mjs",
+    "start": 1,
+    "end": 13
+  },
+  {
+    "readme": "lessons/prompt-011/README.md",
+    "source": "lessons/prompt-011/demo.mjs",
+    "start": 1,
+    "end": 12
+  },
+  {
+    "readme": "lessons/prompt-012/README.md",
+    "source": "lessons/prompt-012/demo.mjs",
+    "start": 1,
+    "end": 21
+  },
+  {
+    "readme": "lessons/prompt-013/README.md",
+    "source": "lessons/prompt-013/demo.mjs",
+    "start": 1,
+    "end": 17
+  },
+  {
+    "readme": "lessons/prompt-014/README.md",
+    "source": "lessons/prompt-014/demo.mjs",
+    "start": 1,
+    "end": 10
+  },
+  {
+    "readme": "lessons/prompt-015/README.md",
+    "source": "lessons/prompt-015/demo.mjs",
+    "start": 1,
+    "end": 20
+  },
+  {
+    "readme": "lessons/prompt-016/README.md",
+    "source": "lessons/prompt-016/demo.mjs",
+    "start": 1,
+    "end": 28
+  },
+  {
+    "readme": "lessons/prompt-017/README.md",
+    "source": "lessons/prompt-017/demo.mjs",
+    "start": 1,
+    "end": 7
+  },
+  {
+    "readme": "lessons/prompt-018/README.md",
+    "source": "lessons/prompt-018/order.cjs",
+    "start": 1,
+    "end": 4
+  },
+  {
+    "readme": "lessons/prompt-018/README.md",
+    "source": "lessons/prompt-018/order.mjs",
+    "start": 1,
+    "end": 4
+  },
+  {
+    "readme": "lessons/prompt-019/README.md",
+    "source": "lessons/prompt-019/pool.mjs",
+    "start": 1,
+    "end": 10
+  },
+  {
+    "readme": "lessons/prompt-019/README.md",
+    "source": "lessons/prompt-019/demo.mjs",
+    "start": 1,
+    "end": 10
+  },
+  {
+    "readme": "lessons/prompt-020/README.md",
+    "source": "lessons/prompt-020/demo.mjs",
+    "start": 1,
+    "end": 12
+  },
+  {
+    "readme": "lessons/prompt-021/README.md",
+    "source": "lessons/prompt-021/demo.mjs",
+    "start": 1,
+    "end": 9
+  },
+  {
+    "readme": "lessons/prompt-022/README.md",
+    "source": "lessons/prompt-022/demo.mjs",
+    "start": 1,
+    "end": 12
+  },
+  {
+    "readme": "lessons/prompt-023/README.md",
+    "source": "lessons/prompt-023/demo.mjs",
+    "start": 1,
+    "end": 14
+  },
+  {
+    "readme": "lessons/prompt-024/README.md",
+    "source": "lessons/prompt-024/demo.mjs",
+    "start": 1,
+    "end": 21
+  },
+  {
+    "readme": "lessons/prompt-025/README.md",
+    "source": "lessons/prompt-025/demo.mjs",
+    "start": 2,
+    "end": 19
+  },
+  {
+    "readme": "lessons/prompt-025/README.md",
+    "source": "lessons/prompt-025/demo.mjs",
+    "start": 33,
+    "end": 37
+  },
+  {
+    "readme": "lessons/prompt-026/README.md",
+    "source": "lessons/prompt-026/demo.mjs",
+    "start": 1,
+    "end": 11
+  },
+  {
+    "readme": "lessons/prompt-027/README.md",
+    "source": "lessons/prompt-027/demo.mjs",
+    "start": 1,
+    "end": 20
+  },
+  {
+    "readme": "lessons/prompt-028/README.md",
+    "source": "lessons/prompt-028/demo.mjs",
+    "start": 1,
+    "end": 21
+  },
+  {
+    "readme": "lessons/prompt-029/README.md",
+    "source": "lessons/prompt-029/demo.mjs",
+    "start": 1,
+    "end": 6
+  },
+  {
+    "readme": "lessons/prompt-030/README.md",
+    "source": "lessons/prompt-030/demo.mjs",
+    "start": 1,
+    "end": 7
+  },
+  {
+    "readme": "lessons/prompt-031/README.md",
+    "source": "lessons/prompt-031/demo.mjs",
+    "start": 1,
+    "end": 10
+  },
+  {
+    "readme": "lessons/prompt-032/README.md",
+    "source": "lessons/prompt-032/demo.mjs",
+    "start": 9,
+    "end": 20
+  },
+  {
+    "readme": "lessons/prompt-032/README.md",
+    "source": "lessons/prompt-032/demo.mjs",
+    "start": 33,
+    "end": 39
+  },
+  {
+    "readme": "lessons/prompt-033/README.md",
+    "source": "lessons/prompt-033/demo.mjs",
+    "start": 1,
+    "end": 10
+  },
+  {
+    "readme": "lessons/prompt-034/README.md",
+    "source": "lessons/prompt-034/demo.mjs",
+    "start": 1,
+    "end": 6
+  },
+  {
+    "readme": "lessons/prompt-035/README.md",
+    "source": "lessons/prompt-035/a.mjs",
+    "start": 1,
+    "end": 2
+  },
+  {
+    "readme": "lessons/prompt-035/README.md",
+    "source": "lessons/prompt-035/b.mjs",
+    "start": 1,
+    "end": 2
+  },
+  {
+    "readme": "lessons/prompt-035/README.md",
+    "source": "lessons/prompt-035/fixed-a.mjs",
+    "start": 1,
+    "end": 2
+  },
+  {
+    "readme": "lessons/prompt-035/README.md",
+    "source": "lessons/prompt-035/shared.mjs",
+    "start": 1,
+    "end": 1
+  },
+  {
+    "readme": "lessons/prompt-036/README.md",
+    "source": "lessons/prompt-036/demo.mjs",
+    "start": 1,
+    "end": 22
+  },
+  {
+    "readme": "lessons/prompt-037/README.md",
+    "source": "lessons/prompt-037/demo.mjs",
+    "start": 1,
+    "end": 9
+  },
+  {
+    "readme": "lessons/prompt-038/README.md",
+    "source": "lessons/prompt-038/demo.mjs",
+    "start": 1,
+    "end": 31
+  },
+  {
+    "readme": "lessons/prompt-039/README.md",
+    "source": "lessons/prompt-039/demo.mjs",
+    "start": 1,
+    "end": 18
+  },
+  {
+    "readme": "lessons/prompt-040/README.md",
+    "source": "lessons/prompt-040/demo.mjs",
+    "start": 6,
+    "end": 17
+  },
+  {
+    "readme": "lessons/prompt-040/README.md",
+    "source": "lessons/prompt-040/demo.mjs",
+    "start": 23,
+    "end": 43
+  },
+  {
+    "readme": "lessons/prompt-041/README.md",
+    "source": "lessons/prompt-041/demo.mjs",
+    "start": 1,
+    "end": 15
+  },
+  {
+    "readme": "lessons/prompt-042/README.md",
+    "source": "lessons/prompt-042/demo.mjs",
+    "start": 1,
+    "end": 28
+  },
+  {
+    "readme": "lessons/prompt-043/README.md",
+    "source": "lessons/prompt-043/demo.mjs",
+    "start": 1,
+    "end": 14
+  },
+  {
+    "readme": "lessons/prompt-044/README.md",
+    "source": "lessons/prompt-044/demo.mjs",
+    "start": 1,
+    "end": 21
+  },
+  {
+    "readme": "lessons/prompt-045/README.md",
+    "source": "lessons/prompt-045/demo.mjs",
+    "start": 1,
+    "end": 17
+  },
+  {
+    "readme": "lessons/prompt-046/README.md",
+    "source": "lessons/prompt-046/demo.mjs",
+    "start": 1,
+    "end": 19
+  },
+  {
+    "readme": "lessons/prompt-047/README.md",
+    "source": "lessons/prompt-047/demo.mjs",
+    "start": 1,
+    "end": 11
+  },
+  {
+    "readme": "lessons/prompt-048/README.md",
+    "source": "lessons/prompt-048/demo.mjs",
+    "start": 1,
+    "end": 16
+  },
+  {
+    "readme": "lessons/prompt-049/README.md",
+    "source": "lessons/prompt-049/demo.mjs",
+    "start": 1,
+    "end": 12
+  },
+  {
+    "readme": "lessons/prompt-050/README.md",
+    "source": "lessons/prompt-050/demo.mjs",
+    "start": 1,
+    "end": 34
+  },
+  {
+    "readme": "lessons/prompt-051/README.md",
+    "source": "lessons/prompt-051/demo.mjs",
+    "start": 1,
+    "end": 15
+  },
+  {
+    "readme": "lessons/prompt-052/README.md",
+    "source": "lessons/prompt-052/demo.mjs",
+    "start": 1,
+    "end": 13
+  },
+  {
+    "readme": "lessons/prompt-053/README.md",
+    "source": "lessons/prompt-053/demo.mjs",
+    "start": 7,
+    "end": 23
+  },
+  {
+    "readme": "lessons/prompt-054/README.md",
+    "source": "shared/ndjson.mjs",
+    "start": 34,
+    "end": 61
+  },
+  {
+    "readme": "lessons/prompt-054/README.md",
+    "source": "lessons/prompt-054/demo.mjs",
+    "start": 5,
+    "end": 9
+  },
+  {
+    "readme": "lessons/prompt-055/README.md",
+    "source": "lessons/prompt-055/demo.mjs",
+    "start": 1,
+    "end": 25
+  },
+  {
+    "readme": "lessons/prompt-056/README.md",
+    "source": "lessons/prompt-056/demo.mjs",
+    "start": 1,
+    "end": 14
+  },
+  {
+    "readme": "lessons/prompt-057/README.md",
+    "source": "lessons/prompt-057/demo.mjs",
+    "start": 1,
+    "end": 22
+  },
+  {
+    "readme": "lessons/prompt-058/README.md",
+    "source": "lessons/prompt-058/demo.mjs",
+    "start": 24,
+    "end": 28
+  },
+  {
+    "readme": "lessons/prompt-058/README.md",
+    "source": "lessons/prompt-058/demo.mjs",
+    "start": 29,
+    "end": 54
+  },
+  {
+    "readme": "lessons/prompt-059/README.md",
+    "source": "lessons/prompt-059/demo.mjs",
+    "start": 1,
+    "end": 11
+  },
+  {
+    "readme": "lessons/prompt-060/README.md",
+    "source": "shared/core-http.mjs",
+    "start": 8,
+    "end": 28
+  },
+  {
+    "readme": "lessons/prompt-060/README.md",
+    "source": "lessons/prompt-060/demo.mjs",
+    "start": 6,
+    "end": 16
+  },
+  {
+    "readme": "lessons/prompt-061/README.md",
+    "source": "lessons/prompt-061/demo.mjs",
+    "start": 1,
+    "end": 24
+  },
+  {
+    "readme": "lessons/prompt-062/README.md",
+    "source": "lessons/prompt-062/demo.mjs",
+    "start": 1,
+    "end": 25
+  },
+  {
+    "readme": "lessons/prompt-063/README.md",
+    "source": "lessons/prompt-063/demo.mjs",
+    "start": 65,
+    "end": 82
+  },
+  {
+    "readme": "lessons/prompt-064/README.md",
+    "source": "lessons/prompt-064/demo.mjs",
+    "start": 1,
+    "end": 29
+  },
+  {
+    "readme": "lessons/prompt-065/README.md",
+    "source": "lessons/prompt-065/demo.mjs",
+    "start": 3,
+    "end": 23
+  },
+  {
+    "readme": "lessons/prompt-065/README.md",
+    "source": "lessons/prompt-065/demo.mjs",
+    "start": 24,
+    "end": 31
+  },
+  {
+    "readme": "lessons/prompt-066/README.md",
+    "source": "lessons/prompt-066/demo.mjs",
+    "start": 1,
+    "end": 38
+  },
+  {
+    "readme": "lessons/prompt-067/README.md",
+    "source": "lessons/prompt-067/demo.mjs",
+    "start": 1,
+    "end": 17
+  },
+  {
+    "readme": "lessons/prompt-068/README.md",
+    "source": "lessons/prompt-068/lifecycle.mjs",
+    "start": 1,
+    "end": 15
+  },
+  {
+    "readme": "lessons/prompt-069/README.md",
+    "source": "lessons/prompt-069/demo.mjs",
+    "start": 1,
+    "end": 6
+  },
+  {
+    "readme": "lessons/prompt-070/README.md",
+    "source": "lessons/prompt-070/demo.mjs",
+    "start": 16,
+    "end": 23
+  },
+  {
+    "readme": "lessons/prompt-070/README.md",
+    "source": "lessons/prompt-070/demo.mjs",
+    "start": 39,
+    "end": 56
+  },
+  {
+    "readme": "lessons/prompt-071/README.md",
+    "source": "lessons/prompt-071/worker.mjs",
+    "start": 1,
+    "end": 4
+  },
+  {
+    "readme": "lessons/prompt-071/README.md",
+    "source": "lessons/prompt-071/demo.mjs",
+    "start": 1,
+    "end": 16
+  },
+  {
+    "readme": "lessons/prompt-072/README.md",
+    "source": "lessons/prompt-072/demo.mjs",
+    "start": 1,
+    "end": 21
+  },
+  {
+    "readme": "lessons/prompt-073/README.md",
+    "source": "lessons/prompt-073/demo.mjs",
+    "start": 1,
+    "end": 13
+  },
+  {
+    "readme": "lessons/prompt-074/README.md",
+    "source": "lessons/prompt-074/worker.mjs",
+    "start": 1,
+    "end": 3
+  },
+  {
+    "readme": "lessons/prompt-074/README.md",
+    "source": "lessons/prompt-074/demo.mjs",
+    "start": 1,
+    "end": 19
+  },
+  {
+    "readme": "lessons/prompt-075/README.md",
+    "source": "lessons/prompt-075/demo.mjs",
+    "start": 15,
+    "end": 19
+  },
+  {
+    "readme": "lessons/prompt-075/README.md",
+    "source": "lessons/prompt-075/demo.mjs",
+    "start": 38,
+    "end": 58
+  },
+  {
+    "readme": "lessons/prompt-076/README.md",
+    "source": "lessons/prompt-076/demo.mjs",
+    "start": 1,
+    "end": 27
+  },
+  {
+    "readme": "lessons/prompt-077/README.md",
+    "source": "lessons/prompt-077/demo.mjs",
+    "start": 1,
+    "end": 34
+  },
+  {
+    "readme": "lessons/prompt-078/README.md",
+    "source": "lessons/prompt-078/demo.mjs",
+    "start": 5,
+    "end": 32
+  },
+  {
+    "readme": "lessons/prompt-078/README.md",
+    "source": "lessons/prompt-078/demo.mjs",
+    "start": 34,
+    "end": 42
+  },
+  {
+    "readme": "lessons/prompt-079/README.md",
+    "source": "lessons/prompt-079/demo.mjs",
+    "start": 1,
+    "end": 35
+  },
+  {
+    "readme": "lessons/prompt-080/README.md",
+    "source": "lessons/prompt-080/demo.mjs",
+    "start": 1,
+    "end": 28
+  },
+  {
+    "readme": "lessons/prompt-081/README.md",
+    "source": "shared/upload.mjs",
+    "start": 1,
+    "end": 31
+  },
+  {
+    "readme": "lessons/prompt-081/README.md",
+    "source": "lessons/prompt-081/demo.mjs",
+    "start": 7,
+    "end": 20
+  },
+  {
+    "readme": "lessons/prompt-082/README.md",
+    "source": "lessons/prompt-082/demo.mjs",
+    "start": 3,
+    "end": 33
+  },
+  {
+    "readme": "lessons/prompt-083/README.md",
+    "source": "lessons/prompt-083/demo.mjs",
+    "start": 8,
+    "end": 24
+  },
+  {
+    "readme": "lessons/prompt-083/README.md",
+    "source": "lessons/prompt-083/demo.mjs",
+    "start": 27,
+    "end": 42
+  },
+  {
+    "readme": "lessons/prompt-084/README.md",
+    "source": "lessons/prompt-084/demo.mjs",
+    "start": 1,
+    "end": 28
+  },
+  {
+    "readme": "lessons/prompt-085/README.md",
+    "source": "lessons/prompt-085/demo.mjs",
+    "start": 1,
+    "end": 20
+  },
+  {
+    "readme": "lessons/prompt-086/README.md",
+    "source": "lessons/prompt-086/demo.mjs",
+    "start": 1,
+    "end": 14
+  },
+  {
+    "readme": "lessons/prompt-087/README.md",
+    "source": "lessons/prompt-087/demo.mjs",
+    "start": 1,
+    "end": 26
+  },
+  {
+    "readme": "lessons/prompt-088/README.md",
+    "source": "lessons/prompt-088/demo.mjs",
+    "start": 9,
+    "end": 20
+  },
+  {
+    "readme": "lessons/prompt-088/README.md",
+    "source": "lessons/prompt-088/demo.mjs",
+    "start": 22,
+    "end": 33
+  },
+  {
+    "readme": "lessons/prompt-089/README.md",
+    "source": "lessons/prompt-089/demo.mjs",
+    "start": 1,
+    "end": 20
+  },
+  {
+    "readme": "lessons/prompt-090/README.md",
+    "source": "lessons/prompt-090/demo.mjs",
+    "start": 25,
+    "end": 39
+  },
+  {
+    "readme": "lessons/prompt-091/README.md",
+    "source": "lessons/prompt-091/demo.mjs",
+    "start": 1,
+    "end": 36
+  },
+  {
+    "readme": "lessons/prompt-092/README.md",
+    "source": "lessons/prompt-092/demo.mjs",
+    "start": 1,
+    "end": 32
+  },
+  {
+    "readme": "lessons/prompt-093/README.md",
+    "source": "lessons/prompt-093/demo.mjs",
+    "start": 1,
+    "end": 20
+  },
+  {
+    "readme": "lessons/prompt-094/README.md",
+    "source": "lessons/prompt-094/demo.mjs",
+    "start": 17,
+    "end": 38
+  },
+  {
+    "readme": "lessons/prompt-095/README.md",
+    "source": "shared/outbox.mjs",
+    "start": 1,
+    "end": 29
+  },
+  {
+    "readme": "lessons/prompt-096/README.md",
+    "source": "lessons/prompt-096/config.mjs",
+    "start": 1,
+    "end": 13
+  },
+  {
+    "readme": "lessons/prompt-096/README.md",
+    "source": "lessons/prompt-096/demo.mjs",
+    "start": 1,
+    "end": 13
+  },
+  {
+    "readme": "lessons/prompt-097/README.md",
+    "source": "shared/passwords.mjs",
+    "start": 1,
+    "end": 32
+  },
+  {
+    "readme": "lessons/prompt-098/README.md",
+    "source": "lessons/prompt-098/demo.mjs",
+    "start": 6,
+    "end": 29
+  },
+  {
+    "readme": "lessons/prompt-098/README.md",
+    "source": "lessons/prompt-098/demo.mjs",
+    "start": 37,
+    "end": 48
+  },
+  {
+    "readme": "lessons/prompt-099/README.md",
+    "source": "lessons/prompt-099/demo.mjs",
+    "start": 1,
+    "end": 28
+  },
+  {
+    "readme": "lessons/prompt-100/README.md",
+    "source": "lessons/prompt-100/demo.mjs",
+    "start": 9,
+    "end": 20
+  },
+  {
+    "readme": "lessons/prompt-100/README.md",
+    "source": "lessons/prompt-100/demo.mjs",
+    "start": 41,
+    "end": 49
+  },
+  {
+    "readme": "lessons/prompt-101/README.md",
+    "source": "lessons/prompt-101/demo.mjs",
+    "start": 13,
+    "end": 27
+  },
+  {
+    "readme": "lessons/prompt-101/README.md",
+    "source": "lessons/prompt-101/demo.mjs",
+    "start": 31,
+    "end": 48
+  },
+  {
+    "readme": "lessons/prompt-102/README.md",
+    "source": "lessons/prompt-102/demo.mjs",
+    "start": 1,
+    "end": 20
+  },
+  {
+    "readme": "lessons/prompt-103/README.md",
+    "source": "lessons/prompt-103/demo.mjs",
+    "start": 1,
+    "end": 41
+  },
+  {
+    "readme": "lessons/prompt-104/README.md",
+    "source": "lessons/prompt-104/demo.mjs",
+    "start": 1,
+    "end": 22
+  },
+  {
+    "readme": "lessons/prompt-105/README.md",
+    "source": "lessons/prompt-105/demo.mjs",
+    "start": 1,
+    "end": 21
+  },
+  {
+    "readme": "lessons/prompt-106/README.md",
+    "source": "lessons/prompt-106/config.mjs",
+    "start": 1,
+    "end": 6
+  },
+  {
+    "readme": "lessons/prompt-106/README.md",
+    "source": "lessons/prompt-106/config.test.mjs",
+    "start": 1,
+    "end": 10
+  },
+  {
+    "readme": "lessons/prompt-107/README.md",
+    "source": "lessons/prompt-107/async.test.mjs",
+    "start": 1,
+    "end": 12
+  },
+  {
+    "readme": "lessons/prompt-108/README.md",
+    "source": "lessons/prompt-108/demo.mjs",
+    "start": 1,
+    "end": 24
+  },
+  {
+    "readme": "lessons/prompt-109/README.md",
+    "source": "lessons/prompt-109/timers.test.mjs",
+    "start": 1,
+    "end": 11
+  },
+  {
+    "readme": "lessons/prompt-110/README.md",
+    "source": "lessons/prompt-110/demo.mjs",
+    "start": 1,
+    "end": 11
+  },
+  {
+    "readme": "lessons/prompt-111/README.md",
+    "source": "lessons/prompt-111/discount.mjs",
+    "start": 1,
+    "end": 4
+  },
+  {
+    "readme": "lessons/prompt-111/README.md",
+    "source": "lessons/prompt-111/complete.test.mjs",
+    "start": 1,
+    "end": 8
+  },
+  {
+    "readme": "lessons/prompt-111/README.md",
+    "source": "lessons/prompt-111/demo.mjs",
+    "start": 1,
+    "end": 6
+  },
+  {
+    "readme": "lessons/prompt-112/README.md",
+    "source": "lessons/prompt-112/demo.mjs",
+    "start": 1,
+    "end": 19
+  },
+  {
+    "readme": "lessons/prompt-113/README.md",
+    "source": "lessons/prompt-113/broken.mjs",
+    "start": 1,
+    "end": 4
+  },
+  {
+    "readme": "lessons/prompt-113/README.md",
+    "source": "lessons/prompt-113/fixed.mjs",
+    "start": 1,
+    "end": 3
+  },
+  {
+    "readme": "lessons/prompt-113/README.md",
+    "source": "lessons/prompt-113/discount.test.mjs",
+    "start": 1,
+    "end": 6
+  },
+  {
+    "readme": "lessons/prompt-114/README.md",
+    "source": "lessons/prompt-114/demo.mjs",
+    "start": 1,
+    "end": 19
+  },
+  {
+    "readme": "lessons/prompt-115/README.md",
+    "source": "lessons/prompt-115/demo.mjs",
+    "start": 1,
+    "end": 29
+  },
+  {
+    "readme": "lessons/prompt-116/README.md",
+    "source": "lessons/prompt-116/demo.mjs",
+    "start": 1,
+    "end": 15
+  },
+  {
+    "readme": "lessons/prompt-117/README.md",
+    "source": "lessons/prompt-117/demo.mjs",
+    "start": 1,
+    "end": 21
+  },
+  {
+    "readme": "lessons/prompt-118/README.md",
+    "source": "lessons/prompt-118/demo.mjs",
+    "start": 1,
+    "end": 21
+  },
+  {
+    "readme": "lessons/prompt-119/README.md",
+    "source": "lessons/prompt-119/demo.mjs",
+    "start": 22,
+    "end": 39
+  },
+  {
+    "readme": "lessons/prompt-120/README.md",
+    "source": "lessons/prompt-120/demo.mjs",
+    "start": 14,
+    "end": 33
+  },
+  {
+    "readme": "lessons/prompt-121/README.md",
+    "source": "lessons/prompt-121/demo.mjs",
+    "start": 1,
+    "end": 14
+  },
+  {
+    "readme": "lessons/prompt-122/README.md",
+    "source": "lessons/prompt-122/cache.mjs",
+    "start": 1,
+    "end": 17
+  },
+  {
+    "readme": "lessons/prompt-122/README.md",
+    "source": "lessons/prompt-122/demo.mjs",
+    "start": 1,
+    "end": 8
+  },
+  {
+    "readme": "lessons/prompt-123/README.md",
+    "source": "lessons/prompt-123/demo.mjs",
+    "start": 20,
+    "end": 28
+  },
+  {
+    "readme": "lessons/prompt-123/README.md",
+    "source": "lessons/prompt-123/demo.mjs",
+    "start": 29,
+    "end": 48
+  },
+  {
+    "readme": "lessons/prompt-124/README.md",
+    "source": "shared/reliability.mjs",
+    "start": 2,
+    "end": 30
+  },
+  {
+    "readme": "lessons/prompt-124/README.md",
+    "source": "lessons/prompt-124/demo.mjs",
+    "start": 1,
+    "end": 17
+  },
+  {
+    "readme": "lessons/prompt-125/README.md",
+    "source": "shared/reliability.mjs",
+    "start": 31,
+    "end": 49
+  },
+  {
+    "readme": "lessons/prompt-125/README.md",
+    "source": "lessons/prompt-125/demo.mjs",
+    "start": 14,
+    "end": 29
+  },
+  {
+    "readme": "lessons/prompt-126/README.md",
+    "source": "shared/reliability.mjs",
+    "start": 50,
+    "end": 70
+  },
+  {
+    "readme": "lessons/prompt-126/README.md",
+    "source": "lessons/prompt-126/demo.mjs",
+    "start": 14,
+    "end": 21
+  },
+  {
+    "readme": "lessons/prompt-127/README.md",
+    "source": "lessons/prompt-127/demo.mjs",
+    "start": 1,
+    "end": 30
+  },
+  {
+    "readme": "lessons/prompt-128/README.md",
+    "source": "lessons/prompt-128/native.ts",
+    "start": 1,
+    "end": 5
+  },
+  {
+    "readme": "lessons/prompt-128/README.md",
+    "source": "lessons/prompt-128/demo.mjs",
+    "start": 1,
+    "end": 17
+  },
+  {
+    "readme": "lessons/prompt-129/README.md",
+    "source": "lessons/prompt-129/src/index.ts",
+    "start": 1,
+    "end": 3
+  },
+  {
+    "readme": "lessons/prompt-129/README.md",
+    "source": "lessons/prompt-129/tsconfig.json",
+    "start": 1,
+    "end": 14
+  },
+  {
+    "readme": "lessons/prompt-129/README.md",
+    "source": "lessons/prompt-129/demo.mjs",
+    "start": 1,
+    "end": 13
+  },
+  {
+    "readme": "lessons/prompt-130/README.md",
+    "source": "lessons/prompt-130/bad.js",
+    "start": 1,
+    "end": 5
+  },
+  {
+    "readme": "lessons/prompt-130/README.md",
+    "source": "lessons/prompt-130/fixed.js",
+    "start": 1,
+    "end": 5
+  },
+  {
+    "readme": "lessons/prompt-130/README.md",
+    "source": "lessons/prompt-130/demo.mjs",
+    "start": 6,
+    "end": 19
+  },
+  {
+    "readme": "lessons/prompt-131/README.md",
+    "source": "lessons/prompt-131/native.cc",
+    "start": 1,
+    "end": 4
+  },
+  {
+    "readme": "lessons/prompt-131/README.md",
+    "source": "lessons/prompt-131/demo.mjs",
+    "start": 13,
+    "end": 15
+  },
+  {
+    "readme": "lessons/prompt-132/README.md",
+    "source": "lessons/prompt-132/demo.mjs",
+    "start": 1,
+    "end": 13
+  },
+  {
+    "readme": "lessons/prompt-133/README.md",
+    "source": "lessons/prompt-133/cache.mjs",
+    "start": 1,
+    "end": 3
+  },
+  {
+    "readme": "lessons/prompt-133/README.md",
+    "source": "lessons/prompt-133/demo.mjs",
+    "start": 1,
+    "end": 15
+  },
+  {
+    "readme": "lessons/prompt-134/README.md",
+    "source": "lessons/prompt-134/demo.mjs",
+    "start": 1,
+    "end": 16
+  },
+  {
+    "readme": "lessons/prompt-135/README.md",
+    "source": "lessons/prompt-135/modern.mjs",
+    "start": 1,
+    "end": 7
+  },
+  {
+    "readme": "lessons/prompt-135/README.md",
+    "source": "lessons/prompt-135/demo.mjs",
+    "start": 1,
+    "end": 16
+  },
+  {
+    "readme": "lessons/prompt-136/README.md",
+    "source": "lessons/prompt-136/Dockerfile",
+    "start": 1,
+    "end": 12
+  },
+  {
+    "readme": "lessons/prompt-136/README.md",
+    "source": "lessons/prompt-136/demo.mjs",
+    "start": 16,
+    "end": 30
+  },
+  {
+    "readme": "lessons/prompt-137/README.md",
+    "source": "../.github/workflows/practical-examples.yml",
+    "start": 1,
+    "end": 22
+  },
+  {
+    "readme": "lessons/prompt-138/README.md",
+    "source": "shared/deployment-demo.mjs",
+    "start": 54,
+    "end": 66
+  },
+  {
+    "readme": "lessons/prompt-139/README.md",
+    "source": "lessons/prompt-139/demo.mjs",
+    "start": 1,
+    "end": 31
+  },
+  {
+    "readme": "lessons/prompt-140/README.md",
+    "source": "lessons/prompt-140/demo.mjs",
+    "start": 1,
+    "end": 33
+  },
+  {
+    "readme": "lessons/prompt-141/README.md",
+    "source": "lessons/prompt-141/demo.mjs",
+    "start": 1,
+    "end": 32
+  },
+  {
+    "readme": "lessons/prompt-142/README.md",
+    "source": "lessons/prompt-142/demo.mjs",
+    "start": 24,
+    "end": 37
+  },
+  {
+    "readme": "lessons/prompt-142/README.md",
+    "source": "lessons/prompt-142/demo.mjs",
+    "start": 56,
+    "end": 74
+  },
+  {
+    "readme": "lessons/prompt-143/README.md",
+    "source": "lessons/prompt-143/src/index.mjs",
+    "start": 1,
+    "end": 5
+  },
+  {
+    "readme": "lessons/prompt-143/README.md",
+    "source": "lessons/prompt-143/demo.mjs",
+    "start": 1,
+    "end": 14
+  },
+  {
+    "readme": "lessons/prompt-144/README.md",
+    "source": "lessons/prompt-144/demo.mjs",
+    "start": 11,
+    "end": 25
+  },
+  {
+    "readme": "lessons/prompt-145/README.md",
+    "source": "lessons/prompt-145/demo.mjs",
+    "start": 1,
+    "end": 22
+  },
+  {
+    "readme": "lessons/prompt-146/README.md",
+    "source": "lessons/prompt-146/register.mjs",
+    "start": 1,
+    "end": 14
+  },
+  {
+    "readme": "lessons/prompt-146/README.md",
+    "source": "lessons/prompt-146/demo.mjs",
+    "start": 1,
+    "end": 6
+  },
+  {
+    "readme": "lessons/prompt-147/README.md",
+    "source": "lessons/prompt-147/demo.mjs",
+    "start": 1,
+    "end": 12
+  },
+  {
+    "readme": "lessons/prompt-148/README.md",
+    "source": "lessons/prompt-148/demo.mjs",
+    "start": 1,
+    "end": 19
+  },
+  {
+    "readme": "lessons/prompt-149/README.md",
+    "source": "lessons/prompt-149/compare.mjs",
+    "start": 1,
+    "end": 18
+  },
+  {
+    "readme": "lessons/prompt-150/README.md",
+    "source": "lessons/prompt-150/iter.mjs",
+    "start": 1,
+    "end": 8
+  },
+  {
+    "readme": "lessons/prompt-150/README.md",
+    "source": "lessons/prompt-150/classic.mjs",
+    "start": 1,
+    "end": 12
+  },
+  {
+    "readme": "lessons/prompt-151/README.md",
+    "source": "applications/logtool/main.mjs",
+    "start": 34,
+    "end": 58
+  },
+  {
+    "readme": "lessons/prompt-151/README.md",
+    "source": "lessons/prompt-151/demo.mjs",
+    "start": 24,
+    "end": 39
+  },
+  {
+    "readme": "lessons/prompt-152/README.md",
+    "source": "shared/task-api.mjs",
+    "start": 86,
+    "end": 100
+  },
+  {
+    "readme": "lessons/prompt-152/README.md",
+    "source": "shared/task-api.mjs",
+    "start": 134,
+    "end": 144
+  },
+  {
+    "readme": "lessons/prompt-152/README.md",
+    "source": "lessons/prompt-152/demo.mjs",
+    "start": 51,
+    "end": 61
+  },
+  {
+    "readme": "lessons/prompt-153/README.md",
+    "source": "applications/rooms/server.mjs",
+    "start": 67,
+    "end": 91
+  },
+  {
+    "readme": "lessons/prompt-153/README.md",
+    "source": "lessons/prompt-153/demo.mjs",
+    "start": 65,
+    "end": 75
+  },
+  {
+    "readme": "lessons/prompt-154/README.md",
+    "source": "shared/outbox.mjs",
+    "start": 15,
+    "end": 29
+  },
+  {
+    "readme": "lessons/prompt-154/README.md",
+    "source": "lessons/prompt-154/demo.mjs",
+    "start": 32,
+    "end": 53
+  },
+  {
+    "readme": "lessons/prompt-155/README.md",
+    "source": "shared/deployment-demo.mjs",
+    "start": 74,
+    "end": 99
+  },
+  {
+    "readme": "lessons/prompt-156/README.md",
+    "source": "lessons/prompt-156/demo.mjs",
+    "start": 1,
+    "end": 19
+  },
+  {
+    "readme": "lessons/prompt-157/README.md",
+    "source": "lessons/prompt-157/demo.mjs",
+    "start": 1,
+    "end": 10
+  },
+  {
+    "readme": "lessons/prompt-158/README.md",
+    "source": "lessons/prompt-158/fetch-pool.mjs",
+    "start": 1,
+    "end": 21
+  },
+  {
+    "readme": "lessons/prompt-159/README.md",
+    "source": "lessons/prompt-159/upload-client.mjs",
+    "start": 1,
+    "end": 22
+  },
+  {
+    "readme": "lessons/prompt-160/README.md",
+    "source": "lessons/prompt-160/demo.mjs",
+    "start": 1,
+    "end": 22
+  },
+  {
+    "readme": "lessons/prompt-161/README.md",
+    "source": "lessons/prompt-161/snapshot.test.mjs",
+    "start": 1,
+    "end": 7
+  },
+  {
+    "readme": "lessons/prompt-161/README.md",
+    "source": "lessons/prompt-161/demo.mjs",
+    "start": 1,
+    "end": 9
+  },
+  {
+    "readme": "lessons/prompt-162/README.md",
+    "source": "lessons/prompt-162/demo.mjs",
+    "start": 1,
+    "end": 20
+  },
+  {
+    "readme": "lessons/prompt-163/README.md",
+    "source": "lessons/prompt-163/demo.mjs",
+    "start": 1,
+    "end": 19
+  },
+  {
+    "readme": "lessons/prompt-164/README.md",
+    "source": "lessons/prompt-164/demo.mjs",
+    "start": 1,
+    "end": 14
+  },
+  {
+    "readme": "lessons/prompt-165/README.md",
+    "source": "lessons/prompt-165/demo.mjs",
+    "start": 1,
+    "end": 16
+  },
+  {
+    "readme": "lessons/prompt-166/README.md",
+    "source": "lessons/prompt-166/demo.mjs",
+    "start": 1,
+    "end": 16
+  },
+  {
+    "readme": "lessons/prompt-167/README.md",
+    "source": "lessons/prompt-167/demo.mjs",
+    "start": 1,
+    "end": 17
+  }
+]

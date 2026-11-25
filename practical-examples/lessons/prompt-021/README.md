@@ -17,9 +17,44 @@ Open `demo.mjs` beside this file. Every imported shared helper is supplied in `.
 
 Active timer/server resources appear before cleanup; the process then exits naturally. Resource names vary by platform.
 
+<!-- prompt-concepts:start -->
+## Prompt concepts explained with code
+
+### What this application teaches
+
+A process remains alive while referenced resources still need its event loop. A listening server and repeating timer can keep an otherwise finished script running.
+
+### Follow the implementation
+
+From [demo.mjs, lines 1-9](demo.mjs#L1) (source excerpt; run the full application using the command above):
+
+```javascript
+import { createServer } from "node:http";
+import { listen, close } from "../../shared/lab.mjs";
+const timer = setInterval(() => {}, 1000);
+const server = createServer((q, s) => s.end("ok"));
+await listen(server);
+console.log(process.getActiveResourcesInfo());
+clearInterval(timer);
+await close(server);
+console.log("closed; natural process exit");
+```
+
+### Why this produces the observed result
+
+`getActiveResourcesInfo` exposes resource types for diagnosis; cleanup clears the interval and closes the server so Node can exit naturally. Names and extra resources depend on the platform.
+
+Compare the behavior described above with [the captured run](observed-output.txt). That file records one validation run; timing, generated paths, ports, and identifiers can differ on your machine. Read the assertions in [demo.mjs](demo.mjs) to see which outcomes the demo actually checks.
+
+### Student exercise
+
+Temporarily omit `clearInterval` and observe that the process remains active. Restore cleanup and explain why calling `process.exit()` would hide the resource-lifetime problem.
+
+<!-- prompt-concepts:end -->
+
 ## Walkthrough and experiments
 
-Follow the values through the implementation. Change one input, predict the result, then run again. Assertions intentionally stop the example when its contract is violated.
+Use the student exercise above to change one input at a time. Predict the result, run the application, and explain which assertion or output confirms your prediction. Restore your experiment before running the course validation again.
 
 ## Requirements and validation
 

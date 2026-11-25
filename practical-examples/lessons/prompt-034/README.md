@@ -17,9 +17,41 @@ Open `demo.mjs` beside this file. Every imported shared helper is supplied in `.
 
 Module-relative assets load consistently even when the shell current directory changes.
 
+<!-- prompt-concepts:start -->
+## Prompt concepts explained with code
+
+### What this application teaches
+
+A module-relative URL anchors asset lookup to the source file instead of the shell's current directory. JSON import attributes identify the imported resource's type.
+
+### Follow the implementation
+
+From [demo.mjs, lines 1-6](demo.mjs#L1) (source excerpt; run the full application using the command above):
+
+```javascript
+import { readFile } from "node:fs/promises";
+import settings from "./settings.json" with { type: "json" };
+console.log(
+  settings.title,
+  (await readFile(new URL("./message.txt", import.meta.url), "utf8")).trim(),
+);
+```
+
+### Why this produces the observed result
+
+`new URL(..., import.meta.url)` keeps the text asset beside the module regardless of where the launcher starts. This differs from resolving `./message.txt` against process.cwd().
+
+Compare the behavior described above with [the captured run](observed-output.txt). That file records one validation run; timing, generated paths, ports, and identifiers can differ on your machine. Read the assertions in [demo.mjs](demo.mjs) to see which outcomes the demo actually checks.
+
+### Student exercise
+
+Launch the module from another directory using its full path. Compare the current URL-based read with a deliberately cwd-relative read.
+
+<!-- prompt-concepts:end -->
+
 ## Walkthrough and experiments
 
-Follow the values through the implementation. Change one input, predict the result, then run again. Assertions intentionally stop the example when its contract is violated.
+Use the student exercise above to change one input at a time. Predict the result, run the application, and explain which assertion or output confirms your prediction. Restore your experiment before running the course validation again.
 
 ## Requirements and validation
 

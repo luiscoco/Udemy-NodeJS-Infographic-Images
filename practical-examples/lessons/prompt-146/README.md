@@ -18,9 +18,60 @@ Open `demo.mjs` beside this file. Every imported shared helper is supplied in `.
 
 The preload hook resolves only explicit aliases, preserves node: imports and rejects an unknown alias.
 
+<!-- prompt-concepts:start -->
+## Prompt concepts explained with code
+
+### What this application teaches
+
+Module customization hooks can resolve selected specifiers before the normal resolver. A preload registers the hook before the application's imports are evaluated.
+
+### Follow the implementation
+
+From [register.mjs, lines 1-14](register.mjs#L1) (source excerpt; run the full application using the command above):
+
+```javascript
+import { registerHooks } from "node:module";
+const aliases = new Map([
+  ["@app/config", new URL("./src/config.mjs", import.meta.url).href],
+]);
+registerHooks({
+  resolve(specifier, context, nextResolve) {
+    if (specifier.startsWith("@app/")) {
+      const url = aliases.get(specifier);
+      if (!url) throw Error(`Unknown alias: ${specifier}`);
+      return { url, shortCircuit: true };
+    }
+    return nextResolve(specifier, context);
+  },
+});
+```
+
+From [demo.mjs, lines 1-6](demo.mjs#L1) (source excerpt; run the full application using the command above):
+
+```javascript
+import { assert, spawnNode } from "../../shared/lab.mjs";
+const r = await spawnNode(["--import", "./register.mjs", "main.mjs"]);
+console.log(r.stdout, r.stderr);
+assert.equal(r.code, 0, r.stderr);
+assert.ok(r.stdout.includes("course-app function"));
+assert.ok(r.stderr.includes("Unknown alias: @app/missing"));
+```
+
+### Why this produces the observed result
+
+The hook handles only an explicit alias map, returns shortCircuit for its own resolutions, and delegates all other imports. Unknown aliases fail clearly rather than becoming arbitrary paths.
+
+Compare the behavior described above with [the captured run](observed-output.txt). That file records one validation run; timing, generated paths, ports, and identifiers can differ on your machine. Read the assertions in [demo.mjs](demo.mjs) to see which outcomes the demo actually checks.
+
+### Student exercise
+
+Add a second known alias and import it. Verify a node: import still works, and explain why failing to delegate would break normal module resolution.
+
+<!-- prompt-concepts:end -->
+
 ## Walkthrough and experiments
 
-Follow the values through the implementation. Change one input, predict the result, then run again. Assertions intentionally stop the example when its contract is violated.
+Use the student exercise above to change one input at a time. Predict the result, run the application, and explain which assertion or output confirms your prediction. Restore your experiment before running the course validation again.
 
 ## Requirements and validation
 

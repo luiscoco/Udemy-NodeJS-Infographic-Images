@@ -17,9 +17,52 @@ Open `demo.mjs` beside this file. Every imported shared helper is supplied in `.
 
 The OS resolver reads localhost configuration. Optional --network queries real A/AAAA records without inventing addresses.
 
+<!-- prompt-concepts:start -->
+## Prompt concepts explained with code
+
+### What this application teaches
+
+DNS lookup and DNS record queries answer different questions. OS lookup can use local host configuration, while explicit A or AAAA queries ask the configured DNS service for records.
+
+### Follow the implementation
+
+From [demo.mjs, lines 1-17](demo.mjs#L1) (source excerpt; run the full application using the command above):
+
+```javascript
+import { lookup, resolve4, resolve6 } from "node:dns/promises";
+console.log("OS localhost lookup:", await lookup("localhost", { all: true }));
+if (process.argv.includes("--network"))
+  for (const [name, resolve] of [
+    ["A", resolve4],
+    ["AAAA", resolve6],
+  ]) {
+    try {
+      console.log(name, await resolve("example.org"));
+    } catch (e) {
+      console.log(e.code);
+    }
+  }
+else
+  console.log(
+    "Use --network for live DNS record queries; addresses depend on your resolver.",
+  );
+```
+
+### Why this produces the observed result
+
+The default localhost exercise works without public DNS. Optional network queries are separate so changing external records are not mistaken for fixed fixture output.
+
+Compare the behavior described above with [the captured run](observed-output.txt). That file records one validation run; timing, generated paths, ports, and identifiers can differ on your machine. Read the assertions in [demo.mjs](demo.mjs) to see which outcomes the demo actually checks.
+
+### Student exercise
+
+Run the localhost path and explain why its answer can come from a hosts file. If you use the optional network mode, compare record families without hard-coding returned addresses.
+
+<!-- prompt-concepts:end -->
+
 ## Walkthrough and experiments
 
-Follow the values through the implementation. Change one input, predict the result, then run again. Assertions intentionally stop the example when its contract is violated.
+Use the student exercise above to change one input at a time. Predict the result, run the application, and explain which assertion or output confirms your prediction. Restore your experiment before running the course validation again.
 
 ## Requirements and validation
 

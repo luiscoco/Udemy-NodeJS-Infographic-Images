@@ -17,9 +17,56 @@ Open `demo.mjs` beside this file. Every imported shared helper is supplied in `.
 
 A bounded two-thread pool computes a result and rejects excess queued work.
 
+<!-- prompt-concepts:start -->
+## Prompt concepts explained with code
+
+### What this application teaches
+
+A worker pool reuses a bounded number of threads instead of creating one per task. The external Piscina library adds scheduling and a maximum queue length.
+
+### Follow the implementation
+
+From [demo.mjs, lines 1-21](demo.mjs#L1) (source excerpt; run the full application using the command above):
+
+```javascript
+import Piscina from "piscina";
+import assert from "node:assert/strict";
+const pool = new Piscina({
+  filename: new URL("./worker.mjs", import.meta.url).href,
+  minThreads: 2,
+  maxThreads: 2,
+  maxQueue: 4,
+});
+try {
+  assert.equal(await pool.run(100000), 5000050000);
+  const outcomes = await Promise.allSettled(
+    Array.from({ length: 12 }, () => pool.run(1000000)),
+  );
+  console.log({
+    fulfilled: outcomes.filter((x) => x.status === "fulfilled").length,
+    rejected: outcomes.filter((x) => x.status === "rejected").length,
+  });
+  assert.ok(outcomes.some((x) => x.status === "rejected"));
+} finally {
+  await pool.destroy();
+}
+```
+
+### Why this produces the observed result
+
+Two threads and four waiting slots establish an overload policy. Submitting a burst produces some rejections, and destroying the pool releases the threads at the end.
+
+Compare the behavior described above with [the captured run](observed-output.txt). That file records one validation run; timing, generated paths, ports, and identifiers can differ on your machine. Read the assertions in [demo.mjs](demo.mjs) to see which outcomes the demo actually checks.
+
+### Student exercise
+
+Reduce maxQueue and submit the same burst. Compare rejected counts without relying on an exact scheduling-dependent count, then explain why an unbounded queue can exhaust memory.
+
+<!-- prompt-concepts:end -->
+
 ## Walkthrough and experiments
 
-Follow the values through the implementation. Change one input, predict the result, then run again. Assertions intentionally stop the example when its contract is violated.
+Use the student exercise above to change one input at a time. Predict the result, run the application, and explain which assertion or output confirms your prediction. Restore your experiment before running the course validation again.
 
 ## Requirements and validation
 

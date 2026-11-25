@@ -17,9 +17,50 @@ Open `demo.mjs` beside this file. Every imported shared helper is supplied in `.
 
 A unique SKU index supports an idempotent upsert; a duplicate insert is rejected and the real query plan is displayed.
 
+<!-- prompt-concepts:start -->
+## Prompt concepts explained with code
+
+### What this application teaches
+
+Document modeling combines flexible records with explicit invariants. A MongoDB collection validator restricts fields, and a unique SKU index enforces identity across concurrent writers.
+
+### Follow the implementation
+
+From [demo.mjs, lines 25-39](demo.mjs#L25) (source excerpt; run the full application using the command above):
+
+```javascript
+  const products = db.collection("products");
+  await products.createIndex({ sku: 1 }, { unique: true });
+  await products.updateOne(
+    { sku: "demo-1" },
+    { $setOnInsert: { price: 10 } },
+    { upsert: true },
+  );
+  console.log(await products.findOne({ sku: "demo-1" }));
+  await assert.rejects(products.insertOne({ sku: "demo-1", price: 20 }), {
+    code: 11000,
+  });
+  console.log(
+    (await products.find({ sku: "demo-1" }).explain("executionStats"))
+      .executionStats,
+  );
+```
+
+### Why this produces the observed result
+
+An upsert with `$setOnInsert` inserts only when the SKU is absent. The duplicate-key case and actual explain output connect the logical rule to real database behavior.
+
+Compare the behavior described above with [the captured run](observed-output.txt). That file records one validation run; timing, generated paths, ports, and identifiers can differ on your machine. Read the assertions in [demo.mjs](demo.mjs) to see which outcomes the demo actually checks.
+
+### Student exercise
+
+Run the upsert again with a different insert-only price. Predict why the existing price remains, then compare `$setOnInsert` with `$set`.
+
+<!-- prompt-concepts:end -->
+
 ## Walkthrough and experiments
 
-Follow the values through the implementation. Change one input, predict the result, then run again. Assertions intentionally stop the example when its contract is violated.
+Use the student exercise above to change one input at a time. Predict the result, run the application, and explain which assertion or output confirms your prediction. Restore your experiment before running the course validation again.
 
 ## Requirements and validation
 

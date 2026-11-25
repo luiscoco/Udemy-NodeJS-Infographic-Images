@@ -17,9 +17,55 @@ Open `demo.mjs` beside this file. Every imported shared helper is supplied in `.
 
 Cleanup runs before the caller observes the wrapped error and its original cause.
 
+<!-- prompt-concepts:start -->
+## Prompt concepts explained with code
+
+### What this application teaches
+
+An error can gain application context without losing its underlying cause. The service wraps a low-level disk failure using Error's `cause` option.
+
+### Follow the implementation
+
+From [demo.mjs, lines 1-20](demo.mjs#L1) (source excerpt; run the full application using the command above):
+
+```javascript
+import assert from "node:assert/strict";
+async function read() {
+  throw Error("disk unavailable");
+}
+async function service() {
+  try {
+    return await read();
+  } catch (cause) {
+    throw Error("Load failed", { cause });
+  } finally {
+    console.log("cleanup");
+  }
+}
+try {
+  await service();
+  assert.fail();
+} catch (e) {
+  console.log(e.message, e.cause.message);
+  assert.equal(e.cause.message, "disk unavailable");
+}
+```
+
+### Why this produces the observed result
+
+Returning `await read()` inside the try keeps the rejection within this catch/finally scope. Cleanup runs before the caller observes the wrapped failure.
+
+Compare the behavior described above with [the captured run](observed-output.txt). That file records one validation run; timing, generated paths, ports, and identifiers can differ on your machine. Read the assertions in [demo.mjs](demo.mjs) to see which outcomes the demo actually checks.
+
+### Student exercise
+
+Remove `await` from the return and compare which scope handles the rejection. Explain why `return promise` and `return await promise` differ inside try/catch.
+
+<!-- prompt-concepts:end -->
+
 ## Walkthrough and experiments
 
-Follow the values through the implementation. Change one input, predict the result, then run again. Assertions intentionally stop the example when its contract is violated.
+Use the student exercise above to change one input at a time. Predict the result, run the application, and explain which assertion or output confirms your prediction. Restore your experiment before running the course validation again.
 
 ## Requirements and validation
 
