@@ -1,0 +1,7 @@
+Second correction (quote glyphs). The first pass fixed the structure, but the quotes render wrongly: the opening quote of 'id: 1\n' looks like a degree sign, and the data line shows a curly quote, which is invalid JSON if copied. Re-render the res.write statement in plain monospaced ASCII, exactly:
+res.write('id: 1\n'
+  + 'event: ready\n'
+  + 'data: {"ok":true}\n\n');
+Quote rules: JavaScript string delimiters are straight single quotes ('), and the JSON quotes inside are straight double quotes ("). No curly quotes (‘ ’ “ ”), no degree signs, no backticks. The backslash-n sequences are literal \n.
+Also change the verification text "(req close)" to "(res close)" so it matches res.on('close', () => clearInterval(heartbeat));.
+Preserve the resync strategy wording and all other style, content, badge and logo.

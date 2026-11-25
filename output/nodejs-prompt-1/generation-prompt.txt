@@ -1,0 +1,70 @@
+Use case: infographic-diagram.
+Create a polished high-resolution landscape educational infographic, approximately 3:2, in English for Udemy programming students. Title: "Node.js Installation & Version Management". Purple "Prompt 1" badge top left. Place the official Node.js horizontal logo from input image 4 in the top-right header, preserve its shapes, proportions and green/charcoal colors exactly.
+
+Input images 1–3 are STYLE AND CONTENT-STRUCTURE REFERENCES ONLY: reproduce their white background, dense but meticulously aligned rounded panel grid, pale blue section headers, heavy dark navy sans-serif headings, bright cyan outline icons, purple prompt box, green check marks, pale mint and amber supporting panels, thin delicate borders and generous inner padding. Do not copy Claude content or logos. Image 4 is the official logo insert. This is a NEW Node.js infographic. Use crisp readable typography and exact monospaced code, no pseudo-code, no misspelled commands. All visible content must fit comfortably without cropping. Prioritize command readability at full resolution.
+
+Layout: top header 8%; left column 22% contains Goal, Implementation Prompt, What You'll Get. Main area 76% has upper conceptual panels; middle large command panel next to verification terminal; bottom troubleshooting and best practices. Bottom tiny source line. Do not overload with extra content.
+
+EXACT CONTENT:
+Left Goal:
+"Reproduce the same Node.js runtime across projects and development environments."
+Left Implementation Prompt, italic quotation:
+"Set up Node.js 26.13.1 using the external fnm version manager, with commands appropriate to my OS. Pin the project version and verify the active executable, Node.js version, and npm version; demonstrate diagnosing a conflicting installation."
+Left What You'll Get, four green check bullets:
+"Install and configure fnm"
+"Pin a project runtime"
+"Verify Node.js, npm and executable"
+"Diagnose PATH conflicts"
+
+Upper main panel "Know Your Tools" with 3 horizontal pastel mini-cards:
+"Node.js" / "Runs JavaScript outside the browser."
+"npm" / "Package manager bundled with Node.js."
+"fnm" / "External tool that installs and switches Node.js versions."
+Upper right "Setup Flow":
+"Install fnm → Initialize shell → Install Node.js → Pin → Verify"
+small tag "Course baseline: Node.js 26.13.1"
+
+Large central panel "Setup Commands · Windows PowerShell"
+Render code exactly with syntax coloring on very light background, no line numbers needed. Subhead "1 · Install fnm", code:
+winget install --id Schniz.fnm -e
+Annotation: "Reopen PowerShell after installation."
+Subhead "2 · Initialize this shell", code:
+fnm env --use-on-cd --shell powershell |
+  Out-String | Invoke-Expression
+Annotation: "Add this same command to your PowerShell $PROFILE for future sessions."
+Subhead "3 · Install and select the course runtime", code:
+fnm install 26.13.1
+fnm use 26.13.1
+Subhead "4 · Pin inside your project folder", code:
+Set-Content .node-version '26.13.1' -Encoding ascii
+fnm use
+Annotation: "Commit .node-version to version control."
+
+Adjacent right panel "Verify Your Installation" styled dark terminal with colored dots. Render exact commands and example output; caption "Expected checks · paths and npm versions vary":
+> node --version
+v26.13.1
+> npm --version
+<bundled npm version>
+> node -p "process.execPath"
+<fnm-managed path to node.exe>
+> fnm current
+v26.13.1
+Use a small note beneath: "Confirm the executable belongs to fnm's selected runtime."
+
+Wide bottom panel "Diagnose a Conflicting Installation"
+Code:
+Get-Command node -All
+where.exe node
+node -p "process.execPath"
+Small simple visual: "Old installer path → wrong runtime" with amber warning; "fnm-selected path → v26.13.1" with green check.
+Caption: "If the version is wrong: inspect command resolution and PATH, initialize fnm, run fnm use, then verify again. Restart the terminal after changing PATH."
+
+Bottom-right panel "Best Practices & Key Takeaways", four check bullets:
+"Keep one runtime manager in control of PATH."
+"Pin the exact version per project."
+"Node.js and npm have separate versions."
+"Practice: switch projects and check node --version."
+
+Footer small but readable:
+"PowerShell commands • fnm is external tooling • Sources: nodejs.org/en/download · github.com/Schniz/fnm"
+Do not claim commands were executed. Do not add additional sections or version claims. Produce the final infographic image, not a mockup of a poster in a room.

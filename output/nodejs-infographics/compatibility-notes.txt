@@ -1,0 +1,11 @@
+Node.js infographic series compatibility notes
+
+Baseline: Node.js 26.13.1, matching the source document.
+Prompt 120 and capstone 155 use the current OpenTelemetry @opentelemetry/sdk-trace package in place of the source document's older @opentelemetry/sdk-trace-base name. SDK 3 removed the older package. Select mutually compatible versions and commit the lockfile.
+Official migration: https://github.com/open-telemetry/opentelemetry-js/blob/main/doc/3.x/migration-guide.md
+Official ESM startup: https://opentelemetry.io/docs/languages/js/getting-started/nodejs/
+
+Prompt 143: AWS lists nodejs26.x as supported. Its managed patch version is controlled by AWS; it is not pinned to the local course patch.
+Runtime reference: https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
+
+Expected outputs and measurements in the images are instructional examples or verification targets. The exercise applications have not been implemented or executed as part of generating these images.

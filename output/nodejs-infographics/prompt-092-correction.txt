@@ -1,0 +1,10 @@
+Replace the entire CENTRAL JavaScript app.mjs code panel, which has an incorrect invented xReadGroup signature, with a clear Redis CLI command reference. Heading "Redis CLI Commands · External Tool". Show only:
+Pub/Sub (use separate CLI connections):
+SUBSCRIBE updates
+PUBLISH updates hello
+Streams (interactive Redis CLI):
+XADD events * type hello
+XGROUP CREATE events workers 0 MKSTREAM
+XREADGROUP GROUP workers c1 COUNT 10 STREAMS events >
+XACK events workers <id>
+Note "<id> is the actual stream entry ID returned by Redis; replace it." Note "Run these inside redis-cli, not directly as PowerShell commands." No JavaScript API calls anywhere in the replacement panel. Retain top concepts, flow, comparison, right illustrative CLI outputs and bottom takeaways. Preserve style/logo/badge92.

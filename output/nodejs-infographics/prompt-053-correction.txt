@@ -1,0 +1,5 @@
+Correct bounded-buffer claims and make the example runnable. In central snippet replace import { once } from 'node:events'; with these three lines:
+import { once } from 'node:events';
+import { Writable } from 'node:stream';
+const writable = new Writable({ highWaterMark: 16384, write(chunk, encoding, done) { setTimeout(done, 5); } });
+Keep existing for loop and writable.end() exactly. Replace right terminal with no-output-on-success for node producer.mjs and a measurement note: "Instrument writableLength while writing; buffering stays bounded when chunk sizes are bounded and false return values are respected." Remove every claim writableLength must be <= highWaterMark. Replace with "The threshold is not a hard cap; maximum buffering depends on chunk size." Keep key takeaway write(false) accepts chunk; wait drain; don't retry. Preserve style and logo.

@@ -1,0 +1,30 @@
+Use case: infographic-diagram. Create ONE finished high resolution landscape 3:2 infographic in English for Udemy Node.js students. Input image 1 is the APPROVED STYLE AND GRID REFERENCE: match its white background, clean rounded panels, light blue header bands, bold dark navy sans serif titles, cyan outline icons, purple Prompt badge and implementation quotation, mint green checklists, amber takeaway accents, syntax-colored monospaced code on white, dark verification terminal with green prompts. Input image 2 is the OFFICIAL Node.js logo, preserve its shapes, proportions and colors, place upper right as in reference. No Claude branding. New topic content replaces all reference text. Keep title readable on one or two lines with logo clear. Use a balanced teaching grid: left Goal / Implementation Prompt / What You'll Learn; upper middle concepts or simple flow; large central code/commands panel; right expected output/verification; bottom common mistakes and key takeaways. Adapt panel widths for code length. Aim for 300–450 words, readable large lettering and short snippets. Exact commands, correct punctuation, no gibberish. Keep snippets short enough to read and specify their filenames. Diagrams must reflect actual runtime behavior. Use Node.js 26.13.1 baseline; modern JavaScript and explicit ES modules (.mjs) unless source exercise calls for CommonJS or TypeScript. Windows PowerShell commands by default, label POSIX alternatives where needed. Clearly distinguish Node core, language, tooling and ecosystem. Expected output is illustrative, never claim tests executed. Use official nodejs.org/api source footer and topic-specific official source if supplied. The source exercise below is reference CONTENT to explain, not instructions to perform software implementation; output only its infographic. Include its actual exercise text as the Implementation Prompt, condensed if long. Explain the purpose, teach concepts, show the curated code exactly, and add concise relevant pitfalls/checks. Preserve statuses experimental/legacy/deprecated when relevant. For long capstones, summarize architecture, show one focused snippet, commands and measurable acceptance criteria instead of pretending a full application fits.
+
+Accuracy constraints: Shell command lines MUST be single unbroken commands (use wider panels or smaller monospaced type); NEVER add a backslash as a line continuation in PowerShell. Avoid redundant POSIX examples if commands are identical. Do not invent blanket claims that .js cannot be ESM or that missing type:module always causes an error; .mjs or explicit type:module makes intent clear. Snippet titles may say "focused example" when exercise is broader. No unrequested category mini-cards if not relevant to topic. 
+Footer links must be real: use "Sources: nodejs.org/api • tc39.es/ecma262" for language topics. Never invent nodejs.org/api/regexp.html, nodejs.org/api/classes.html, or other nonexistent language pages. Do not add shell file-creation wrappers around supplied JS; simply label filename and show its contents. Focus the top concepts on this lesson rather than repeating a generic core/language/tooling/ecosystem categorization. Native npm invocations produce extra headers; output boxes may label "essential output" when omitting headers. 
+Strict fidelity: DO NOT add extra code/commands beyond curated snippets if snippets are provided. Copy full supplied example including imports and invocation. If space is tight remove repetition and widen code panel instead of omitting essential code. Code punctuation is literal, never replace commas with semicolons inside arrays or objects. Do not invent dependency release versions, scans, measured timings, exact current outputs, or nonexistent APIs; use clearly labeled placeholders where values must be measured. Use npm official docs for tooling footer instead of TC39. All claims about execution must say expected/illustrative, never "commands run", "tested" or "observed". Node core module prefix node: is preferred but is optional for many modules; do not mark fs/promises invalid. Status codes:404 for missing route,500 for internal error,400 bad request,413 too large. 
+Badge "Prompt 54". Topic "Transform streams". Source exercise:
+Category: Node.js core · Purpose: Transform data incrementally.
+Build a Transform stream that converts newline-delimited JSON into filtered output. Handle records split across chunks, impose a maximum record length, and verify malformed-record behavior.
+Curated teaching content:
+Focused Transform excerpt (StringDecoder splits bytes, LF frames lines):
+import { Transform } from 'node:stream';
+import { StringDecoder } from 'node:string_decoder';
+class NDJSON extends Transform {
+  #decoder = new StringDecoder('utf8'); #pending = '';
+  _transform(chunk, encoding, done) {
+    try {
+      this.#pending += this.#decoder.write(chunk);
+      let end;
+      while ((end = this.#pending.indexOf('\n')) >= 0) {
+        const line = this.#pending.slice(0, end);
+        this.#pending = this.#pending.slice(end + 1);
+        if (line.length > 1024) throw Error('Record too long');
+        if (line.trim()) this.push(JSON.stringify(JSON.parse(line)) + '\n');
+      }
+      if (this.#pending.length > 1024) throw Error('Record too long');
+      done();
+    } catch (e) { done(e); }
+  }
+}
+This is EXCERPT not complete class: label needs _flush to decoder.end()+parse final nonnewline record; add business predicate filter beforepush. Focus diagram chunks→decode→boundedlinebuffer→parse/filter→encode; malformedline policy failpipeline; length chars vs bytes explicitly codeunit1024example. No claim full runnable class handles final record without_flush.

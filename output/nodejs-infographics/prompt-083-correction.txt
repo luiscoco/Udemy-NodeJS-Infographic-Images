@@ -1,0 +1,6 @@
+Correct the SSE record formatting and expired-history strategy. Replace ONLY the first res.write event statement with this exact valid JavaScript:
+res.write('id: 1\n'
+  + 'event: ready\n'
+  + 'data: {"ok":true}\n\n');
+Each field must be separated by a newline and the record must end in a blank line. Replace req.on('close', ...) with res.on('close', () => clearInterval(heartbeat)); to tie cleanup to the response connection.
+Everywhere that mentions expired history, remove the alternative HTTP 409 response and the claim EventSource automatically retries 409. Use one consistent strategy: "If retained history has expired, send an explicit resync event with a snapshot URL; the browser client handles it and resynchronizes." Keep Last-Event-ID/replay as full-exercise tasks, not implemented in excerpt. Preserve all other style/content/logo.

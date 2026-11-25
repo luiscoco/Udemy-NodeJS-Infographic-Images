@@ -1,0 +1,1 @@
+Correct ONLY the "Language" pill label in the top-right Key Concepts panel to "OS/runtime". Its row describes signals SIGINT/SIGTERM and exit codes, which are operating-system/runtime facilities, not JavaScript language features. Preserve everything else, badge68 and logo.

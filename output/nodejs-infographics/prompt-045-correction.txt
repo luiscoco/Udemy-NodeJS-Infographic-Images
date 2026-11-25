@@ -1,0 +1,1 @@
+Make the displayed walker.mjs actually produce its illustrated paths. Add exactly one line AFTER the walk function: for await (const file of walk('./fixtures')) console.log(file); . Add note "Prerequisite: create the fixtures directory and sample files first." Preserve all other code, content and style. Do not change correct opendir or yield* syntax.

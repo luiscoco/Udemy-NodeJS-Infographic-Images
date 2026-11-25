@@ -1,0 +1,1 @@
+In the Common Mistakes panel replace ONLY its last row (the incorrect claim that omitting node: is a mistake). New row: "Missing JSON import attribute → import fails" and green fix: "Use with { type: 'json' } for JSON imports." Imports from fs/promises are valid without node: so do not mark them invalid. Preserve everything else, badge34 and official logo.

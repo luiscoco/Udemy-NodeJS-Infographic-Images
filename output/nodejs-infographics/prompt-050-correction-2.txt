@@ -1,0 +1,16 @@
+Second correction (code typo). In the monitor() code panel, the watch callback shows clearTimeout(debunce); which is a misspelling that would throw ReferenceError. Every occurrence of the variable must be spelled debounce. The monitor() code must read exactly:
+import { watch } from 'node:fs';
+function monitor(dir, reconcile) {
+  let debounce;
+  const watcher = watch(dir, () => {
+    clearTimeout(debounce);
+    debounce = setTimeout(reconcile, 100);
+  });
+  watcher.on('error', error => console.error(error.code));
+  const periodic = setInterval(reconcile, 1000);
+  reconcile();
+  return () => {
+    clearTimeout(debounce); clearInterval(periodic); watcher.close();
+  };
+}
+Check: the identifier debounce appears 4 times (declaration, two clearTimeout calls, one assignment), all spelled d-e-b-o-u-n-c-e. Preserve the "Verification Scenarios" panel, the harness sentence, the illustrative labels, "The helper alone does not print these lines.", and all style, badge and logo.

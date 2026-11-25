@@ -1,0 +1,1 @@
+Correct ONLY the typo in the main code panel: change job.eff('progress', progress); to job.off('progress', progress); . Spell method o-f-f exactly. Preserve all other code, content and layout.

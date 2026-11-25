@@ -1,0 +1,9 @@
+Keep the excellent top semantic version-range table unchanged. Correct the central and right panels to avoid invented real-package version examples. Central title "Inspect Your Project". Show only these real generic commands with descriptions:
+npm ls
+npm outdated
+npm view <package> version
+npm update
+npm ci
+Explain "<package> means an actual dependency name in your project; replace it before running."
+Replace the express/chalk/dotenv manifest with three clearly labeled illustrative dependency-range fragments, not a runnable manifest: exact "example": "1.2.3"; caret "example": "^1.2.3"; tilde "example": "~1.2.3". Do not recommend installing an imaginary example package.
+Right panel shows table Current=installed version, Wanted=highest version allowed by range, Latest=registry latest version; no fake package releases or audit counts. Note npm update respects ranges; npm ci installs lockfile graph. Preserve rest, badge39 and logo. Footer Sources: docs.npmjs.com • semver.org .

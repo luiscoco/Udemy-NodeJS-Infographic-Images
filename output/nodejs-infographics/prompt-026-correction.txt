@@ -1,0 +1,5 @@
+Correct the focused cancel.mjs code and matching expected output. Keep its existing imports and run(signal) definition unchanged, then ADD this essential executable invocation beneath that function:
+const caller = new AbortController();
+try { console.log(await run(caller.signal)); }
+catch (e) { console.log(e.name); }
+The first expected-output box for node cancel.mjs MUST show AbortError, NOT TimeoutError: the timers/promises delay promise rejects AbortError; its underlying combined.reason is TimeoutError on a deadline. Retain the explanatory checklist making that distinction. Do not claim the snippet prints TimeoutError. Preserve rest of layout, title, badge26 and logo.

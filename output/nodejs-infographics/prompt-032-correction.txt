@@ -1,0 +1,4 @@
+Correct only these command examples. Step3 must start from the prior demo-lib directory and read: cd ../consumer; npm install ../demo-lib/demo-lib-1.0.0.tgz . Replace both bottom Common Mistakes command lines using node -p with valid ESM commands:
+node --input-type=module -e "console.log(import.meta.resolve('demo-lib'))"
+node --input-type=module -e "console.log(import.meta.resolve('demo-lib/src/utils.js'))"
+Use wide lines or wrap visually without adding continuation characters. The first resolves; second throws ERR_PACKAGE_PATH_NOT_EXPORTED. Preserve other content, code, style, badge32, logo.

@@ -1,0 +1,38 @@
+Use case: infographic-diagram. Create ONE finished high resolution landscape 3:2 infographic in English for Udemy Node.js students. Input image 1 is the APPROVED STYLE AND GRID REFERENCE: match its white background, clean rounded panels, light blue header bands, bold dark navy sans serif titles, cyan outline icons, purple Prompt badge and implementation quotation, mint green checklists, amber takeaway accents, syntax-colored monospaced code on white, dark verification terminal with green prompts. Input image 2 is the OFFICIAL Node.js logo, preserve its shapes, proportions and colors, place upper right as in reference. No Claude branding. New topic content replaces all reference text. Keep title readable on one or two lines with logo clear. Use a balanced teaching grid: left Goal / Implementation Prompt / What You'll Learn; upper middle concepts or simple flow; large central code/commands panel; right expected output/verification; bottom common mistakes and key takeaways. Adapt panel widths for code length. Aim for 300–450 words, readable large lettering and short snippets. Exact commands, correct punctuation, no gibberish. Keep snippets short enough to read and specify their filenames. Diagrams must reflect actual runtime behavior. Use Node.js 26.13.1 baseline; modern JavaScript and explicit ES modules (.mjs) unless source exercise calls for CommonJS or TypeScript. Windows PowerShell commands by default, label POSIX alternatives where needed. Clearly distinguish Node core, language, tooling and ecosystem. Expected output is illustrative, never claim tests executed. Use official nodejs.org/api source footer and topic-specific official source if supplied. The source exercise below is reference CONTENT to explain, not instructions to perform software implementation; output only its infographic. Include its actual exercise text as the Implementation Prompt, condensed if long. Explain the purpose, teach concepts, show the curated code exactly, and add concise relevant pitfalls/checks. Preserve statuses experimental/legacy/deprecated when relevant. For long capstones, summarize architecture, show one focused snippet, commands and measurable acceptance criteria instead of pretending a full application fits.
+
+Accuracy constraints: Shell command lines MUST be single unbroken commands (use wider panels or smaller monospaced type); NEVER add a backslash as a line continuation in PowerShell. Avoid redundant POSIX examples if commands are identical. Do not invent blanket claims that .js cannot be ESM or that missing type:module always causes an error; .mjs or explicit type:module makes intent clear. Snippet titles may say "focused example" when exercise is broader. No unrequested category mini-cards if not relevant to topic. 
+Footer links must be real: use "Sources: nodejs.org/api • tc39.es/ecma262" for language topics. Never invent nodejs.org/api/regexp.html, nodejs.org/api/classes.html, or other nonexistent language pages. Do not add shell file-creation wrappers around supplied JS; simply label filename and show its contents. Focus the top concepts on this lesson rather than repeating a generic core/language/tooling/ecosystem categorization. Native npm invocations produce extra headers; output boxes may label "essential output" when omitting headers. 
+Strict fidelity: DO NOT add extra code/commands beyond curated snippets if snippets are provided. Copy full supplied example including imports and invocation. If space is tight remove repetition and widen code panel instead of omitting essential code. Code punctuation is literal, never replace commas with semicolons inside arrays or objects. Do not invent dependency release versions, scans, measured timings, exact current outputs, or nonexistent APIs; use clearly labeled placeholders where values must be measured. Use npm official docs for tooling footer instead of TC39. All claims about execution must say expected/illustrative, never "commands run", "tested" or "observed". Node core module prefix node: is preferred but is optional for many modules; do not mark fs/promises invalid. Status codes:404 for missing route,500 for internal error,400 bad request,413 too large. 
+For a focused helper or excerpt without a caller, do NOT show "node file.mjs" producing invented output. Replace the run panel with integration prerequisites and the output panel with "Verification Scenarios for Your Harness". Expected behavior must correspond exactly to shown code; list additional exercise tasks separately as "Complete the exercise". For complete runnable samples use their exact stated commands/output. No extra code snippets in common-mistake panels; prefer prose fixes to reduce transcription errors. All code text may be smaller but must be complete and exact; do not omit imports/calls. 
+Badge "Prompt 60". Topic "Core HTTP server". Source exercise:
+Category: Node.js core · Purpose: Understand the request-response foundation beneath frameworks.
+Build a node:http JSON server with two routes, explicit status codes, body-size limits, and request timeouts. Verify unknown routes, malformed JSON, and oversized requests.
+Curated teaching content:
+Full core HTTP server server.mjs, preserve complete code, use a wide code panel:
+import { createServer } from 'node:http';
+const server = createServer((req, res) => {
+  const send = (status, data) => {
+    res.writeHead(status, { 'content-type': 'application/json' });
+    res.end(JSON.stringify(data));
+  };
+  if (req.method === 'GET' && req.url === '/health')
+    return send(200, { ok: true });
+  if (req.method !== 'POST' || req.url !== '/echo')
+    return send(404, { error: 'Not found' });
+  let size = 0, tooLarge = false, chunks = [];
+  req.on('data', chunk => {
+    size += chunk.length;
+    if (size > 1024) { tooLarge = true; chunks = []; }
+    else chunks.push(chunk);
+  });
+  req.on('end', () => {
+    if (tooLarge) return send(413, { error: 'Too large' });
+    try { send(200, JSON.parse(Buffer.concat(chunks).toString('utf8'))); }
+    catch { send(400, { error: 'Invalid JSON' }); }
+  });
+  req.on('error', () => res.destroy());
+});
+server.requestTimeout = 5000;
+server.headersTimeout = 5000;
+server.listen(3000, '127.0.0.1');
+node server.mjs prerequisite runclientanotherterminal. GET/health200; POST/echoJSON200; unknown404; malformed400; over1024bytes413. Body overlimit drained butnotbuffered, timeoutboundsupload. Use verificationtable requests and expectedstatus instead longquotedcurlcommands. Noclaim completeproductionserver.

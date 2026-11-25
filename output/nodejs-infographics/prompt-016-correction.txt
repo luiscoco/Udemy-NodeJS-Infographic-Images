@@ -1,0 +1,1 @@
+Correct ONLY two numeric HTTP response status codes in the server.mjs code panel: the unknown-route branch must say res.writeHead(404); res.end('not found'); and the catch branch must say res.writeHead(500); res.end('error'); . Preserve all other text, code, styling, layout, Prompt 16 badge and official Node.js logo.

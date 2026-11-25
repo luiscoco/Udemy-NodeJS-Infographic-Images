@@ -1,0 +1,26 @@
+Second correction (first pass left broken code). Fix ONLY the code; preserve title, badge, logo, layout, runner.mjs and all other lesson content.
+
+1. Delete the stale older demo.mjs code in the "2 · Task factory and usage (demo.mjs)" section. demo.mjs must appear exactly once.
+2. The single demo.mjs panel must contain exactly this code, character for character:
+import { run } from './runner.mjs';
+let active = 0, maxActive = 0;
+const tasks = Array.from({ length: 20 }, (_, i) => async () => {
+  maxActive = Math.max(maxActive, ++active);
+  try {
+    await new Promise(r => setTimeout(r, 10));
+    if (i % 7 === 0) throw new Error('fixture failure');
+    return i;
+  } finally { active--; }
+});
+const results = await run(tasks, 3);
+console.log('processed:', results.length);
+console.log('fulfilled:', results.filter(r => r.status === 'fulfilled').length);
+console.log('rejected:', results.filter(r => r.status === 'rejected').length);
+console.log('maxActive:', maxActive);
+
+Typography checks, the previous image got these wrong:
+- The colon is INSIDE the quotes, followed by a closing quote and a comma: 'processed:', then a space, then the expression. Never write 'processed':, or 'rejected';
+- Spell fulfilled with two l's in both the label and the filter: 'fulfilled'.
+- Every console.log line ends with ); and the separator after the label string is a comma, never a semicolon.
+Make the code panel wide enough that no line wraps; shrink less important prose if needed.
+Expected output panel stays: processed: 20 / fulfilled: 17 / rejected: 3 / maxActive: 3 (illustrative).

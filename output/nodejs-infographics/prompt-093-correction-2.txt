@@ -1,0 +1,8 @@
+Second correction (first pass garbled two lines). Change ONLY these two lines in the right "Illustrative Full-Harness Behavior" panel; preserve everything else (worker.mjs excerpt heading and note, code, style, badge, logo).
+
+1. Replace the garbled redelivery line with exactly:
+Reprocessing redelivered job r1 from the start.
+2. Replace the attempts line with exactly:
+At most 3 total attempts with exponential backoff.
+
+Render both lines in clean, plain, correctly spelled English with no accented or substituted characters. Spell-check: "Reprocessing", "redelivered", "attempts", "exponential". Use a slightly larger font for these lines if needed to keep the letters crisp.

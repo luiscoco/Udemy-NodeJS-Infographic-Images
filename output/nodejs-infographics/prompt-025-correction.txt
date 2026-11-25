@@ -1,0 +1,17 @@
+Correct the demo.mjs code panel so it is a complete runnable client of runner.mjs and actually prints the output shown. Enlarge that panel by reducing unused surrounding padding or shrinking other less important content. Exact demo.mjs contents:
+import { run } from './runner.mjs';
+let active = 0, maxActive = 0;
+const tasks = Array.from({ length: 20 }, (_, i) => async () => {
+  maxActive = Math.max(maxActive, ++active);
+  try {
+    await new Promise(r => setTimeout(r, 10));
+    if (i % 7 === 0) throw new Error('fixture failure');
+    return i;
+  } finally { active--; }
+});
+const results = await run(tasks, 3);
+console.log('processed:', results.length);
+console.log('fulfilled:', results.filter(r => r.status === 'fulfilled').length);
+console.log('rejected:', results.filter(r => r.status === 'rejected').length);
+console.log('maxActive:', maxActive);
+Keep runner.mjs code unchanged. Expected output processed:20 fulfilled:17 rejected:3 maxActive:3. Preserve style, title, badge and logo; all code legible.

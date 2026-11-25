@@ -1,0 +1,1 @@
+Correct ONLY the source footer. Replace the nonexistent nodejs.org/api/regexp.html URL with the real official JavaScript standard source. Footer exactly: Sources: nodejs.org/api • tc39.es/ecma262 . Preserve all other text, code, styling, layout, Prompt 14 badge and official Node.js logo.

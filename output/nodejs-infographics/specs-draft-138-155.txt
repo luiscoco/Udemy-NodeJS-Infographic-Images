@@ -1,0 +1,317 @@
+===== 138 =====
+Focused Docker Compose excerpt with two services: api (built from the provided Dockerfile from Prompt 136) and db (PostgreSQL). Do NOT show any Dockerfile contents; just state "Prerequisite: the Dockerfile from Prompt 136". The API reads the standard PG* environment variables; do not mention DATABASE_URL_FILE or secret files at all. Show each docker compose command on ONE unwrapped line in a wide panel. The db service publishes no host port, so it stays on the internal Compose network. Show compose.yaml exactly:
+services:
+  api:
+    build: .
+    environment:
+      PGHOST: db
+      PGPORT: 5432
+      PGDATABASE: course
+      PGUSER: course
+      PGPASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+    ports: ["3000:3000"]
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: course
+      POSTGRES_USER: course
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U course -d course"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  pgdata:
+Configuration: DB_PASSWORD comes from the PowerShell environment or from a git-ignored .env file; never show a real secret value. postgres:17 is a valid major tag; for a reproducible release, pin a patch tag or a verified digest. Commands, each on one line: docker compose up -d --build and docker compose up -d --force-recreate api. Verification in prose: insert a record through the API, recreate only the api container, and confirm the record is still there because it lives in the pgdata volume. Common mistake: docker compose down -v deletes the named volume and the data with it. Note that depends_on with service_healthy only orders startup; it does not give runtime resilience, and migrations and connection retry are separate tasks. Sources: docs.docker.com/compose • hub.docker.com/_/postgres.
+
+===== 143 =====
+AWS Lambda with the AWS SAM CLI and Docker. First check the runtime: the AWS Lambda runtimes page lists nodejs26.x (Node.js 26, Amazon Linux 2023). AWS manages the patch version, so it is not pinned to the course patch 26.13.1; record that deviation. If the installed SAM CLI or its local build image does not yet support nodejs26.x, upgrade SAM CLI and do not silently switch runtimes. File src/index.mjs, exactly:
+let invocations = 0;
+
+export const handler = async (event) => {
+  invocations += 1;
+  return { invocations, name: event.name ?? null };
+};
+File template.yaml, exactly:
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  HelloFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: index.handler
+      Runtime: nodejs26.x
+File events/event.json: {"name":"course"}
+Commands, each on one line: sam build and sam local invoke HelloFunction --event events/event.json. Illustrative output: {"invocations":1,"name":"course"}. Key teaching point about shared state: module-scope variables persist across warm invocations in the same execution environment. sam local invoke normally starts a fresh container each time, so the counter usually stays at 1 locally; that does NOT prove there is no leakage. Explain that a deployed warm environment would return 2, 3 and so on. Rule: keep per-request data inside the handler; use module scope only for safe reusable clients and configuration. Do not invent cold-start timings. Sources: docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html • docs.aws.amazon.com/serverless-application-model.
+
+===== 144 =====
+Single executable application (SEA). Status: Stability 1.1, Active development; the built-in node --build-sea workflow was added in Node.js 25.5 and exists on the 26.13.1 baseline. Dependency-free CLI hello.mjs, exactly:
+const name = process.argv[2] ?? 'world';
+console.log(`Hello, ${name}!`);
+File sea-config.json, exactly:
+{ "main": "hello.mjs", "mainFormat": "module", "output": "hello.exe" }
+On Windows the .exe extension in output is required. Commands (PowerShell, each on one line): node --build-sea sea-config.json then .\hello.exe world. Illustrative output: Hello, world!
+Signing panel: Windows, optional: signtool sign /fd SHA256 hello.exe (needs a certificate; an unsigned binary still runs, but SmartScreen and policy may warn). macOS (label POSIX): codesign --sign - hello (ad-hoc; distribution needs a Developer ID and notarization). Linux: no signing step.
+Verification in prose: open a new PowerShell session, remove every PATH entry that contains node.exe, confirm Get-Command node finds nothing, then run .\hello.exe world again. Better still, copy it to a clean machine or VM without Node.js. Facts: the executable embeds the Node.js binary that built it, so it is large and platform-specific (build once per OS/architecture). The injected main script cannot import files from disk, only node: built-ins, so bundle multi-file apps first. Source: nodejs.org/api/single-executable-applications.html.
+
+===== 145 =====
+node:wasi. Status: Stability 1, Experimental. Prominent security warning, quote the docs: "do not rely on it to run untrusted code"; Node's WASI does not provide comprehensive filesystem sandboxing. C program read.c, exactly:
+#include <stdio.h>
+
+int main(void) {
+  FILE *file = fopen("/fixtures/hello.txt", "r");
+  if (!file) { perror("open"); return 1; }
+  char line[128];
+  while (fgets(line, sizeof line, file)) fputs(line, stdout);
+  fclose(file);
+  return 0;
+}
+Build with the external WASI SDK (label WASI_SDK_PATH as the install-folder placeholder), one line: & "$env:WASI_SDK_PATH\bin\clang.exe" --target=wasm32-wasip1 -O2 -o read.wasm read.c
+Host run.mjs, exactly:
+import { readFile } from 'node:fs/promises';
+import { WASI } from 'node:wasi';
+
+const wasi = new WASI({
+  version: 'preview1',
+  args: ['read'],
+  preopens: { '/fixtures': './fixtures' },
+});
+const wasm = await WebAssembly.compile(
+  await readFile(new URL('./read.wasm', import.meta.url)),
+);
+const instance = await WebAssembly.instantiate(wasm, wasi.getImportObject());
+process.exitCode = wasi.start(instance);
+Fixture fixtures\hello.txt contains: Hello from WASI
+Command: node run.mjs. Illustrative output: Hello from WASI. Teach: version is mandatory; the program only sees the preopened guest path /fixtures, which maps to the host folder ./fixtures; wasi.start returns the exit code because returnOnExit defaults to true. Limitations panel: preopens are a convenience mapping, not a security boundary; use OS-level isolation for untrusted modules. Sources: nodejs.org/api/wasi.html • github.com/WebAssembly/wasi-sdk.
+
+===== 146 =====
+Module customization hooks. module.registerHooks is synchronous and in-thread, Stability 1.2 Release candidate. module.register is deprecated (DEP0205, runtime deprecation since v26.0.0); do not use it. File register.mjs, exactly:
+import { registerHooks } from 'node:module';
+
+const aliases = new Map([
+  ['@app/config', new URL('./src/config.mjs', import.meta.url).href],
+]);
+
+registerHooks({
+  resolve(specifier, context, nextResolve) {
+    if (specifier.startsWith('@app/')) {
+      const url = aliases.get(specifier);
+      if (!url) throw new Error(`Unknown alias: ${specifier}`);
+      return { url, shortCircuit: true };
+    }
+    return nextResolve(specifier, context);
+  },
+});
+File main.mjs, exactly:
+import { readFile } from 'node:fs/promises';
+import { appName } from '@app/config';
+
+console.log(appName, typeof readFile);
+await import('@app/missing').catch((error) => console.error(error.message));
+File src/config.mjs: export const appName = 'course-app';
+Command: node --import ./register.mjs main.mjs. Illustrative output: course-app function then on stderr Unknown alias: @app/missing. Teach: the hook must run before the importing module loads, which is why it uses --import; shortCircuit: true is mandatory when nextResolve is not called; every other specifier goes to nextResolve, so normal resolution (node: built-ins, packages) is unchanged; keep the alias narrow, with an explicit prefix. Mention that package.json "imports" (#subpath) is the stable built-in alternative for many alias needs. Source: nodejs.org/api/module.html.
+
+===== 147 =====
+node:ffi. Added in Node.js 26.1, Stability 1 Experimental. Under the Permission Model it requires --allow-ffi. Docs warning, quote: "This API is unsafe. Passing invalid pointers, using an incorrect symbol signature, or accessing memory after it has been freed can crash the process or corrupt memory." File add.c, exactly:
+#include <stdint.h>
+#if defined(_WIN32)
+#define EXPORT __declspec(dllexport)
+#else
+#define EXPORT
+#endif
+
+EXPORT int32_t add_i32(int32_t a, int32_t b) {
+  return a + b;
+}
+Build commands, each on one line: Windows, in a Developer PowerShell for Visual Studio: cl /LD add.c /Fe:mylib.dll. Linux (POSIX label): cc -shared -fPIC -o mylib.so add.c. macOS (POSIX label): cc -dynamiclib -o mylib.dylib add.c
+File call.mjs, exactly:
+import { dlopen, suffix } from 'node:ffi';
+
+const { lib, functions } = dlopen(`./mylib.${suffix}`, {
+  add_i32: { arguments: ['int32', 'int32'], return: 'int32' },
+});
+
+console.log(functions.add_i32(20, 22));
+lib.close();
+Command: node call.mjs (run from the folder that contains the library). Illustrative output: 42. Requirements: the library architecture must match process.arch (x64 vs arm64), and suffix is dll, so or dylib. Consequences panel in prose: a declared signature that does not match the C function (for example int64 vs int32, or a wrong argument count) is not detected and gives garbage results or crashes; never call functions after lib.close(); never resize, transfer or detach a buffer while a native call is using it; native crashes cannot be caught with try/catch. Source: nodejs.org/api/ffi.html.
+
+===== 148 =====
+node:vfs. Added in Node.js 26.4, Stability 1 Experimental. It requires the --experimental-vfs flag and the node: scheme. File fixtures.mjs, exactly:
+import vfs from 'node:vfs';
+import fs from 'node:fs';
+
+const fixture = vfs.create();
+fixture.mkdirSync('/config', { recursive: true });
+fixture.writeFileSync('/config/app.json', '{"mode":"test"}');
+
+const root = fixture.mount();
+console.log(fs.readFileSync(`${root}/config/app.json`, 'utf8'));
+fixture.unmount();
+console.log(fixture.mounted);
+
+const provider = new vfs.MemoryProvider();
+const locked = vfs.create(provider);
+locked.writeFileSync('/seed.txt', 'initial');
+provider.setReadOnly();
+try {
+  locked.writeFileSync('/x.txt', 'fail');
+} catch (error) {
+  console.log(error.code);
+}
+Command: node --experimental-vfs fixtures.mjs. Illustrative output, three lines: {"mode":"test"} then false then EROFS. Teach: mount() returns a generated mount point under the VFS base path, so read it from the return value and never hard-code it; regular node:fs calls see the files only while mounted; unmount() is idempotent and is the cleanup step (a using declaration also unmounts automatically); setReadOnly() cannot be reverted. Security panel, quote the docs: "The VFS API is not a sandbox, permission system, or access-control mechanism." Use OS-level isolation for untrusted code. Source: nodejs.org/api/vfs.html.
+
+===== 149 =====
+node:bench. Added in Node.js 26.9, Stability 1.0 Early development. It requires the --experimental-bench flag and the node: scheme. File compare.mjs, exactly:
+import { bench, suite } from 'node:bench';
+
+const parts = Array.from({ length: 1_000 }, (_, i) => `item${i}`);
+const expected = parts.join(',');
+
+suite('join strings', () => {
+  bench('Array.join', { samples: 30, warmup: 10 }, (b) => {
+    b.start();
+    const result = parts.join(',');
+    b.end(1);
+    if (result !== expected) throw new Error('join mismatch');
+  });
+
+  bench('concatenation loop', { samples: 30, warmup: 10 }, (b) => {
+    b.start();
+    let result = parts[0];
+    for (let i = 1; i < parts.length; i++) result += `,${parts[i]}`;
+    b.end(1);
+    if (result !== expected) throw new Error('loop mismatch');
+  });
+});
+Command: node --experimental-bench --bench compare.mjs. Do NOT show invented numbers; the output panel shows placeholders such as mean ops/s <measured>, stddev <measured>, coefficient of variation <measured>, confidence interval <measured>. Teach: warmup invocations are unreported (default 10); samples is the number of measured invocations; each function calls b.start() and b.end(operations) exactly once; the correctness check stays outside the timed region and throws on mismatch. Interpretation: compare confidence intervals and coefficient of variation; if intervals overlap, report no clear winner; rerun on an idle machine and record the Node.js version and hardware. Source: nodejs.org/api/bench.html.
+
+===== 150 =====
+node:stream/iter (Iterable Streams). Stability 1 Experimental; it requires --experimental-stream-iter. It is separate from the stable for await...of consumption of classic Node streams. File iter.mjs, exactly:
+import { from, pull, text } from 'node:stream/iter';
+
+const upper = (chunks) => {
+  if (chunks === null) return null;
+  return chunks.map((c) => new TextEncoder().encode(
+    new TextDecoder().decode(c).toUpperCase(),
+  ));
+};
+
+console.log(await text(pull(from('hello, iterable streams'), upper)));
+Command: node --experimental-stream-iter iter.mjs. Illustrative output: HELLO, ITERABLE STREAMS
+Comparison file classic.mjs (stable), exactly:
+import { Readable, Transform } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
+
+const upper = new Transform({
+  transform(chunk, _encoding, callback) {
+    callback(null, chunk.toString().toUpperCase());
+  },
+});
+await pipeline(Readable.from(['hello, classic streams']), upper, process.stdout);
+Command: node classic.mjs. Illustrative output: HELLO, CLASSIC STREAMS
+Teach in a two-column comparison: the iter transform is a plain function over batches of Uint8Array chunks, and null signals flush, versus a Transform class with a callback. Pull-based consumption gives natural backpressure (a slow consumer simply pulls less), versus highWaterMark and write() returning false. Cancellation: an AbortSignal makes the pending and later reads reject with signal.reason, versus pipeline destroying every stream on error or abort. Caveat: decoding each chunk separately can split multi-byte UTF-8 characters at chunk boundaries; a production transform must use a streaming TextDecoder. Verification tasks in prose: output, abort mid-stream, slow consumer. Source: nodejs.org/api/stream_iter.html.
+
+===== 151 =====
+Capstone, logtool: a dependency-free command-line tool that filters newline-delimited JSON (NDJSON) logs. Architecture flow: input (file or stdin) → line splitter with a maximum record length and a streaming UTF-8 decoder → JSON parse with a malformed-record policy (skip, count or fail) → filter → aggregate statistics → stdout as JSON, diagnostics to stderr. Show one focused snippet, safe output replacement, logtool/write-atomically.mjs, exactly:
+import { createWriteStream } from 'node:fs';
+import { rename, rm } from 'node:fs/promises';
+import { pipeline } from 'node:stream/promises';
+
+export async function writeAtomically(target, source, signal) {
+  const temp = `${target}.${process.pid}.tmp`;
+  try {
+    await pipeline(source, createWriteStream(temp, { flags: 'wx' }), { signal });
+    await rename(temp, target);
+  } catch (error) {
+    await rm(temp, { force: true });
+    throw error;
+  }
+}
+Explain: the output is written to a temporary file next to the target and renamed only on success, so cancellation (Ctrl+C mapped to an AbortController) leaves no partial output; pipeline gives backpressure. Exit codes: 0 success, 1 data error under the fail policy, 2 usage error. Command: node --test. Acceptance criteria checklist (measurable): a generated 1 GiB fixture gives correct counts with peak RSS under a documented budget (placeholder <budget> MiB, measured, not assumed); empty input; a UTF-8 character split across chunks; malformed records; an incomplete final line; records over the maximum length rejected; stdout stays machine-readable; cancellation removes incomplete output. Sources: nodejs.org/api/stream.html • nodejs.org/api/fs.html.
+
+===== 152 =====
+Capstone: a task API using fastify, pg, node-pg-migrate and jose, with PostgreSQL. Architecture flow: request → Fastify JSON-schema validation → auth hook (jose jwtVerify checks signature, issuer, audience and expiry) → route → owner-scoped SQL (WHERE owner_id = $1) → PostgreSQL through a pg Pool; migrations run through node-pg-migrate. One focused snippet, src/passwords.mjs, exactly:
+import { scrypt, randomBytes, timingSafeEqual } from 'node:crypto';
+import { promisify } from 'node:util';
+
+const scryptAsync = promisify(scrypt);
+
+export async function hashPassword(password) {
+  const salt = randomBytes(16);
+  const key = await scryptAsync(password, salt, 64);
+  return `${salt.toString('base64')}:${key.toString('base64')}`;
+}
+
+export async function verifyPassword(password, stored) {
+  const [salt, key] = stored.split(':').map((p) => Buffer.from(p, 'base64'));
+  const candidate = await scryptAsync(password, salt, key.length);
+  return timingSafeEqual(candidate, key);
+}
+Teach: a random salt per user; timingSafeEqual for a constant-time comparison; never log passwords, signing keys or bearer tokens (configure the logger to redact the authorization header). A cross-user access attempt returns 404, not 403, so task existence is not revealed. The transactional operation uses one checked-out client with BEGIN, COMMIT and ROLLBACK. Commands, each on one line: npx node-pg-migrate up (reads DATABASE_URL from the environment) and node --test. Acceptance criteria checklist: fresh database through migrations; data survives a restart; missing, invalid and expired tokens give 401; user A cannot read or change user B's tasks; an injected failure rolls back all changes; concurrent requests keep a stated invariant; no secrets in responses or logs. Sources: fastify.dev • node-postgres.com • github.com/panva/jose • nodejs.org/api/crypto.html.
+
+===== 153 =====
+Capstone: real-time rooms using fastify, ws, pg and redis. Architecture flow: client → WebSocket upgrade with an authenticated room check → instance A or B → message stored in PostgreSQL first (gets a persistent, increasing event id) → published to a Redis channel → every instance fans out to its local sockets. On reconnect the client sends its last event id and the server replays the missed events from PostgreSQL (WHERE room_id = $1 AND id > $2 ORDER BY id, with a limit) before resuming live delivery. One focused snippet, bounded per-client buffering, src/send.mjs, exactly:
+const MAX_BUFFERED_BYTES = 1_000_000;
+
+export function sendOrClose(socket, event) {
+  if (socket.bufferedAmount > MAX_BUFFERED_BYTES) {
+    socket.close(1013, 'Client too slow');
+    return false;
+  }
+  socket.send(JSON.stringify(event));
+  return true;
+}
+Teach: Redis pub/sub is fire-and-forget, so PostgreSQL is the durable history and Redis is only live fan-out. A slow client is disconnected and recovers through replay instead of growing server memory. On close, remove the socket from its room set, clear heartbeat timers, and unsubscribe from the Redis channel when a room has no local sockets. Unauthorized room subscriptions are rejected before joining. Acceptance criteria checklist: 3 or more clients across 2 server instances; unauthorized subscriptions fail; a documented replay policy; missed events recovered from durable history; bounded outbound buffering; disconnect releases listeners, timers and state. Sources: github.com/websockets/ws • redis.io/docs • postgresql.org/docs.
+
+===== 154 =====
+Capstone: report processing using fastify, pg and bullmq with Redis. Architecture flow: POST /reports → one database transaction writes the business row plus an outbox row → an outbox relay adds a BullMQ job with jobId = reportId → worker (bounded concurrency) → idempotent result publication guarded by a unique constraint. One focused snippet, the transactional outbox, src/create-report.mjs (pool supplied by the app), exactly:
+export async function createReport(pool, reportId, ownerId) {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const { rows } = await client.query(
+      'INSERT INTO reports (id, owner_id, status) VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING RETURNING id',
+      [reportId, ownerId, 'pending'],
+    );
+    if (rows.length > 0) {
+      await client.query(
+        'INSERT INTO outbox (id, topic, payload) VALUES ($1, $2, $3)',
+        [reportId, 'report.requested', { reportId }],
+      );
+    }
+    await client.query('COMMIT');
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+Teach in two separate columns. Queue delivery: BullMQ is at-least-once; a killed worker's job becomes stalled and is retried from the start, not resumed from the crash point; attempts with exponential backoff bound retries; jobs that fail after the last attempt stay in the failed set for inspection. Business effect: exactly one durable result, enforced by the reports and outbox unique ids plus idempotent publication. Worker concurrency is set explicitly. Scheduling policy: explicit time zone (tz), no overlapping runs, restart behavior. Command: node --test, plus an interruption script that kills the worker at controlled points (described, not shown). Acceptance criteria checklist: recovery after a worker kill; a repeated operation gives one durable result; transient failures retry within budget; permanent failures visible after the attempt limit; concurrency stays within the bound; documented time-zone, overlap and restart policy. Sources: docs.bullmq.io • node-postgres.com/features/transactions.
+
+===== 155 =====
+Capstone: deployed fastify and PostgreSQL service with a BullMQ worker, Docker Compose, GitHub Actions, pino, prom-client and OpenTelemetry. Packages are named explicitly: @opentelemetry/sdk-node plus @opentelemetry/sdk-trace (SDK 3 replaced sdk-trace-base, see the compatibility notes); choose mutually compatible versions and commit the lockfile; do not invent version numbers. Architecture flow: GitHub Actions (npm ci, checks, image build) → image running as a non-root USER node → Compose: 2 api replicas behind NGINX, a worker, PostgreSQL, Redis → telemetry: pino JSON logs with trace ids, /metrics, OTLP traces. One focused snippet, coordinated shutdown, src/shutdown.mjs (app, worker, pool and sdk supplied), exactly:
+const DEADLINE_MS = 10_000;
+let stopping = false;
+
+export async function shutdown(signal) {
+  if (stopping) return;
+  stopping = true;
+  app.log.info({ signal }, 'shutting down');
+  const timer = setTimeout(() => process.exit(1), DEADLINE_MS);
+  timer.unref();
+  await app.close();
+  await worker.close();
+  await pool.end();
+  await sdk.shutdown();
+  clearTimeout(timer);
+}
+
+process.once('SIGTERM', shutdown);
+process.once('SIGINT', shutdown);
+Teach: readiness returns 503 as soon as stopping is true (see Prompt 139); app.close() stops new connections and waits for in-flight requests; worker.close() lets active jobs finish; sdk.shutdown() flushes telemetry; the deadline is shorter than the Compose stop_grace_period. Metrics labels use route templates, never raw URLs or user ids. Connection budget: 2 replicas × pool max 10, plus the worker, must stay under the database limit (example allocation, not measured). Commands, each on one line: npm ci, docker compose up -d --build, docker compose stop db (dependency-outage rehearsal), docker compose up -d --force-recreate api (replica replacement). Acceptance criteria checklist: clean checkout builds from the lockfile; non-root, no embedded credentials; readiness reflects startup, dependencies and shutdown; shutdown within the declared deadline; one request traceable through logs and a trace; bounded metric labels; 2 replicas within the connection budget; rollback and database restore demonstrated with recorded results (placeholders). Sources: fastify.dev • opentelemetry.io/docs/languages/js • docs.docker.com/compose • docs.github.com/actions.

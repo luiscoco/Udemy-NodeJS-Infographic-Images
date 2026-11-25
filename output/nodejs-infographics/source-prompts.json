@@ -1,0 +1,777 @@
+[
+  {
+    "number": 1,
+    "title": "Installation and version management",
+    "body": "Category: Tooling · Purpose: Reproduce the same runtime across development environments.\nSet up Node.js 26.13.1 using the external fnm version manager, with commands appropriate to my OS. Pin the project version and verify the active executable, Node.js version, and npm version; demonstrate diagnosing a conflicting installation."
+  },
+  {
+    "number": 2,
+    "title": "CLI and REPL",
+    "body": "Category: Node.js core · Purpose: Explore runtime behavior without building an application.\nCreate a short CLI and REPL lab covering script execution, --eval, --print, --check, and process.versions. Include a syntax error and show the expected command output and exit status."
+  },
+  {
+    "number": 3,
+    "title": "Minimal project structure",
+    "body": "Category: Tooling · Purpose: Establish a small, understandable project foundation.\nCreate an ES-module project with src, test, a README, and npm scripts for running and testing. Include one exported function and an assertion that can run from a clean checkout."
+  },
+  {
+    "number": 4,
+    "title": "Environment configuration",
+    "body": "Category: Node.js core · Purpose: Separate configuration from application logic.\nBuild a configuration loader using process.env and node --env-file. Validate a port, boolean, and required secret; verify environment-variable precedence and fail before startup when configuration is invalid."
+  },
+  {
+    "number": 5,
+    "title": "Command-line arguments and output contracts",
+    "body": "Category: Node.js core · Purpose: Build commands usable by people and scripts.\nBuild a CLI using node:util.parseArgs with --input, --format, and --help. Send results to stdout and diagnostics to stderr; verify invalid arguments produce a nonzero exit code without corrupting JSON output."
+  },
+  {
+    "number": 6,
+    "title": "Interactive terminal input",
+    "body": "Category: Node.js core · Purpose: Support interactive workflows without hanging automation.\nCreate a confirmation-based CLI using node:readline/promises. Handle cancellation and close the interface; verify that piped input or a noninteractive flag avoids waiting indefinitely for a terminal response."
+  },
+  {
+    "number": 7,
+    "title": "Application watch mode",
+    "body": "Category: Node.js core · Purpose: Shorten the edit-and-run development loop.\nCreate a small application run with node --watch. Change an imported module and verify automatic restart; explain the difference between ordinary watch mode and the platform restrictions of --watch-path."
+  },
+  {
+    "number": 8,
+    "title": "Scope and closures",
+    "body": "Category: JavaScript · Purpose: Understand captured state and variable lifetime.\nImplement a counter factory using closures and block-scoped variables. Create two counters and verify independent state; include a loop-capture example that demonstrates the difference between var and let."
+  },
+  {
+    "number": 9,
+    "title": "Objects, destructuring, and mutation",
+    "body": "Category: JavaScript · Purpose: Avoid accidental modification of shared data.\nBuild a function that applies defaults to a nested configuration object using destructuring and nullish coalescing. Demonstrate shallow-copy behavior and verify that the chosen implementation preserves the original input."
+  },
+  {
+    "number": 10,
+    "title": "Classes, prototypes, and this",
+    "body": "Category: JavaScript · Purpose: Choose suitable object behavior and encapsulation.\nImplement a small inventory class with a private field and a prototype method. Pass a method as a callback, reproduce a lost-`this` failure, and verify two appropriate fixes."
+  },
+  {
+    "number": 11,
+    "title": "Collections and identity",
+    "body": "Category: JavaScript · Purpose: Select collections according to lookup and ownership needs.\nBuild a deduplication example using Set, an ID lookup using Map, and object metadata using WeakMap. Verify equality behavior and explain which collections support enumeration and predictable retention."
+  },
+  {
+    "number": 12,
+    "title": "Iterators and generators",
+    "body": "Category: JavaScript · Purpose: Produce values lazily instead of allocating entire datasets.\nImplement a custom iterable and a generator that yields a large numeric range. Consume only the first ten values and verify that the remaining values were never generated."
+  },
+  {
+    "number": 13,
+    "title": "Serialization and numeric boundaries",
+    "body": "Category: JavaScript · Purpose: Preserve meaning when data crosses JSON boundaries.\nCreate a serializer for records containing dates and large integer identifiers. Demonstrate BigInt, unsafe integer precision, and cyclic-object failures, then verify a documented JSON representation round-trips correctly."
+  },
+  {
+    "number": 14,
+    "title": "Unicode and regular expressions",
+    "body": "Category: JavaScript · Purpose: Process real-world text without assuming one character equals one byte.\nBuild a Unicode-aware identifier validator and text-normalization example. Test accented characters, combining marks, and emoji; explain the distinction between code units, code points, and encoded bytes."
+  },
+  {
+    "number": 15,
+    "title": "Dates, locales, and time zones",
+    "body": "Category: JavaScript · Purpose: Present time and numeric values consistently across locales.\nFormat the same timestamp and currency amount using Intl for Spain and the United States. Specify time zones explicitly and verify examples around a daylight-saving transition without relying on the machine’s default locale."
+  },
+  {
+    "number": 16,
+    "title": "Blocking versus nonblocking execution",
+    "body": "Category: Node.js core · Purpose: Understand why a responsive server can become blocked.\nBuild a server with one delayed-I/O endpoint and one CPU-heavy endpoint. Send overlapping requests and measure responsiveness; demonstrate why adding async to CPU-heavy code does not make that work parallel."
+  },
+  {
+    "number": 17,
+    "title": "Event-loop phases",
+    "body": "Category: Node.js core · Purpose: Reason about when callbacks can execute.\nCreate an experiment using a filesystem callback, setTimeout, and setImmediate. Repeat it inside and outside an I/O callback, recording observations while distinguishing guaranteed ordering from timing-dependent results."
+  },
+  {
+    "number": 18,
+    "title": "Microtasks and next-tick callbacks",
+    "body": "Category: Node.js core · Purpose: Diagnose scheduling surprises and starvation.\nCompare promise callbacks, queueMicrotask, and legacy process.nextTick in separate ESM and CommonJS programs. Demonstrate bounded starvation and verify that yielding restores timer progress."
+  },
+  {
+    "number": 19,
+    "title": "The libuv worker pool",
+    "body": "Category: Node.js core · Purpose: Recognize contention outside the JavaScript execution thread.\nRun concurrent filesystem operations and asynchronous crypto.scrypt calls while measuring latency. Compare two startup values of UV_THREADPOOL_SIZE and explain the observed contention without assuming more threads always improve performance."
+  },
+  {
+    "number": 20,
+    "title": "Timers and cancellation",
+    "body": "Category: Node.js core · Purpose: Schedule work without assuming exact execution times.\nBuild an abortable delay with node:timers/promises. Measure actual elapsed time, demonstrate ref versus unref behavior, and verify cancellation leaves no unnecessary timer keeping the process alive."
+  },
+  {
+    "number": 21,
+    "title": "Resource lifetime and process exit",
+    "body": "Category: Node.js core · Purpose: Understand why a completed program sometimes remains running.\nCreate a script that accidentally leaves a timer and server open. Diagnose the active resources using supported process diagnostics, close them, and verify natural process termination."
+  },
+  {
+    "number": 22,
+    "title": "Callback conventions and promisification",
+    "body": "Category: Node.js core · Purpose: Integrate older asynchronous APIs safely.\nCreate an error-first callback API and convert it using node:util.promisify. Verify success and failure, and demonstrate why a callback implementation must not complete twice."
+  },
+  {
+    "number": 23,
+    "title": "Promise aggregation",
+    "body": "Category: JavaScript · Purpose: Choose appropriate behavior when several operations complete independently.\nRun three simulated operations with Promise.all, Promise.allSettled, and Promise.any. Make one operation fail and assert the different result and rejection behaviors."
+  },
+  {
+    "number": 24,
+    "title": "Sequential and concurrent await",
+    "body": "Category: JavaScript · Purpose: Express dependencies without accidentally serializing independent work.\nImplement a workflow containing two independent operations and one dependent operation. Compare unnecessary sequential awaits with correct concurrency, verifying both result correctness and elapsed time."
+  },
+  {
+    "number": 25,
+    "title": "Bounded concurrency",
+    "body": "Category: JavaScript · Purpose: Prevent large workloads from overwhelming resources.\nImplement an asynchronous task runner with a configurable concurrency limit and no external package. Process twenty tasks, inject failures, and assert that active work never exceeds the configured limit."
+  },
+  {
+    "number": 26,
+    "title": "Cancellation and deadlines",
+    "body": "Category: Node.js core · Purpose: Stop work when its caller no longer needs the result.\nBuild an operation accepting an AbortSignal, combining caller cancellation with a deadline using supported AbortSignal APIs. Verify early cancellation, timeout, successful completion, and cleanup in all three paths."
+  },
+  {
+    "number": 27,
+    "title": "Error propagation and cleanup",
+    "body": "Category: JavaScript · Purpose: Preserve useful failures across asynchronous layers.\nBuild a three-layer asynchronous workflow using error causes and try/finally. Inject a failure in each layer and verify that cleanup executes and the original cause remains available."
+  },
+  {
+    "number": 28,
+    "title": "Async generators",
+    "body": "Category: JavaScript · Purpose: Consume asynchronous sequences lazily.\nImplement an async generator over a simulated paginated data source. Stop consumption early with for await...of and verify that later pages are not requested and cleanup runs."
+  },
+  {
+    "number": 29,
+    "title": "ES modules",
+    "body": "Category: Node.js core · Purpose: Structure applications with explicit module boundaries.\nCreate an ESM application using \"type\": \"module\", named exports, and explicit relative extensions. Introduce a missing-extension error and verify the corrected module graph runs successfully."
+  },
+  {
+    "number": 30,
+    "title": "CommonJS",
+    "body": "Category: Node.js core · Purpose: Understand existing Node.js packages and applications.\nBuild a small .cjs application using require and module.exports. Demonstrate module caching with a stateful export and verify how repeated imports share that state."
+  },
+  {
+    "number": 31,
+    "title": "ESM–CommonJS interoperability",
+    "body": "Category: Node.js core · Purpose: Integrate packages using different module systems.\nCreate ESM and CommonJS consumers of a small library. Demonstrate createRequire and dynamic import, then test how top-level await affects synchronous loading from CommonJS."
+  },
+  {
+    "number": 32,
+    "title": "Package exports and imports",
+    "body": "Category: Node.js core · Purpose: Define a deliberate public package interface.\nCreate a package using exports for public entry points and imports for internal aliases. Install its packed archive into a separate consumer and verify public imports succeed while an unexported subpath fails."
+  },
+  {
+    "number": 33,
+    "title": "Dynamic imports and plugins",
+    "body": "Category: Node.js core · Purpose: Load optional functionality only when needed.\nBuild a plugin loader using dynamic import and an explicit plugin-name allowlist. Verify lazy loading, a missing plugin, and rejection of a path-like unapproved plugin name."
+  },
+  {
+    "number": 34,
+    "title": "Module-relative assets and JSON imports",
+    "body": "Category: Node.js core · Purpose: Locate assets independently of the working directory.\nLoad a text asset relative to import.meta.url and import JSON using the baseline’s supported import attributes. Run the application from another directory and verify both resources still load."
+  },
+  {
+    "number": 35,
+    "title": "Circular dependencies",
+    "body": "Category: Node.js core · Purpose: Recognize initialization-order problems.\nConstruct a small circular ESM dependency that fails during initialization. Refactor the shared responsibility into a third module and verify the public behavior remains unchanged."
+  },
+  {
+    "number": 36,
+    "title": "Package metadata and dependency types",
+    "body": "Category: Tooling · Purpose: Declare how a package should be installed and consumed.\nCreate a package manifest demonstrating dependencies, development dependencies, peer dependencies, optional dependencies, and an engine requirement. Use tiny local fixture packages and verify which relationships appear in the installed dependency tree."
+  },
+  {
+    "number": 37,
+    "title": "Portable npm scripts",
+    "body": "Category: Tooling · Purpose: Make common development commands consistent.\nAdd npm scripts for checking, testing, running, and cleaning a project. Use Node.js scripts for filesystem operations instead of shell-specific commands, and verify equivalent behavior on Windows and POSIX shells."
+  },
+  {
+    "number": 38,
+    "title": "Lockfiles and reproducible installation",
+    "body": "Category: Tooling · Purpose: Recreate the intended dependency graph.\nGenerate a lockfile and verify installation with npm ci in a clean directory. Deliberately introduce a manifest mismatch and demonstrate the expected failure and correct repair workflow."
+  },
+  {
+    "number": 39,
+    "title": "Semantic versioning and updates",
+    "body": "Category: Tooling · Purpose: Understand which dependency changes a project permits.\nCreate a controlled example comparing exact, caret, and tilde version ranges. Use npm inspection commands to explain installed versus allowed versions and verify the effect of an intentional dependency update."
+  },
+  {
+    "number": 40,
+    "title": "npm workspaces",
+    "body": "Category: Tooling · Purpose: Develop related packages in one repository.\nCreate npm workspaces containing a reusable library and a CLI consumer. Run targeted and repository-wide scripts, then verify a change in the library is consumed without publishing it."
+  },
+  {
+    "number": 41,
+    "title": "Dependency inspection and security review",
+    "body": "Category: Tooling · Purpose: Understand and review transitive dependencies.\nInspect a project with npm ls, npm explain, npm outdated, and npm audit. Review an installation script and a lockfile change, producing an evidence-based update decision rather than automatically applying forced upgrades."
+  },
+  {
+    "number": 42,
+    "title": "Packaging and publishing preparation",
+    "body": "Category: Tooling · Purpose: Verify what consumers will actually receive.\nPrepare a library with a files allowlist, README, license, and release metadata. Inspect npm pack --dry-run and npm publish --dry-run, install the resulting archive into a consumer, and verify secrets and development fixtures are excluded."
+  },
+  {
+    "number": 43,
+    "title": "Filesystem operations",
+    "body": "Category: Node.js core · Purpose: Read and write files with predictable failure handling.\nBuild a file utility with node:fs/promises that creates, reads, appends, and deletes a temporary file. Verify missing-file errors and ensure explicitly opened file handles close after both success and failure."
+  },
+  {
+    "number": 44,
+    "title": "Paths and containment",
+    "body": "Category: Node.js core · Purpose: Keep file access within an intended directory.\nImplement a file resolver using node:path and appropriate real-path checks inside a controlled fixture directory. Test traversal, absolute paths, and symlinks; document remaining race-condition limitations."
+  },
+  {
+    "number": 45,
+    "title": "Directory traversal",
+    "body": "Category: Node.js core · Purpose: Inspect directory trees without loading everything at once.\nBuild an asynchronous directory walker using opendir and file metadata. Define a symlink policy, handle inaccessible entries, and verify it avoids cycles and reports correct file counts."
+  },
+  {
+    "number": 46,
+    "title": "Safe file replacement",
+    "body": "Category: Node.js core · Purpose: Reduce the risk of corrupting existing data.\nImplement configuration replacement using a temporary file and rename within one directory. Inject a failure before replacement and verify the original remains intact; explain atomicity versus crash durability."
+  },
+  {
+    "number": 47,
+    "title": "File permissions and exclusive creation",
+    "body": "Category: Node.js core · Purpose: Control access and prevent accidental overwrites.\nCreate a private temporary file using appropriate modes and exclusive creation flags. Verify a second creation attempt fails and explain which permission expectations differ on Windows."
+  },
+  {
+    "number": 48,
+    "title": "Buffers and binary layouts",
+    "body": "Category: Node.js core · Purpose: Encode and decode binary protocols.\nDefine a binary record containing a version byte, integer length, and payload using Buffer and typed arrays. Verify endianness, bounds checking, and round-trip decoding of multiple records."
+  },
+  {
+    "number": 49,
+    "title": "Text encodings and chunk boundaries",
+    "body": "Category: Node.js core · Purpose: Decode streamed text without corrupting characters.\nSplit UTF-8 text containing emoji into arbitrary byte chunks and decode it with StringDecoder. Compare naive decoding and verify the correct output for every possible split point."
+  },
+  {
+    "number": 50,
+    "title": "File watching",
+    "body": "Category: Node.js core · Purpose: React to changes while accommodating imperfect notifications.\nBuild a directory watcher with debouncing and periodic reconciliation. Test rapid edits, replacement, and deletion, treating notifications as hints rather than assuming one event per change."
+  },
+  {
+    "number": 51,
+    "title": "EventEmitter lifecycle",
+    "body": "Category: Node.js core · Purpose: Connect components through in-process events.\nImplement a job object using EventEmitter with progress, completion, and error events. Verify listener ordering, once, listener removal, and cleanup after repeated jobs."
+  },
+  {
+    "number": 52,
+    "title": "Asynchronous event listeners",
+    "body": "Category: Node.js core · Purpose: Handle failures from event-driven asynchronous work.\nCreate an EventEmitter example with an async listener that rejects. Demonstrate an appropriate rejection-handling strategy and verify the failure is observed without an unhandled rejection."
+  },
+  {
+    "number": 53,
+    "title": "Readable and writable backpressure",
+    "body": "Category: Node.js core · Purpose: Keep producer speed aligned with consumer capacity.\nConnect a fast producer to a deliberately slow writable stream. Respect write() results and drain, and verify buffered data remains bounded as total processed input increases."
+  },
+  {
+    "number": 54,
+    "title": "Transform streams",
+    "body": "Category: Node.js core · Purpose: Transform data incrementally.\nBuild a Transform stream that converts newline-delimited JSON into filtered output. Handle records split across chunks, impose a maximum record length, and verify malformed-record behavior."
+  },
+  {
+    "number": 55,
+    "title": "Pipelines and failure cleanup",
+    "body": "Category: Node.js core · Purpose: Coordinate stream completion and errors.\nBuild a file transformation with node:stream/promises.pipeline. Inject a transform error and an abort signal, verifying all streams close and incomplete output is handled according to a stated policy."
+  },
+  {
+    "number": 56,
+    "title": "Async iteration over streams",
+    "body": "Category: Node.js core · Purpose: Process streams using familiar asynchronous control flow.\nConsume a file stream with for await...of, stopping after a configured byte count. Verify early termination releases the resource and compare this behavior with full consumption."
+  },
+  {
+    "number": 57,
+    "title": "Web Streams interoperability",
+    "body": "Category: Node.js core · Purpose: Connect browser-style APIs with Node stream APIs.\nFetch a large response from a local server and connect its Web Stream body to a Node writable using supported adapters. Verify cancellation propagates and output matches the source."
+  },
+  {
+    "number": 58,
+    "title": "Streaming compression",
+    "body": "Category: Node.js core · Purpose: Reduce data size without buffering entire files.\nBuild streaming gzip and Brotli round trips using node:zlib. Verify restored checksums, handle corrupted input, and enforce a decompressed-output limit."
+  },
+  {
+    "number": 59,
+    "title": "URLs and query parameters",
+    "body": "Category: Node.js core · Purpose: Construct and interpret URLs correctly.\nBuild a URL utility using WHATWG URL and URLSearchParams. Test repeated parameters, encoded characters, relative URLs, and invalid input without manually concatenating query strings."
+  },
+  {
+    "number": 60,
+    "title": "Core HTTP server",
+    "body": "Category: Node.js core · Purpose: Understand the request-response foundation beneath frameworks.\nBuild a node:http JSON server with two routes, explicit status codes, body-size limits, and request timeouts. Verify unknown routes, malformed JSON, and oversized requests."
+  },
+  {
+    "number": 61,
+    "title": "HTTP clients and connection reuse",
+    "body": "Category: Node.js core · Purpose: Understand socket reuse and client resource ownership.\nBuild a node:http client using an explicitly configured Agent. Measure connection reuse across requests, enforce a socket limit, and verify the Agent is closed after the workload."
+  },
+  {
+    "number": 62,
+    "title": "Fetch, cancellation, and HTTP errors",
+    "body": "Category: Node.js core · Purpose: Make reliable outbound web requests.\nBuild a client using native fetch against a local fault-injection server. Handle non-success HTTP statuses, invalid JSON, cancellation, and timeouts, verifying response bodies are consumed or canceled appropriately."
+  },
+  {
+    "number": 63,
+    "title": "HTTPS and TLS verification",
+    "body": "Category: Node.js core · Purpose: Understand encrypted connections and trust configuration.\nCreate a local HTTPS server with certificates generated using OpenSSL. Verify trusted connections succeed and an untrusted certificate or hostname mismatch fails without disabling certificate verification."
+  },
+  {
+    "number": 64,
+    "title": "HTTP/2 multiplexing",
+    "body": "Category: Node.js core · Purpose: Understand concurrent streams within a connection.\nBuild an HTTP/2 server and client using node:http2. Send multiple requests over one session, cancel one stream, and verify the remaining streams complete and the session closes."
+  },
+  {
+    "number": 65,
+    "title": "TCP framing",
+    "body": "Category: Node.js core · Purpose: Build protocols that do not confuse chunks with messages.\nImplement a length-prefixed TCP client and server using node:net. Test fragmented and combined writes, reject oversized frames, and verify message reconstruction independently of received chunk boundaries."
+  },
+  {
+    "number": 66,
+    "title": "UDP datagrams",
+    "body": "Category: Node.js core · Purpose: Understand message-oriented communication without reliable delivery guarantees.\nBuild a UDP sender and receiver using node:dgram with sequence numbers. Simulate dropped and reordered messages, report missing sequences, and verify sockets close cleanly."
+  },
+  {
+    "number": 67,
+    "title": "DNS and address selection",
+    "body": "Category: Node.js core · Purpose: Diagnose hostname resolution and connectivity problems.\nCompare dns.lookup with DNS record-resolution APIs for controlled examples. Handle nonexistent names and IPv4/IPv6 results, explaining why OS name resolution and DNS queries can differ."
+  },
+  {
+    "number": 68,
+    "title": "Process lifecycle and signals",
+    "body": "Category: Node.js core · Purpose: Make termination behavior deliberate.\nBuild a long-running CLI that handles supported termination signals and uses meaningful exit codes. Verify cleanup executes once and document how signal behavior differs between Windows and POSIX."
+  },
+  {
+    "number": 69,
+    "title": "Child processes without shell interpolation",
+    "body": "Category: Node.js core · Purpose: Run external programs with controlled arguments and resources.\nLaunch a helper using spawn or execFile with an argument array. Capture output, handle spawn failure and timeout, and verify an argument containing shell metacharacters remains ordinary data."
+  },
+  {
+    "number": 70,
+    "title": "Interprocess communication",
+    "body": "Category: Node.js core · Purpose: Coordinate separate Node.js processes.\nBuild a parent and forked child communicating through request IDs and replies. Add request deadlines and simulate a child crash, verifying pending requests fail rather than hang."
+  },
+  {
+    "number": 71,
+    "title": "Worker threads",
+    "body": "Category: Node.js core · Purpose: Move CPU-heavy work away from the main event loop.\nMove a CPU-intensive calculation into node:worker_threads. Compare HTTP responsiveness before and after, and verify worker errors and completion are handled."
+  },
+  {
+    "number": 72,
+    "title": "Worker pools",
+    "body": "Category: Ecosystem · Purpose: Reuse workers and control CPU-work admission.\nUse piscina to process CPU-heavy jobs with a fixed worker limit and bounded queue. Overload the pool and verify excess work is rejected or delayed according to an explicit policy."
+  },
+  {
+    "number": 73,
+    "title": "Message channels and transferable data",
+    "body": "Category: Node.js core · Purpose: Understand the cost and ownership of cross-thread communication.\nCompare cloning an ArrayBuffer with transferring it through a MessageChannel. Verify sender-side detachment after transfer and measure the difference using a documented payload size."
+  },
+  {
+    "number": 74,
+    "title": "Shared memory and Atomics",
+    "body": "Category: JavaScript · Purpose: Coordinate shared state across execution threads.\nUse SharedArrayBuffer and Atomics to maintain a counter across workers. Reproduce a race without atomic operations, verify the corrected total, and avoid blocking waits on the main thread."
+  },
+  {
+    "number": 75,
+    "title": "Clustered processes",
+    "body": "Category: Node.js core · Purpose: Understand multiple processes serving one application.\nBuild a two-worker node:cluster HTTP service that returns each worker’s PID. Terminate one worker, verify controlled replacement, and demonstrate why ordinary in-memory state is not shared."
+  },
+  {
+    "number": 76,
+    "title": "Framework routing and lifecycle",
+    "body": "Category: Ecosystem · Purpose: Organize web behavior beyond a raw HTTP callback.\nBuild a small task API using fastify with route registration, lifecycle hooks, and centralized error handling. Verify successful requests, unknown routes, and an intentionally rejected handler."
+  },
+  {
+    "number": 77,
+    "title": "Express middleware",
+    "body": "Category: Ecosystem · Purpose: Understand a common request-processing abstraction.\nBuild a minimal express application with request logging, routing, and error middleware. Record execution order and verify an error reaches the error handler without sending two responses."
+  },
+  {
+    "number": 78,
+    "title": "Request and response validation",
+    "body": "Category: Ecosystem · Purpose: Enforce an API contract at its boundaries.\nAdd trusted JSON Schemas to a fastify endpoint for parameters, body, and response. Verify invalid requests fail and internal fields do not appear in serialized responses."
+  },
+  {
+    "number": 79,
+    "title": "REST pagination and filtering",
+    "body": "Category: Ecosystem · Purpose: Design predictable collection endpoints.\nBuild a paginated collection endpoint with fastify, stable sorting, and bounded page size. Verify traversal has no duplicates for a fixed dataset and invalid cursors receive a defined error."
+  },
+  {
+    "number": 80,
+    "title": "OpenAPI contracts",
+    "body": "Category: Ecosystem · Purpose: Make API behavior discoverable and reviewable.\nGenerate an OpenAPI document using fastify and @fastify/swagger. Verify documented request and response schemas match actual endpoint behavior, including at least one error response."
+  },
+  {
+    "number": 81,
+    "title": "Streaming file uploads",
+    "body": "Category: Ecosystem · Purpose: Accept uploads without unbounded buffering or unsafe filenames.\nBuild an upload endpoint using fastify and @fastify/multipart. Generate storage names, limit file sizes and part counts, and verify oversized or interrupted uploads remove partial files."
+  },
+  {
+    "number": 82,
+    "title": "WebSocket communication",
+    "body": "Category: Ecosystem · Purpose: Support bidirectional communication over persistent connections.\nBuild a WebSocket server using ws and a native WebSocket client. Add message validation, heartbeat cleanup, and a bounded outbound-buffer policy; verify disconnected and slow clients are handled."
+  },
+  {
+    "number": 83,
+    "title": "Server-sent events",
+    "body": "Category: Node.js core · Purpose: Push server updates to browser clients.\nBuild an SSE endpoint with node:http and a browser client. Include event IDs, heartbeats, and bounded retained history; verify reconnection and an explicit response when requested history has expired."
+  },
+  {
+    "number": 84,
+    "title": "Browser integration and CORS",
+    "body": "Category: Ecosystem · Purpose: Understand browser access rules around an API.\nServe a small page using fastify and @fastify/static, and configure @fastify/cors for a separate allowed origin. Verify browser behavior for allowed and disallowed origins, and demonstrate that CORS does not authenticate nonbrowser clients."
+  },
+  {
+    "number": 85,
+    "title": "Embedded SQLite — experimental",
+    "body": "Category: Node.js core · Purpose: Explore a database without a separate server.\nBuild a local notes CLI using the experimental node:sqlite module and its current Database class. Use prepared statements, verify persistence after restart, and measure the effect of synchronous queries on an active timer."
+  },
+  {
+    "number": 86,
+    "title": "PostgreSQL and connection pooling",
+    "body": "Category: Ecosystem · Purpose: Access a relational database with controlled connection usage.\nBuild parameterized CRUD operations using pg and a local PostgreSQL service. Configure a bounded pool, test injection-like input as ordinary data, and verify connections are released after errors."
+  },
+  {
+    "number": 87,
+    "title": "Transactions",
+    "body": "Category: Ecosystem · Purpose: Preserve invariants across related database changes.\nImplement a two-record transfer using pg and one checked-out PostgreSQL client. Inject failure between updates and verify rollback preserves the total and the client returns to the pool."
+  },
+  {
+    "number": 88,
+    "title": "Schema migrations",
+    "body": "Category: Ecosystem · Purpose: Evolve database structure reproducibly.\nUse node-pg-migrate with PostgreSQL to create and evolve a task schema. Verify migration from an empty database and an existing dataset, documenting rollback limitations when data could be lost."
+  },
+  {
+    "number": 89,
+    "title": "Concurrent updates",
+    "body": "Category: Ecosystem · Purpose: Prevent one request from silently overwriting another.\nImplement optimistic concurrency using pg, PostgreSQL, and a version column. Submit competing updates with the same version and verify exactly one succeeds while the other receives a conflict."
+  },
+  {
+    "number": 90,
+    "title": "MongoDB document modeling",
+    "body": "Category: Ecosystem · Purpose: Work with a document-oriented persistence model.\nBuild a product catalog using the mongodb driver and a local MongoDB service. Add a useful index, validate document boundaries, and verify the query plan and duplicate-key behavior."
+  },
+  {
+    "number": 91,
+    "title": "Redis caching",
+    "body": "Category: Ecosystem · Purpose: Reduce repeated work while managing stale data.\nImplement cache-aside reads using the redis package and a local Redis service. Add TTLs and write invalidation, then verify cache misses, stale-entry removal, and a defined cache-outage fallback."
+  },
+  {
+    "number": 92,
+    "title": "Pub/Sub versus durable streams",
+    "body": "Category: Ecosystem · Purpose: Choose messaging behavior according to delivery requirements.\nUse the redis package to compare Pub/Sub with Redis Streams consumer groups. Disconnect a consumer, publish messages, reconnect, and verify the different recovery and acknowledgment behavior."
+  },
+  {
+    "number": 93,
+    "title": "Durable background jobs",
+    "body": "Category: Ecosystem · Purpose: Process work independently of an HTTP request.\nProcess report-generation jobs using bullmq configured with Redis. Bound concurrency and attempts, terminate a worker mid-job, and verify idempotent output after recovery or redelivery."
+  },
+  {
+    "number": 94,
+    "title": "Scheduling and overlap policies",
+    "body": "Category: Ecosystem · Purpose: Run recurring work predictably across replicas.\nConfigure BullMQ Job Schedulers with an explicit time zone and overlap policy. Start two scheduler instances, run a job longer than its interval, and verify the intended schedule and concurrency behavior."
+  },
+  {
+    "number": 95,
+    "title": "Transactional outbox",
+    "body": "Category: Ecosystem · Purpose: Coordinate database changes with eventual message delivery.\nImplement an outbox using pg, PostgreSQL, and bullmq with Redis. Commit business data and an outbox row together, crash the dispatcher at different points, and verify eventual processing with deduplicated business effects."
+  },
+  {
+    "number": 96,
+    "title": "Secrets and configuration hygiene",
+    "body": "Category: Node.js core · Purpose: Keep credentials out of source and accidental output.\nBuild startup configuration that reads secrets from environment variables or a mounted file. Validate missing values and verify sanitized diagnostics never reveal the secret or its source file contents."
+  },
+  {
+    "number": 97,
+    "title": "Password derivation",
+    "body": "Category: Node.js core · Purpose: Store password verification material appropriately.\nImplement password registration and verification using asynchronous crypto.scrypt, random salts, and safe comparison. Verify correct and incorrect passwords, malformed stored records, and distinct stored values for identical passwords."
+  },
+  {
+    "number": 98,
+    "title": "Cookie sessions and CSRF",
+    "body": "Category: Ecosystem · Purpose: Authenticate browser sessions with appropriate request protection.\nBuild a cookie-session example using fastify, @fastify/secure-session, and @fastify/csrf-protection. Verify cookie settings, rejected CSRF attempts, expiration, and the revocation limitations of a stateless session design."
+  },
+  {
+    "number": 99,
+    "title": "JWT verification",
+    "body": "Category: Ecosystem · Purpose: Validate bearer credentials according to a defined trust policy.\nBuild JWT issuance and verification using jose. Restrict algorithms and verify issuer, audience, and expiry; test tampered tokens, incorrect audiences, and expired credentials."
+  },
+  {
+    "number": 100,
+    "title": "Resource authorization",
+    "body": "Category: Ecosystem · Purpose: Prevent authenticated users from accessing unauthorized data.\nAdd owner and administrator authorization to a fastify task API. Create two users and verify one cannot read, update, or delete the other’s tasks by guessing identifiers."
+  },
+  {
+    "number": 101,
+    "title": "Webhook signatures and replay prevention",
+    "body": "Category: Node.js core · Purpose: Verify message authenticity before processing side effects.\nImplement webhook verification using crypto.createHmac over the original request bytes. Add timestamp and event-ID checks, and verify modified bodies, stale timestamps, and repeated events are rejected."
+  },
+  {
+    "number": 102,
+    "title": "Authenticated encryption",
+    "body": "Category: Node.js core · Purpose: Protect confidentiality while detecting tampering.\nEncrypt and decrypt a small record using Web Crypto AES-GCM with a fresh nonce for each encryption. Verify round-trip output and failure after changing ciphertext, authentication data, or the key."
+  },
+  {
+    "number": 103,
+    "title": "Outbound-request restrictions",
+    "body": "Category: Node.js core · Purpose: Prevent user input from choosing unintended network destinations.\nBuild a download service whose destination comes from a fixed server-side allowlist rather than an arbitrary user URL. Disable or revalidate redirects and verify attempts to reach unapproved destinations fail."
+  },
+  {
+    "number": 104,
+    "title": "Abuse and resource controls",
+    "body": "Category: Ecosystem · Purpose: Limit resource consumption by expensive requests.\nAdd @fastify/rate-limit to a fastify API with body limits and execution deadlines. Verify rejection behavior and configure trusted proxies explicitly so forged forwarding headers cannot bypass the chosen policy."
+  },
+  {
+    "number": 105,
+    "title": "Runtime permissions",
+    "body": "Category: Node.js core · Purpose: Reduce the capabilities available to a trusted application.\nRun a file-processing CLI under --permission with only the required filesystem access. Verify permitted operations succeed and denied file, network, and child-process operations fail; document why this is not a malicious-code sandbox."
+  },
+  {
+    "number": 106,
+    "title": "Unit tests",
+    "body": "Category: Node.js core · Purpose: Verify small pieces of behavior independently.\nTest a configuration parser using node:test and node:assert/strict. Cover valid values, boundaries, and malformed input, and introduce one deliberate defect to verify the tests detect it."
+  },
+  {
+    "number": 107,
+    "title": "Asynchronous tests and teardown",
+    "body": "Category: Node.js core · Purpose: Make asynchronous tests complete and clean up reliably.\nWrite tests around a temporary HTTP server and directory using test lifecycle hooks. Verify rejected promises fail the test and teardown closes resources even when an assertion fails."
+  },
+  {
+    "number": 108,
+    "title": "Integration tests",
+    "body": "Category: Ecosystem · Purpose: Verify real collaboration between application components.\nTest a fastify API backed by PostgreSQL using pg and node:test. Create isolated fixture data, exercise a rollback path, and verify the suite can run repeatedly without relying on test order."
+  },
+  {
+    "number": 109,
+    "title": "Mocks and deterministic time",
+    "body": "Category: Node.js core · Purpose: Test time and dependencies without slow or fragile waits.\nTest a retrying function using injected dependencies, built-in function mocks, and timer mocks. Advance time deterministically and verify the attempt limit and cancellation behavior."
+  },
+  {
+    "number": 110,
+    "title": "Property-based testing",
+    "body": "Category: Ecosystem · Purpose: Find edge cases beyond handpicked examples.\nUse fast-check to test a binary encoder-decoder round trip. Introduce an endianness or length bug, capture the minimized failing case, and verify the corrected implementation passes."
+  },
+  {
+    "number": 111,
+    "title": "Coverage — experimental",
+    "body": "Category: Node.js core · Purpose: Identify behavior that tests have not exercised.\nCollect coverage with node --test --experimental-test-coverage. Find an uncovered failure branch, add a behavior-focused test, and explain why higher coverage alone does not establish correctness."
+  },
+  {
+    "number": 112,
+    "title": "Linting and formatting",
+    "body": "Category: Tooling · Purpose: Catch common mistakes and maintain consistent source formatting.\nConfigure eslint, @eslint/js, and prettier for an ESM project. Add check-only CI commands and verify they detect an unused variable, an undefined identifier, and a formatting violation."
+  },
+  {
+    "number": 113,
+    "title": "Interactive debugging",
+    "body": "Category: Node.js core · Purpose: Inspect program state before guessing at a fix.\nCreate a reproducible calculation bug and debug it with --inspect-brk using an editor or DevTools. Set a conditional breakpoint, inspect variables, and verify a regression test fails before the fix."
+  },
+  {
+    "number": 114,
+    "title": "Stack traces and source maps",
+    "body": "Category: Tooling · Purpose: Relate transformed code failures to original source.\nBundle a small JavaScript program with esbuild and source maps. Trigger an error and compare stack traces with and without --enable-source-maps, verifying the mapped source location."
+  },
+  {
+    "number": 115,
+    "title": "Structured logging",
+    "body": "Category: Ecosystem · Purpose: Produce logs that support filtering and diagnosis.\nAdd pino logging to a small API with structured errors and request identifiers. Configure redaction and verify credentials and sensitive fields are absent from captured logs."
+  },
+  {
+    "number": 116,
+    "title": "Asynchronous request context",
+    "body": "Category: Node.js core · Purpose: Preserve correlation information across asynchronous operations.\nUse AsyncLocalStorage to carry a request ID through promises, timers, and database-like callbacks. Run overlapping requests and verify their context values never mix."
+  },
+  {
+    "number": 117,
+    "title": "Diagnostics channels",
+    "body": "Category: Node.js core · Purpose: Expose instrumentation without coupling business logic to subscribers.\nInstrument a reusable operation with node:diagnostics_channel. Add and remove a subscriber, verify start and completion events, and avoid constructing expensive diagnostic payloads when nobody subscribes."
+  },
+  {
+    "number": 118,
+    "title": "Runtime measurements",
+    "body": "Category: Node.js core · Purpose: Detect pressure on the event loop.\nMeasure operation duration, event-loop utilization, and event-loop delay using node:perf_hooks. Introduce blocking work and verify the measurements reveal it, including correct conversion of reported units."
+  },
+  {
+    "number": 119,
+    "title": "Application metrics",
+    "body": "Category: Ecosystem · Purpose: Observe latency, errors, and workload over time.\nUse prom-client to expose request counters, a duration histogram, and an in-flight gauge. Verify metrics change under success and failure while labels avoid user IDs and unbounded URL values."
+  },
+  {
+    "number": 120,
+    "title": "Distributed tracing",
+    "body": "Category: Ecosystem · Purpose: Follow one operation across service boundaries.\nInstrument two local HTTP services using @opentelemetry/api, @opentelemetry/sdk-node, @opentelemetry/auto-instrumentations-node, and a console exporter from @opentelemetry/sdk-trace-base. Verify a request produces related spans, using the packages’ documented ESM initialization."
+  },
+  {
+    "number": 121,
+    "title": "CPU profiling",
+    "body": "Category: Node.js core · Purpose: Locate expensive execution before optimizing it.\nProfile a CPU-heavy endpoint using --cpu-prof and inspect the generated profile. Optimize the dominant function and compare correctness and timing over repeated runs."
+  },
+  {
+    "number": 122,
+    "title": "Memory leaks and heap analysis",
+    "body": "Category: Node.js core · Purpose: Distinguish retained objects from normal allocation activity.\nCreate a controlled leak caused by a growing cache or retained listener. Compare memory measurements and heap evidence before and after fixing ownership, avoiding claims based on one memory sample."
+  },
+  {
+    "number": 123,
+    "title": "Load testing and bottlenecks",
+    "body": "Category: Tooling · Purpose: Measure application behavior at realistic concurrency.\nLoad-test a PostgreSQL-backed endpoint using autocannon and pg. Report latency percentiles, throughput, and errors; inspect the query plan and verify the effect of a justified index."
+  },
+  {
+    "number": 124,
+    "title": "Resource budgets",
+    "body": "Category: Node.js core · Purpose: Keep overload from causing uncontrolled memory growth.\nBuild a service with explicit limits for concurrent work, queued work, and payload size. Apply a documented heap limit, overload the service, and verify predictable rejection while tracking heap and total process memory separately."
+  },
+  {
+    "number": 125,
+    "title": "Retry budgets and backoff",
+    "body": "Category: Node.js core · Purpose: Recover from transient failures without amplifying an outage.\nImplement retries for an idempotent HTTP operation with exponential backoff, jitter, a maximum attempt count, and an overall deadline. Verify permanent errors are not retried and cancellation stops pending attempts."
+  },
+  {
+    "number": 126,
+    "title": "Circuit breakers and recovery",
+    "body": "Category: JavaScript · Purpose: Reduce repeated work against a failing dependency.\nImplement a small circuit breaker around an injected asynchronous dependency. Test closed, open, and half-open transitions deterministically, including recovery and limits on probe requests."
+  },
+  {
+    "number": 127,
+    "title": "Graceful shutdown",
+    "body": "Category: Node.js core · Purpose: Finish or terminate active work within a bounded shutdown period.\nAdd coordinated shutdown to a service with HTTP requests, long-lived connections, and background work. Stop admission, drain or close resources, enforce a deadline, and verify termination during active traffic."
+  },
+  {
+    "number": 128,
+    "title": "Native TypeScript execution",
+    "body": "Category: Node.js core · Purpose: Understand the runtime’s limited TypeScript support.\nRun a small .ts program containing erasable types directly with Node.js. Demonstrate that a type mismatch can still execute, identify unsupported syntax, and explain why execution is not type checking."
+  },
+  {
+    "number": 129,
+    "title": "TypeScript compilation and declarations",
+    "body": "Category: Tooling · Purpose: Add static checking and distributable JavaScript.\nCreate a TypeScript library using typescript and baseline-compatible @types/node with NodeNext settings. Emit JavaScript, declarations, and source maps, then verify a separate consumer can import the built package."
+  },
+  {
+    "number": 130,
+    "title": "Type checking JavaScript with JSDoc",
+    "body": "Category: Tooling · Purpose: Gain static feedback without changing the implementation language.\nAdd JSDoc types to an existing JavaScript module and check it with typescript using checkJs and no emit. Introduce an incorrect argument type and verify the checker catches it while Node still runs ordinary JavaScript."
+  },
+  {
+    "number": 131,
+    "title": "Native addons with Node-API",
+    "body": "Category: Node.js core · Purpose: Integrate native code through a supported addon interface.\nBuild a minimal native addon using node-addon-api and node-gyp. State the required compiler and Python setup, validate arguments, and verify the addon loads and returns correct results on the target platform."
+  },
+  {
+    "number": 132,
+    "title": "WebAssembly",
+    "body": "Category: Node.js core · Purpose: Execute a portable compiled computation from JavaScript.\nUse the wabt package to compile a small WAT function into WebAssembly and invoke it from Node.js. Verify numeric boundaries and compare call overhead with an equivalent JavaScript implementation."
+  },
+  {
+    "number": 133,
+    "title": "Module compile caching",
+    "body": "Category: Node.js core · Purpose: Evaluate startup optimization with evidence.\nEnable the stable module compile cache for a CLI with several modules. Compare cold and repeated startup, report cache status, and verify the application still works when caching is unavailable."
+  },
+  {
+    "number": 134,
+    "title": "Trusted code in VM contexts",
+    "body": "Category: Node.js core · Purpose: Run trusted scripts with separate global state.\nExecute a trusted expression using node:vm with a dedicated context and execution timeout. Verify global-state separation and explain why this mechanism must not be treated as secure isolation for hostile code."
+  },
+  {
+    "number": 135,
+    "title": "Deprecated API migration",
+    "body": "Category: Node.js core · Purpose: Recognize and remove outdated runtime dependencies.\nCreate a small legacy fixture using deprecated Buffer construction and node:domain, then migrate it to appropriate current APIs. Use deprecation diagnostics and regression tests to verify the replacement behavior."
+  },
+  {
+    "number": 136,
+    "title": "Container packaging",
+    "body": "Category: Tooling · Purpose: Deliver a reproducible application environment.\nContainerize a Node.js API using Docker with an explicitly pinned runtime, npm ci, a non-root user, and a minimal runtime stage. Verify startup, signal delivery, and exclusion of source secrets and unnecessary development dependencies."
+  },
+  {
+    "number": 137,
+    "title": "Continuous integration",
+    "body": "Category: Tooling · Purpose: Check changes consistently before delivery.\nCreate a GitHub Actions workflow that installs from the lockfile, checks formatting, lints, and runs tests. Include appropriate OS coverage and verify an intentionally broken change fails the pipeline."
+  },
+  {
+    "number": 138,
+    "title": "Deployment configuration",
+    "body": "Category: Tooling · Purpose: Assemble application services predictably.\nCreate a Docker Compose deployment for a Node.js API and PostgreSQL with persistent data and externalized configuration. Verify startup from a clean environment and persistence after replacing the application container."
+  },
+  {
+    "number": 139,
+    "title": "Health checks",
+    "body": "Category: Node.js core · Purpose: Communicate whether an instance should receive traffic or restart.\nImplement separate readiness and liveness endpoints in a Node.js service. Simulate startup, database unavailability, and shutdown, verifying readiness changes without automatically treating every dependency outage as a process failure."
+  },
+  {
+    "number": 140,
+    "title": "Horizontal scaling",
+    "body": "Category: Tooling · Purpose: Run multiple instances without relying on local process state.\nRun two application replicas behind an NGINX reverse proxy with shared state in Redis and PostgreSQL. Verify requests reach both replicas and calculate a database connection budget across all instances."
+  },
+  {
+    "number": 141,
+    "title": "Deployment and rollback",
+    "body": "Category: Tooling · Purpose: Release changes while preserving a recovery path.\nBuild a local deployment rehearsal with two application versions and a backward-compatible PostgreSQL migration. Verify both versions work during transition and demonstrate rollback without reversing an unsafe data transformation."
+  },
+  {
+    "number": 142,
+    "title": "Backup, restore, and maintenance",
+    "body": "Category: Tooling · Purpose: Prove that recovery procedures work.\nCreate a PostgreSQL backup-and-restore drill using pg_dump and pg_restore. Verify restored records and constraints, and provide a Node.js patch-upgrade procedure that reruns the project’s checks before rollout."
+  },
+  {
+    "number": 143,
+    "title": "Serverless runtime compatibility",
+    "body": "Category: Tooling · Purpose: Understand how hosted runtimes constrain application design.\nUse AWS SAM CLI and Docker to run a minimal Lambda handler locally. Verify the platform’s supported runtime first, document any deviation from the main baseline, and test repeated invocations for accidental shared-state leakage."
+  },
+  {
+    "number": 144,
+    "title": "Single executable applications — experimental 1.1",
+    "body": "Category: Node.js core · Purpose: Distribute a small application with its runtime.\nPackage a dependency-free CLI using the baseline’s built-in node --build-sea workflow. Document target-platform signing requirements and verify the executable runs without finding a separate Node.js executable on PATH.\nThe built-in generation workflow is available on this baseline; SEA remains in active development. Node.js v26.13.1 Documentation"
+  },
+  {
+    "number": 145,
+    "title": "WASI — experimental",
+    "body": "Category: Node.js core · Purpose: Explore system interfaces for WebAssembly programs.\nBuild a tiny file-reading program with the external WASI SDK and run it through node:wasi. Configure a fixture-directory preopen, verify expected output, and document the implementation’s security limitations.\nNode explicitly cautions against relying on its WASI implementation to run untrusted code securely. Node.js v26.13.1 Documentation"
+  },
+  {
+    "number": 146,
+    "title": "Module customization hooks — experimental 1.2",
+    "body": "Category: Node.js core · Purpose: Explore custom module resolution.\nImplement a narrow module alias using module.registerHooks. Verify normal resolution still works, missing aliases fail clearly, and the hook avoids the deprecated module.register API.\nThe synchronous hook API is currently classified as a release candidate. Node.js v26.13.1 Documentation"
+  },
+  {
+    "number": 147,
+    "title": "Foreign function interface — experimental, Node.js 26.1+",
+    "body": "Category: Node.js core · Purpose: Explore calling a native shared library without writing an addon.\nCompile a tiny C shared library and call one function through node:ffi. State build and architecture requirements, verify the signature and result, and explain the consequences of incorrect native type or memory declarations.\nThis API was added in Node.js 26.1 and remains experimental. Node.js v26.13.1 Documentation"
+  },
+  {
+    "number": 148,
+    "title": "Virtual filesystem — experimental, Node.js 26.4+",
+    "body": "Category: Node.js core · Purpose: Create self-contained filesystem fixtures.\nUse node:vfs with the required experimental flag to build an in-memory fixture tree. Verify reads and writes, unmount cleanup, and a read-only configuration without treating the virtual filesystem as a security boundary.\nThe module was added in Node.js 26.4. Node.js v26.13.1 Documentation"
+  },
+  {
+    "number": 149,
+    "title": "Built-in benchmark runner — experimental 1.0, Node.js 26.9+",
+    "body": "Category: Node.js core · Purpose: Explore structured runtime benchmarking.\nUse node:bench with its required experimental flag to compare two equivalent implementations. Include warmup and repeated measurements, verify equal outputs, and report variability instead of declaring a winner from one sample.\nThe benchmark runner was added in Node.js 26.9 and is in early development. Node.js v26.13.1 Documentation"
+  },
+  {
+    "number": 150,
+    "title": "Iterable Streams API — experimental",
+    "body": "Category: Node.js core · Purpose: Compare a newer streaming interface with established alternatives.\nImplement a small transformation using node:stream/iter with its required experimental flag. Verify output, cancellation, and slow-consumer behavior, then compare its interface with a stable classic-stream pipeline.\nThis API is separate from ordinary, stable for await...of consumption of Node streams. Node.js v26.13.1 Documentation"
+  },
+  {
+    "number": 151,
+    "title": "Command-Line File-Processing Tool",
+    "body": "Category: Node.js corePurpose: Consolidate CLI design, filesystem safety, and streaming.\nLearning goals: Argument parsing, stdin/stdout, UTF-8 decoding, transformations, backpressure, cancellation, exit codes, and tests.\nImplementation prompt:\nBuild logtool, a dependency-free Node.js CLI that filters newline-delimited JSON logs and produces aggregate statistics. Support files and stdin, streamed output, configurable malformed-record handling, cancellation, and safe output replacement. Provide generated fixtures and tests demonstrating correctness and bounded memory.\nAcceptance criteria:\nProcesses a generated 1 GiB input with correct counts and a documented memory budget substantially below input size.\nHandles empty input, split UTF-8 sequences, malformed records, and an incomplete final line.\nEnforces a maximum record length.\nProduces clean machine-readable stdout and appropriate stderr diagnostics.\nReturns meaningful exit codes and removes incomplete output after cancellation.\nSuggested point: After Module 8."
+  },
+  {
+    "number": 152,
+    "title": "Database-Backed API with Authentication",
+    "body": "Category: EcosystemPurpose: Combine API contracts, persistence, identity, and authorization.\nLearning goals: Fastify, PostgreSQL, pooling, migrations, transactions, password derivation, token verification, ownership rules, and integration tests.\nImplementation prompt:\nBuild a task-management API using fastify, pg, node-pg-migrate, and jose, with PostgreSQL persistence and core crypto.scrypt password verification. Implement registration, authentication, owner-scoped task operations, validation, pagination, and one transactional business operation. Supply integration tests for authentication failures, cross-user access, rollback, and concurrent writes.\nAcceptance criteria:\nA fresh database can be created through migrations.\nData survives application restart.\nMissing, invalid, and expired credentials are rejected.\nUser A cannot access user B’s tasks.\nAn injected transaction failure rolls back all related changes.\nConcurrent requests preserve a stated database invariant.\nPasswords, signing keys, and bearer credentials do not appear in responses or logs.\nSuggested point: After Module 14."
+  },
+  {
+    "number": 153,
+    "title": "Real-Time Collaboration Application",
+    "body": "Category: EcosystemPurpose: Manage persistent connections and recoverable shared state.\nLearning goals: WebSockets, authorization, connection cleanup, replay, slow-client policies, and multi-instance communication.\nImplementation prompt:\nBuild a room-based collaboration application using fastify, ws, pg, and redis, with PostgreSQL message history and Redis live fan-out. Authenticate room access, assign persistent event IDs, and support reconnecting clients through history-based resynchronization. Demonstrate operation across two application instances with bounded per-client buffering.\nAcceptance criteria:\nAt least three clients communicate through two server instances.\nUnauthorized room subscriptions fail.\nReconnection follows a documented replay or resynchronization policy.\nMissed events can be recovered from durable history.\nSlow clients cannot create unlimited outbound buffering.\nDisconnecting releases listeners, timers, and connection state.\nSuggested point: After Module 15."
+  },
+  {
+    "number": 154,
+    "title": "Background-Job Processing System",
+    "body": "Category: EcosystemPurpose: Make asynchronous work recoverable under partial failure.\nLearning goals: Durable queues, idempotency, scheduling, retries, bounded concurrency, transactional outbox, and failure inspection.\nImplementation prompt:\nBuild a report-processing system using fastify, pg, and bullmq configured with Redis. Accept requests through an API, persist business state and an outbox entry transactionally, and process jobs with bounded retries and idempotent result publication. Include scheduling, progress reporting, and a script that interrupts workers at controlled points.\nAcceptance criteria:\nKilling a worker during processing permits recovery.\nRepeating the same logical operation produces one durable business result.\nTransient failures retry within a configured budget.\nPermanent failures become visible after the attempt limit.\nWorker concurrency stays within the configured bound.\nScheduling has explicit time-zone, overlap, and restart policies.\nQueue delivery behavior and business-effect guarantees are explained separately.\nSuggested point: After Module 16."
+  },
+  {
+    "number": 155,
+    "title": "Deployed Application with Monitoring and Graceful Shutdown",
+    "body": "Category: ToolingPurpose: Operate an application as a complete, maintainable system.\nLearning goals: Reproducible builds, CI/CD, containers, configuration, readiness, scaling, telemetry, shutdown, rollback, and recovery.\nImplementation prompt:\nDeliver a containerized fastify and PostgreSQL service with a BullMQ worker, using Docker Compose and GitHub Actions. Add pino, prom-client, and OpenTelemetry instrumentation with explicitly named compatible packages, plus readiness, liveness, and coordinated shutdown. Provide a deployment rehearsal that exercises load, a dependency outage, replica replacement, and rollback.\nAcceptance criteria:\nA clean checkout installs from the lockfile, passes checks, and builds the deployment artifact.\nContainers run without application root privileges and contain no embedded credentials.\nReadiness reflects startup, required dependency availability, and shutdown.\nShutdown stops new admission, handles long-lived connections, flushes telemetry, and exits within a declared deadline.\nA request can be followed through structured logs and a distributed trace.\nMetrics show latency and errors without unbounded labels.\nTwo replicas operate correctly with an explicit connection budget.\nRollback and database restoration are demonstrated with recorded results.\nSuggested point: After Module 18.\nThe deliverable here is the roadmap and its implementation prompts. No exercises were implemented or executed in this response.\n"
+  }
+]

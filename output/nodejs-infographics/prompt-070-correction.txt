@@ -1,0 +1,1 @@
+Correct ONLY the Complete the exercise bullet about simulating a crash. It must read "Simulate a child crash (e.g., process.exit(1) inside child.mjs) and handle it." The child object has no child.exit(1) method. Preserve all other content, code, badge70 and logo.

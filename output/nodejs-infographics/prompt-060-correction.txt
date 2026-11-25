@@ -1,0 +1,7 @@
+Correct ONLY the braces in the req.on('data') callback. Render that entire callback exactly:
+req.on('data', chunk => {
+  size += chunk.length;
+  if (size > 1024) { tooLarge = true; chunks = []; }
+  else chunks.push(chunk);
+});
+The opening { immediately after if (size > 1024) is required. Do not omit it. Preserve every other part of the infographic, code, style, badge60 and logo.

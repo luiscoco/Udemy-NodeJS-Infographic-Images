@@ -1,0 +1,4 @@
+Correct the verification panel. The shown compression.mjs logs nothing on success, so display "> node compression.mjs" then "(no console output on success; files are created)". Replace fabricated hash output and sha256sum with real Windows PowerShell commands:
+Get-FileHash ./input.txt -Algorithm SHA256
+Get-FileHash ./restored.txt -Algorithm SHA256
+Expected: "<matching SHA-256 hashes>" with no invented digest values. Explain "Prepared input.txt fixture required." Replace the checklist claim that a decompressed-output limit is already implemented with "Complete exercise: add a byte-counting Transform after decompression and remove partial output on failure." Keep sample code unchanged and label focused excerpt; do not claim it implements byte cap or cleanup by itself. Preserve style, other content and logo.
