@@ -1,0 +1,334 @@
+Additional Node.js Course Prompts 156-167
+Course baseline: Node.js 26.13.1. APIs reviewed 2026-11-25. Generated with the built-in image tool.
+Selected runnable examples were checked on locally installed Node.js 24.21.0, not the course runtime; exact scope is in examples-156-167/validation-results.txt.
+
+===== Prompt 156: Explicit Resource Management =====
+Use using and await using to manage file handles and temporary directories. Verify resources are disposed in reverse declaration order on normal completion and on an exception; distinguish scope exit from process termination.
+
+Course baseline: Node.js 26.13.1. using is JavaScript syntax; Node resources expose Symbol.dispose or Symbol.asyncDispose. await using awaits cleanup. The file closes before the temporary folder is removed (reverse declaration order). Normal block exit, return and thrown exceptions trigger disposal; abrupt process termination does not guarantee it. This sample requires no external package. Complete the exercise: throw inside the block and verify cleanup in a surrounding catch; compare with try/finally. Disposal errors can also propagate.
+Files (copy exactly):
+dispose.mjs:
+import { mkdtempDisposable, open, readFile, access } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
+let path;
+{
+  await using temp = await mkdtempDisposable(join(tmpdir(), 'node-lab-'));
+  path = temp.path;
+  await using file = await open(join(path, 'note.txt'), 'w+');
+  await file.writeFile('hello');
+  console.log(await readFile(join(path, 'note.txt'), 'utf8'));
+}
+try {
+  await access(path);
+  console.log('exists');
+} catch (error) {
+  if (error.code !== 'ENOENT') throw error;
+  console.log('removed');
+}
+Commands (PowerShell, each a single unwrapped line):
+node dispose.mjs
+Essential expected output (illustrative):
+hello
+removed
+Sources: https://nodejs.org/api/fs.html
+
+===== Prompt 157: Diagnostic Reports =====
+Capture a diagnostic report for a controlled Node.js process. Locate runtime metadata, JavaScript and native stacks, heap statistics and libuv handles. Omit environment variables and explain how to handle the resulting diagnostic artifact.
+
+Course baseline: Node.js 26.13.1. process.report is stable. getReport returns an object; writeReport writes JSON with a generated timestamp/PID/sequence filename. Report generation may also log to stderr; show essential output only. Inspect javascriptStack, nativeStack, javascriptHeap and libuv. A report is a diagnostic snapshot, not a heap snapshot or proof of root cause. excludeEnv omits environment variables but does not make the remaining artifact public-safe: review paths, command arguments and other metadata before sharing. Windows lab uses programmatic capture; no POSIX signal commands. Complete the exercise: compare reports with and without an open timer/server and close all lab resources.
+Files (copy exactly):
+report.mjs:
+import { mkdir } from 'node:fs/promises';
+
+await mkdir('./reports', { recursive: true });
+process.report.directory = './reports';
+process.report.excludeEnv = true;
+
+const data = process.report.getReport(new Error('Lab checkpoint'));
+console.log(data.header.nodejsVersion);
+console.log(Array.isArray(data.libuv));
+console.log(process.report.writeReport());
+Commands (PowerShell, each a single unwrapped line):
+node report.mjs
+Essential expected output (illustrative):
+v26.13.1
+true
+<generated report filename>
+Sources: https://nodejs.org/api/report.html | https://nodejs.org/api/process.html
+
+===== Prompt 158: Fetch Connection Management =====
+Configure native fetch with an Undici-compatible dispatcher. Bound per-origin connections, consume response bodies, apply deadlines, and close owned client resources after a workload. Verify behavior against a local HTTP fixture.
+
+Course baseline: Node.js 26.13.1. Prerequisite: a separate local fixture server is already listening on 127.0.0.1:3000 and exposes GET /health; its body determines the output. Undici is an ecosystem package; fetch is a Node global. Choose a version compatible with Node 26.13.1 and commit the lockfile; do not invent package versions. connections:2 is a per-origin connection cap, not a global request-rate limit. pipelining:1 avoids multiple outstanding pipelined requests per connection. fetch does not use node:http.Agent. Consume or cancel every body. The two sequential calls demonstrate ownership, not measured concurrency; complete the exercise with concurrent requests and instrument active sockets. Verify the cap, deadline, HTTP-error cleanup and natural exit. Do not claim reuse is guaranteed or that tests ran.
+Files (copy exactly):
+fetch-pool.mjs:
+import { Agent } from 'undici';
+
+const dispatcher = new Agent({ connections: 2, pipelining: 1 });
+try {
+  for (let i = 0; i < 2; i++) {
+    const response = await fetch('http://127.0.0.1:3000/health', {
+      dispatcher,
+      signal: AbortSignal.timeout(1_000),
+    });
+    if (!response.ok) {
+      await response.body?.cancel();
+      throw new Error('HTTP ' + response.status);
+    }
+    console.log(await response.text());
+  }
+} finally {
+  await dispatcher.close();
+}
+Commands (PowerShell, each a single unwrapped line):
+npm install --save-exact undici
+node fetch-pool.mjs
+Verification scenarios in prose only; no fabricated output.
+Sources: https://nodejs.org/api/globals.html | https://undici.nodejs.org/
+
+===== Prompt 159: Browser-Compatible HTTP Objects =====
+Build a multipart upload client with native Blob, File, FormData, Headers and Request objects. Send it with fetch to the upload fixture from Prompt 81, inspect the response, and verify the multipart boundary is generated automatically.
+
+Course baseline: Node.js 26.13.1. Prerequisite: the separate local upload server from Prompt 81 is listening and accepts the multipart file field. No external client package is required. Blob holds immutable bytes, File adds name/metadata, FormData encodes multipart fields, Headers manages headers, Request describes the request and fetch resolves to a Response. Let fetch/FormData set Content-Type with its boundary; never manually set a bare multipart/form-data header. Request and Response bodies are one-use streams; clone before consuming if a second independent read is needed. The status comes from the fixture; HTTP errors do not automatically reject fetch. The tiny in-memory Blob is a lab example, not a bounded-memory large-file uploader. Complete the exercise: missing file, server 413, cancellation, and body consumption/cleanup.
+Files (copy exactly):
+upload-client.mjs:
+const blob = new Blob(['hello\n'], { type: 'text/plain' });
+const file = new File([blob], 'note.txt', { type: blob.type });
+const form = new FormData();
+form.append('file', file);
+
+const request = new Request('http://127.0.0.1:3000/upload', {
+  method: 'POST',
+  headers: new Headers({ Accept: 'application/json' }),
+  body: form,
+  signal: AbortSignal.timeout(1_000),
+});
+console.log(request.headers.get('content-type')
+  .startsWith('multipart/form-data; boundary='));
+const response = await fetch(request);
+console.log(response.status);
+await response.body?.cancel();
+Commands (PowerShell, each a single unwrapped line):
+node upload-client.mjs
+Essential expected output (illustrative):
+true
+<fixture-defined HTTP status>
+Sources: https://nodejs.org/api/globals.html
+
+===== Prompt 160: Test Execution at Scale =====
+Run multiple test files with process isolation and bounded concurrency. Split the same discovered file set across CI shards, produce a JUnit artifact, and explain the scope of global fixtures and shared resources.
+
+Course baseline: Node.js 26.13.1. Default isolation is process: separate child processes per test file. The two fixture tests pass under default isolation; changing to no isolation can expose shared-global coupling. The deliberate globals teach isolation, not recommended application design. --test-concurrency limits test-file processes, not the number of Worker threads or all async operations. Shards divide test files, not individual test cases, and are not guaranteed equal runtime. Run every shard against the same checkout and file set; merge CI reports as a separate step. results.xml is the JUnit artifact; don't fabricate its contents or claim execution. Each shard invocation needs its own isolated external resources. Optional globalSetup/globalTeardown uses --test-global-setup; that feature is Stability 1.0 Early development, runs per runner invocation, and is not shared across separate CI shards. Commands require a full-width panel and must remain one line each.
+Files (copy exactly):
+a.test.mjs:
+import test from 'node:test';
+test('file A owns its process global', (t) => {
+  globalThis.owner ??= 'A';
+  t.assert.equal(globalThis.owner, 'A');
+});
+
+b.test.mjs:
+import test from 'node:test';
+test('file B owns its process global', (t) => {
+  globalThis.owner ??= 'B';
+  t.assert.equal(globalThis.owner, 'B');
+});
+Commands (PowerShell, each a single unwrapped line):
+node --test --test-concurrency=2 --test-reporter=junit --test-reporter-destination=results.xml a.test.mjs b.test.mjs
+node --test --test-shard=1/2 a.test.mjs b.test.mjs
+node --test --test-shard=2/2 a.test.mjs b.test.mjs
+Verification scenarios in prose only; no fabricated output.
+Sources: https://nodejs.org/api/test.html | https://nodejs.org/api/cli.html
+
+===== Prompt 161: Snapshot Testing =====
+Create a stable snapshot for a small result object using node:test. Review and commit the generated snapshot, detect a deliberate output change, and retain focused assertions for important behavior.
+
+Course baseline: Node.js 26.13.1. Snapshot testing is stable on this baseline. Workflow: generate -> inspect the human-readable diff -> commit -> run without the update flag. The first command creates snapshot.test.mjs.snapshot; the second compares to it. Without an existing snapshot, a normal run fails. A deliberate result change causes a mismatch; updating snapshots accepts current output, it does not prove it is correct. Keep explicit assertions for invariants, errors, authorization and cleanup. Normalize timestamps, random IDs, environment-specific paths and unstable ordering before snapshotting, without hiding meaningful changes. Never run update mode automatically merely to make CI green. Verification scenarios are expected: baseline passes after reviewed generation; changed output fails; reviewed intentional update passes. Do not invent reporter text or serialize a fake snapshot file.
+Files (copy exactly):
+snapshot.test.mjs:
+import test from 'node:test';
+
+test('stable result contract', (t) => {
+  const result = { status: 'ok', items: ['a', 'b'] };
+  t.assert.equal(result.items.length, 2);
+  t.assert.snapshot(result);
+});
+Commands (PowerShell, each a single unwrapped line):
+node --test --test-update-snapshots snapshot.test.mjs
+node --test snapshot.test.mjs
+Verification scenarios in prose only; no fabricated output.
+Sources: https://nodejs.org/api/test.html
+
+===== Prompt 162: SQLite Backup & Advanced Statements =====
+Back up an embedded SQLite database, reopen the copy read-only, iterate restored rows, and preserve a 64-bit integer beyond JavaScript's safe Number range. Use a unique disposable lab directory and verify the copy rather than assuming backup success.
+
+Course baseline: Node.js 26.13.1. node:sqlite is Stability 1.2 Release candidate; do not label it fully stable. Database is the current class name on Node 26.13.1. Statements execute synchronously: iteration avoids all() materializing every row, but it does not make queries asynchronous. Use a BigInt literal before binding and setReadBigInts(true) before reading; converting a rounded Number to BigInt cannot recover lost precision. backup() returns a Promise and needs an open source; it overwrites an existing destination. This lab chooses a fresh destination in a disposable folder; dispose statements and databases before removing that folder. The copy is intentionally deleted on scope exit: durable backup retention is a separate task. Complete the exercise: read-only writes fail, compare counts/IDs and verify a retained copy after restart. Essential output only; warnings may also appear.
+Files (copy exactly):
+sqlite-backup.mjs:
+import { Database, backup } from 'node:sqlite';
+import { mkdtempDisposable } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
+await using temp = await mkdtempDisposable(join(tmpdir(), 'sqlite-lab-'));
+using source = new Database(':memory:');
+source.exec('CREATE TABLE notes(id INTEGER PRIMARY KEY, body TEXT)');
+using insert = source.prepare('INSERT INTO notes VALUES (?, ?)');
+insert.run(9007199254740993n, 'safe');
+
+const path = join(temp.path, 'copy.db');
+await backup(source, path);
+using restored = new Database(path, { readOnly: true });
+using rows = restored.prepare('SELECT id, body FROM notes ORDER BY id');
+rows.setReadBigInts(true);
+for (const row of rows.iterate()) {
+  console.log(row.id.toString(), row.body);
+}
+Commands (PowerShell, each a single unwrapped line):
+node sqlite-backup.mjs
+Essential expected output (illustrative):
+9007199254740993 safe
+Sources: https://nodejs.org/api/sqlite.html | https://nodejs.org/api/fs.html
+
+===== Prompt 163: SQLite Sessions & Changesets =====
+Capture changes to a SQLite table and apply them to another database with the same schema. Reapply the changeset to trigger a conflict, demonstrate an explicit abort policy, and verify no duplicate row is created.
+
+Course baseline: Node.js 26.13.1. node:sqlite is Stability 1.2 Release candidate. Flow: matching schemas -> attach session -> mutate source -> capture binary changeset -> apply on target -> handle conflicts. Session tracks changes after attachment; it does not create the target schema or automatically synchronize continuously. The first apply succeeds; repeating the INSERT conflicts on the primary key, so the explicit abort handler rolls back the apply and returns false. Default conflict policy also aborts. OMIT skips conflicts; REPLACE is valid only for DATA or CONFLICT conflict kinds, not every conflict. Changesets are binary Uint8Array data, not SQL migrations or a distributed replication protocol. using disposes count statement, session and databases in reverse order. Complete the exercise: update/delete conflicts, policy tests and explicit transport/authentication requirements. Essential output only; warnings may appear.
+Files (copy exactly):
+changeset.mjs:
+import { Database, constants } from 'node:sqlite';
+
+using source = new Database(':memory:');
+using target = new Database(':memory:');
+for (const db of [source, target]) {
+  db.exec('CREATE TABLE notes(id INTEGER PRIMARY KEY, body TEXT)');
+}
+using session = source.createSession({ table: 'notes' });
+source.exec("INSERT INTO notes VALUES (1, 'hello')");
+const changes = session.changeset();
+
+console.log(target.applyChangeset(changes));
+console.log(target.applyChangeset(changes, {
+  onConflict: () => constants.SQLITE_CHANGESET_ABORT,
+}));
+using count = target.prepare('SELECT count(*) AS n FROM notes');
+console.log(count.get().n);
+Commands (PowerShell, each a single unwrapped line):
+node changeset.mjs
+Essential expected output (illustrative):
+true
+false
+1
+Sources: https://nodejs.org/api/sqlite.html
+
+===== Prompt 164: Recovering Asynchronous Context =====
+Demonstrate context loss at a deferred callback boundary. Capture context with AsyncLocalStorage.bind() and snapshot(), verify concurrent request IDs stay separate, and design a legacy callback adapter using AsyncResource when required.
+
+Course baseline: Node.js 26.13.1. bind() and snapshot() are stable on the course baseline. run() scopes the store; calling plain later outside the original context sees undefined. bind captures execution context for a specific function; snapshot returns a runner that invokes supplied functions in captured context. Captured context is a reference to the store, not a deep clone of its values. This example models a callback boundary; ordinary supported promises/timers already preserve context. For custom callback adapters or worker-pool integrations, create AsyncResource in the intended context, use runInAsyncScope and call emitDestroy when owned work is complete. Do not claim arbitrary callbacks or worker-thread messages automatically preserve context. Complete the exercise: overlapping A/B callbacks, integration with a context-losing API, cleanup and request-data retention tests.
+Files (copy exactly):
+context-bridge.mjs:
+import { AsyncLocalStorage } from 'node:async_hooks';
+
+const context = new AsyncLocalStorage();
+let plain, bound, captured;
+
+context.run({ id: 'A' }, () => {
+  plain = () => context.getStore()?.id;
+  bound = AsyncLocalStorage.bind(plain);
+  captured = AsyncLocalStorage.snapshot();
+});
+
+console.log(plain());
+console.log(bound());
+console.log(captured(plain));
+Commands (PowerShell, each a single unwrapped line):
+node context-bridge.mjs
+Essential expected output (illustrative):
+undefined
+A
+A
+Sources: https://nodejs.org/api/async_context.html
+
+===== Prompt 165: Asymmetric Signatures & Key Formats =====
+Generate an Ed25519 key pair, sign a message and verify it after exporting and importing the public key. Demonstrate tamper rejection and distinguish public-key formats from private-key storage and peer identity.
+
+Course baseline: Node.js 26.13.1. Ed25519 uses null as the algorithm parameter to sign/verify. A private key signs; the corresponding public key verifies. SPKI describes this public-key encoding; PKCS#8 is a private-key format. PEM is text armor, DER is binary encoding, JWK is JSON key representation. A successful verification checks bytes against the supplied key, not the real-world identity of its owner; distribute trusted public keys through an authenticated channel. Signatures do not encrypt messages and do not by themselves prevent replay. Never log or commit private keys. The ephemeral key and synchronous generation are a small lab; choose secure storage and suitable generation strategy for production. Complete the exercise: wrong public key fails, changed signature fails, format round trips and key rotation. No external package required.
+Files (copy exactly):
+sign.mjs:
+import { generateKeyPairSync, createPublicKey, sign, verify } from 'node:crypto';
+
+const { privateKey, publicKey } = generateKeyPairSync('ed25519');
+const pem = publicKey.export({ type: 'spki', format: 'pem' });
+const imported = createPublicKey(pem);
+const message = Buffer.from('course:v1');
+const signature = sign(null, message, privateKey);
+
+console.log(verify(null, message, imported, signature));
+console.log(verify(null, Buffer.from('tampered'), imported, signature));
+console.log(imported.asymmetricKeyType);
+Commands (PowerShell, each a single unwrapped line):
+node sign.mjs
+Essential expected output (illustrative):
+true
+false
+ed25519
+Sources: https://nodejs.org/api/crypto.html
+
+===== Prompt 166: Hardware-Aware Resource Sizing =====
+Inspect process-available memory, OS constraints and available CPU parallelism. Calculate an explicitly bounded worker-count proposal, document its assumptions, and validate it with workload measurements instead of treating hardware counts as a performance guarantee.
+
+Course baseline: Node.js 26.13.1. Output values must use <measured> placeholders, never invented hardware or memory figures. availableParallelism estimates usable parallelism; do not substitute os.cpus().length as the recommendation. availableMemory returns free bytes available to the process, not total machine RAM. constrainedMemory returns the OS-imposed limit in bytes; 0 means unconstrained or unknown. 128 MiB reserve, 64 MiB per worker and cap 4 are illustrative policy inputs, NOT measured facts or a guaranteed safe configuration. This code only proposes a count; it starts no Workers. workers can be 0 under pressure: defer/reject work rather than force one. Memory availability changes and per-worker estimates require validation. Complete the exercise: measure whole-pool RSS, throughput, latency and event-loop delay at 1..N workers; record runtime/OS/container limits and select an explicit cap. Do not confuse a V8 heap limit with an RSS/container limit.
+Files (copy exactly):
+size-pool.mjs:
+import { availableParallelism } from 'node:os';
+
+const availableMiB = Math.floor(process.availableMemory() / 2 ** 20);
+const reserveMiB = 128;
+const estimatedWorkerMiB = 64;
+const cpuSlots = Math.max(1, availableParallelism() - 1);
+const memorySlots = Math.floor(
+  Math.max(0, availableMiB - reserveMiB) / estimatedWorkerMiB,
+);
+const workers = Math.min(4, cpuSlots, memorySlots);
+
+console.log({
+  availableMiB,
+  constrainedBytes: process.constrainedMemory(),
+  workers,
+});
+Commands (PowerShell, each a single unwrapped line):
+node size-pool.mjs
+Verification scenarios in prose only; no fabricated output.
+Sources: https://nodejs.org/api/os.html | https://nodejs.org/api/process.html
+
+===== Prompt 167: Zstandard Compression =====
+Round-trip a bounded fixture with Node's Zstandard API, reject decompression that exceeds an output limit, and compare size and CPU cost with gzip and Brotli using measured results.
+
+Course baseline: Node.js 26.13.1. Zstandard APIs in node:zlib have Stability 1 Experimental on Node 26.13.1; no extra experimental flag is required for this sample. maxOutputLength bounds output for convenience methods, it is not a total-process memory bound. The source fixture is 800 bytes; the 32-byte cap rejects it. Do not invent compression ratio or timing. This buffer-based example is intentionally small; for large files use createZstdCompress/createZstdDecompress with pipeline, backpressure, and an independent cumulative decompressed-byte limiter. A stream chunkSize is not a total output-size cap. Complete the exercise: gzip/Brotli/Zstd round trips, corrupted input rejection, cleanup after failure and measured size/CPU/latency tradeoffs with runtime/hardware recorded.
+Files (copy exactly):
+zstd.mjs:
+import { zstdCompress, zstdDecompress } from 'node:zlib';
+import { promisify } from 'node:util';
+
+const compress = promisify(zstdCompress);
+const decompress = promisify(zstdDecompress);
+const original = Buffer.from('Node.js\n'.repeat(100));
+const packed = await compress(original);
+const restored = await decompress(packed, { maxOutputLength: 1_024 });
+console.log(restored.equals(original));
+
+try {
+  await decompress(packed, { maxOutputLength: 32 });
+  throw new Error('Expected the size limit to reject');
+} catch (error) {
+  if (error.code !== 'ERR_BUFFER_TOO_LARGE') throw error;
+  console.log('limit rejected');
+}
+Commands (PowerShell, each a single unwrapped line):
+node zstd.mjs
+Essential expected output (illustrative):
+true
+limit rejected
+Sources: https://nodejs.org/api/zlib.html | https://nodejs.org/api/util.html

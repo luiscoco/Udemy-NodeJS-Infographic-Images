@@ -1,0 +1,23 @@
+﻿Run multiple test files with process isolation and bounded concurrency. Split the same discovered file set across CI shards, produce a JUnit artifact, and explain the scope of global fixtures and shared resources.
+
+Course baseline: Node.js 26.13.1. Default isolation is process: separate child processes per test file. The two fixture tests pass under default isolation; changing to no isolation can expose shared-global coupling. The deliberate globals teach isolation, not recommended application design. --test-concurrency limits test-file processes, not the number of Worker threads or all async operations. Shards divide test files, not individual test cases, and are not guaranteed equal runtime. Run every shard against the same checkout and file set; merge CI reports as a separate step. results.xml is the JUnit artifact; don't fabricate its contents or claim execution. Each shard invocation needs its own isolated external resources. Optional globalSetup/globalTeardown uses --test-global-setup; that feature is Stability 1.0 Early development, runs per runner invocation, and is not shared across separate CI shards. Commands require a full-width panel and must remain one line each.
+Files (copy exactly):
+a.test.mjs:
+import test from 'node:test';
+test('file A owns its process global', (t) => {
+  globalThis.owner ??= 'A';
+  t.assert.equal(globalThis.owner, 'A');
+});
+
+b.test.mjs:
+import test from 'node:test';
+test('file B owns its process global', (t) => {
+  globalThis.owner ??= 'B';
+  t.assert.equal(globalThis.owner, 'B');
+});
+Commands (PowerShell, each a single unwrapped line):
+node --test --test-concurrency=2 --test-reporter=junit --test-reporter-destination=results.xml a.test.mjs b.test.mjs
+node --test --test-shard=1/2 a.test.mjs b.test.mjs
+node --test --test-shard=2/2 a.test.mjs b.test.mjs
+Verification scenarios in prose only; no fabricated output.
+Sources: https://nodejs.org/api/test.html | https://nodejs.org/api/cli.html

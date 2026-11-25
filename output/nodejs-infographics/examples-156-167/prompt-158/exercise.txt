@@ -1,0 +1,28 @@
+﻿Configure native fetch with an Undici-compatible dispatcher. Bound per-origin connections, consume response bodies, apply deadlines, and close owned client resources after a workload. Verify behavior against a local HTTP fixture.
+
+Course baseline: Node.js 26.13.1. Prerequisite: a separate local fixture server is already listening on 127.0.0.1:3000 and exposes GET /health; its body determines the output. Undici is an ecosystem package; fetch is a Node global. Choose a version compatible with Node 26.13.1 and commit the lockfile; do not invent package versions. connections:2 is a per-origin connection cap, not a global request-rate limit. pipelining:1 avoids multiple outstanding pipelined requests per connection. fetch does not use node:http.Agent. Consume or cancel every body. The two sequential calls demonstrate ownership, not measured concurrency; complete the exercise with concurrent requests and instrument active sockets. Verify the cap, deadline, HTTP-error cleanup and natural exit. Do not claim reuse is guaranteed or that tests ran.
+Files (copy exactly):
+fetch-pool.mjs:
+import { Agent } from 'undici';
+
+const dispatcher = new Agent({ connections: 2, pipelining: 1 });
+try {
+  for (let i = 0; i < 2; i++) {
+    const response = await fetch('http://127.0.0.1:3000/health', {
+      dispatcher,
+      signal: AbortSignal.timeout(1_000),
+    });
+    if (!response.ok) {
+      await response.body?.cancel();
+      throw new Error('HTTP ' + response.status);
+    }
+    console.log(await response.text());
+  }
+} finally {
+  await dispatcher.close();
+}
+Commands (PowerShell, each a single unwrapped line):
+npm install --save-exact undici
+node fetch-pool.mjs
+Verification scenarios in prose only; no fabricated output.
+Sources: https://nodejs.org/api/globals.html | https://undici.nodejs.org/

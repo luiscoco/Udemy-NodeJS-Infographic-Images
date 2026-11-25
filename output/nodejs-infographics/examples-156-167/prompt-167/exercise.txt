@@ -1,0 +1,28 @@
+﻿Round-trip a bounded fixture with Node's Zstandard API, reject decompression that exceeds an output limit, and compare size and CPU cost with gzip and Brotli using measured results.
+
+Course baseline: Node.js 26.13.1. Zstandard APIs in node:zlib have Stability 1 Experimental on Node 26.13.1; no extra experimental flag is required for this sample. maxOutputLength bounds output for convenience methods, it is not a total-process memory bound. The source fixture is 800 bytes; the 32-byte cap rejects it. Do not invent compression ratio or timing. This buffer-based example is intentionally small; for large files use createZstdCompress/createZstdDecompress with pipeline, backpressure, and an independent cumulative decompressed-byte limiter. A stream chunkSize is not a total output-size cap. Complete the exercise: gzip/Brotli/Zstd round trips, corrupted input rejection, cleanup after failure and measured size/CPU/latency tradeoffs with runtime/hardware recorded.
+Files (copy exactly):
+zstd.mjs:
+import { zstdCompress, zstdDecompress } from 'node:zlib';
+import { promisify } from 'node:util';
+
+const compress = promisify(zstdCompress);
+const decompress = promisify(zstdDecompress);
+const original = Buffer.from('Node.js\n'.repeat(100));
+const packed = await compress(original);
+const restored = await decompress(packed, { maxOutputLength: 1_024 });
+console.log(restored.equals(original));
+
+try {
+  await decompress(packed, { maxOutputLength: 32 });
+  throw new Error('Expected the size limit to reject');
+} catch (error) {
+  if (error.code !== 'ERR_BUFFER_TOO_LARGE') throw error;
+  console.log('limit rejected');
+}
+Commands (PowerShell, each a single unwrapped line):
+node zstd.mjs
+Essential expected output (illustrative):
+true
+limit rejected
+Sources: https://nodejs.org/api/zlib.html | https://nodejs.org/api/util.html

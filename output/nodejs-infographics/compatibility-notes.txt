@@ -9,3 +9,5 @@ Prompt 143: AWS lists nodejs26.x as supported. Its managed patch version is cont
 Runtime reference: https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
 
 Expected outputs and measurements in the images are instructional examples or verification targets. The exercise applications have not been implemented or executed as part of generating these images.
+
+Prompts 156-167 added 2026-11-25. Course API baseline remains Node.js 26.13.1, verified against official documentation. All 13 new .mjs files passed syntax checks on locally available Node.js 24.21.0. Selected examples (156, 160, 161, 164, 165, 166, 167) executed on that local runtime only; see examples-156-167/validation-results.txt. Examples 157-159 and 162-163 were not executed. Images use illustrative output and verification scenarios. SQLite is Stability 1.2 Release candidate; Zstandard is Stability 1 Experimental on the course baseline.

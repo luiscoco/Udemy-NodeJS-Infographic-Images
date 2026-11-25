@@ -1,0 +1,25 @@
+﻿Inspect process-available memory, OS constraints and available CPU parallelism. Calculate an explicitly bounded worker-count proposal, document its assumptions, and validate it with workload measurements instead of treating hardware counts as a performance guarantee.
+
+Course baseline: Node.js 26.13.1. Output values must use <measured> placeholders, never invented hardware or memory figures. availableParallelism estimates usable parallelism; do not substitute os.cpus().length as the recommendation. availableMemory returns free bytes available to the process, not total machine RAM. constrainedMemory returns the OS-imposed limit in bytes; 0 means unconstrained or unknown. 128 MiB reserve, 64 MiB per worker and cap 4 are illustrative policy inputs, NOT measured facts or a guaranteed safe configuration. This code only proposes a count; it starts no Workers. workers can be 0 under pressure: defer/reject work rather than force one. Memory availability changes and per-worker estimates require validation. Complete the exercise: measure whole-pool RSS, throughput, latency and event-loop delay at 1..N workers; record runtime/OS/container limits and select an explicit cap. Do not confuse a V8 heap limit with an RSS/container limit.
+Files (copy exactly):
+size-pool.mjs:
+import { availableParallelism } from 'node:os';
+
+const availableMiB = Math.floor(process.availableMemory() / 2 ** 20);
+const reserveMiB = 128;
+const estimatedWorkerMiB = 64;
+const cpuSlots = Math.max(1, availableParallelism() - 1);
+const memorySlots = Math.floor(
+  Math.max(0, availableMiB - reserveMiB) / estimatedWorkerMiB,
+);
+const workers = Math.min(4, cpuSlots, memorySlots);
+
+console.log({
+  availableMiB,
+  constrainedBytes: process.constrainedMemory(),
+  workers,
+});
+Commands (PowerShell, each a single unwrapped line):
+node size-pool.mjs
+Verification scenarios in prose only; no fabricated output.
+Sources: https://nodejs.org/api/os.html | https://nodejs.org/api/process.html

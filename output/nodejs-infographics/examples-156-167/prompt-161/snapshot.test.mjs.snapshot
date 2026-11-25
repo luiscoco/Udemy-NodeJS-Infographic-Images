@@ -1,0 +1,9 @@
+exports[`stable result contract 1`] = `
+{
+  "status": "ok",
+  "items": [
+    "a",
+    "b"
+  ]
+}
+`;

@@ -1,0 +1,2 @@
+
+FINAL PRECISION REQUIREMENTS: Title 'Module Customization Hooks'; status 'Stability 1.2 · Release candidate'. Code must use exactly `return nextResolve(specifier, context);` with a comma between arguments. Do NOT use `nextResolve(specifier; context)`. main.mjs must use exactly `await import('@app/missing').catch((error) => console.error(error.message));`. Use spacious code text, reduce duplicated prose. Status and code punctuation must be clean and readable. Three file panels, one command, stdout and stderr. No extra snippets.

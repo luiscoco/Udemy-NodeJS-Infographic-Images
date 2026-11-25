@@ -1,0 +1,29 @@
+﻿Capture changes to a SQLite table and apply them to another database with the same schema. Reapply the changeset to trigger a conflict, demonstrate an explicit abort policy, and verify no duplicate row is created.
+
+Course baseline: Node.js 26.13.1. node:sqlite is Stability 1.2 Release candidate. Flow: matching schemas -> attach session -> mutate source -> capture binary changeset -> apply on target -> handle conflicts. Session tracks changes after attachment; it does not create the target schema or automatically synchronize continuously. The first apply succeeds; repeating the INSERT conflicts on the primary key, so the explicit abort handler rolls back the apply and returns false. Default conflict policy also aborts. OMIT skips conflicts; REPLACE is valid only for DATA or CONFLICT conflict kinds, not every conflict. Changesets are binary Uint8Array data, not SQL migrations or a distributed replication protocol. using disposes count statement, session and databases in reverse order. Complete the exercise: update/delete conflicts, policy tests and explicit transport/authentication requirements. Essential output only; warnings may appear.
+Files (copy exactly):
+changeset.mjs:
+import { Database, constants } from 'node:sqlite';
+
+using source = new Database(':memory:');
+using target = new Database(':memory:');
+for (const db of [source, target]) {
+  db.exec('CREATE TABLE notes(id INTEGER PRIMARY KEY, body TEXT)');
+}
+using session = source.createSession({ table: 'notes' });
+source.exec("INSERT INTO notes VALUES (1, 'hello')");
+const changes = session.changeset();
+
+console.log(target.applyChangeset(changes));
+console.log(target.applyChangeset(changes, {
+  onConflict: () => constants.SQLITE_CHANGESET_ABORT,
+}));
+using count = target.prepare('SELECT count(*) AS n FROM notes');
+console.log(count.get().n);
+Commands (PowerShell, each a single unwrapped line):
+node changeset.mjs
+Essential expected output (illustrative):
+true
+false
+1
+Sources: https://nodejs.org/api/sqlite.html
