@@ -1,5 +1,15 @@
 .tools/
 .presentation-build/
+.video-build/
+.practical-video-build/
+.udemy-video-build/
+# Keep large media and generated production files out of the student repository.
+*.mp4
+*.MP4
+output/Course_Videos/
+output/Course_Videos_Practical/
+output/Udemy_Course/
+video-production/
 **/node_modules/
 practical-examples/**/.env
 practical-examples/**/.env.local
